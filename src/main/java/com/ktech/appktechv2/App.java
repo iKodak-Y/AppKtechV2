@@ -1,38 +1,56 @@
 package com.ktech.appktechv2;
 
+import com.ktech.appktechv2.SqlConnection;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.scene.control.Alert;
+import java.sql.Connection;
 
-import java.io.IOException;
-
-/**
- * JavaFX App
- */
 public class App extends Application {
 
-    private static Scene scene;
+    public static void main(String[] args) {
+        launch(args);
+    }
 
     @Override
-    public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 640, 480);
-        stage.setScene(scene);
-        stage.show();
-    }
+    public void start(Stage stage) throws Exception {
+        try {
+            // Crear una instancia de SqlConection
+            SqlConnection conexion = new SqlConnection();
 
-    static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
-    }
+            // Intentar conectar a la base de datos
+            Connection con = conexion.getConexion();
 
-    private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
-        return fxmlLoader.load();
-    }
+            // Verificar si la conexión fue exitosa
+            if (con != null) {
+                System.out.println("Conexión establecida con éxito.");
+            } else {
+                System.out.println("Main: Fallo al establecer conexión con la base de datos.");
+            }
 
-    public static void main(String[] args) {
-        launch();
-    }
+            // Cargar el archivo FXML desde resources
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/com/ktech/appktechv2/vista/principal.fxml"));
+            Pane ventana = loader.load();
 
+            // Configurar y mostrar la escena
+            Scene scene = new Scene(ventana);
+            stage.setScene(scene);
+            stage.setTitle("Aplicación de Facturación");
+            stage.setResizable(false);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error: " + e.getMessage());
+
+            // Mostrar alerta al usuario
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText("Error al iniciar la aplicación: " + e.getMessage());
+            alert.showAndWait();
+        }
+    }
 }
