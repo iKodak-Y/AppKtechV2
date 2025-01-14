@@ -33,17 +33,13 @@ public class App extends Application {
                 System.out.println("Main: Fallo al establecer conexión con la base de datos.");
             }
 
-            // Cargar el archivo FXML desde resources
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/com/ktech/appktechv2/vista/principal.fxml"));
-            Pane ventana = loader.load();
-
-            // Configurar y mostrar la escena
-            Scene scene = new Scene(ventana);
+            System.out.println("Iniciando aplicación...");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ktech/appktechv2/vista/MainLayout.fxml"));
+            Scene scene = new Scene(loader.load());
             stage.setScene(scene);
-            stage.setTitle("Aplicación de Facturación");
-            stage.setResizable(false);
+            stage.setTitle("AppKtech V2");
             stage.show();
+            System.out.println("Aplicación iniciada correctamente");
         } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
 

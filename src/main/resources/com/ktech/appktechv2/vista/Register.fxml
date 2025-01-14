@@ -1,0 +1,25 @@
+<!-- /src/main/resources/com/ktech/appktechv2/vista/Register.fxml -->
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="10" alignment="CENTER" xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="com.ktech.appktechv2.controlador.RegisterController">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    
+    <Label text="Registro de Usuario" style="-fx-font-size: 24px;"/>
+    
+    <TextField fx:id="nombreField" promptText="Nombre Completo"/>
+    <TextField fx:id="usernameField" promptText="Usuario"/>
+    <PasswordField fx:id="passwordField" promptText="Contraseña"/>
+    <PasswordField fx:id="confirmPasswordField" promptText="Confirmar Contraseña"/>
+    
+    <Button text="Registrarse" onAction="#handleRegister"/>
+    <Button text="Volver al Login" onAction="#backToLogin"/>
+    
+    <Label fx:id="errorLabel" textFill="RED"/>
+</VBox>

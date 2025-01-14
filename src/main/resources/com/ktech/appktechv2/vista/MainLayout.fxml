@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane fx:id="mainLayout" xmlns:fx="http://javafx.com/fxml" fx:controller="com.ktech.appktechv2.controlador.MainLayoutController">
+    <!-- Header -->
+    <top>
+        <VBox spacing="10" style="-fx-background-color: #f0f0f0;">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <!-- Logo o título de la app -->
+                <Label text="AppKtech V2" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+                
+                <Region HBox.hgrow="ALWAYS"/> <!-- Espaciador -->
+                
+                <!-- Información de usuario -->
+                <Label fx:id="userNameLabel" text="No has iniciado sesión"/>
+                <Button fx:id="loginButton" text="Iniciar Sesión" onAction="#handleLogin"/>
+                <Button fx:id="logoutButton" text="Cerrar Sesión" onAction="#handleLogout" visible="false"/>
+            </HBox>
+            
+            <!-- Barra de navegación -->
+            <HBox fx:id="navBar" spacing="10" visible="false">
+                <Button text="Inicio" onAction="#navigateToHome"/>
+                <Button text="Clientes" onAction="#navigateToClientes"/>
+                <Button text="Productos" onAction="#navigateToProductos"/>
+                <Button text="Facturación" onAction="#navigateToFacturacion"/>
+                <Button text="Ventas" onAction="#navigateToVentas"/>
+                <Button text="Reportes" onAction="#navigateToReportes"/>
+            </HBox>
+        </VBox>
+    </top>
+    
+    <!-- Contenido dinámico -->
+    <center>
+        <StackPane fx:id="contentArea"/>
+    </center>
+</BorderPane>
