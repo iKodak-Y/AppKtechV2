@@ -38,6 +38,12 @@
     
     <!-- Contenido dinámico -->
     <center>
-        <StackPane fx:id="contentArea"/>
+        <ScrollPane fx:id="scrollPane" fitToWidth="true" fitToHeight="true">
+            <StackPane fx:id="contentArea" alignment="CENTER">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+            </StackPane>
+        </ScrollPane>
     </center>
 </BorderPane>

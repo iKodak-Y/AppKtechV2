@@ -9,6 +9,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import java.io.IOException;
 import javafx.event.ActionEvent;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
 
 public class MainLayoutController {
 
@@ -24,12 +27,24 @@ public class MainLayoutController {
     private StackPane contentArea;
 
     private String currentUser = null;
+    @FXML
+    private BorderPane mainLayout;
+    @FXML
+    private ScrollPane scrollPane;
 
     @FXML
     private void initialize() {
+        // Configurar el ScrollPane
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+
+        // Asegurar que el StackPane siempre use el espacio máximo disponible
+        contentArea.prefWidthProperty().bind(scrollPane.widthProperty());
+        contentArea.prefHeightProperty().bind(scrollPane.heightProperty());
+
+        // Inicializar el resto de componentes
         navBar.setVisible(false);
         updateLoginStatus();
-        // Cargar la vista de login automáticamente al inicio
         handleLogin();
     }
 
@@ -53,9 +68,18 @@ public class MainLayoutController {
     public void setContent(Parent content) {
         if (contentArea != null) {
             contentArea.getChildren().clear();
+
+            // Asegurar que el contenido se centre
+            StackPane.setAlignment(content, javafx.geometry.Pos.CENTER);
+
+            // Si el contenido es un Region, configurar sus propiedades
+            if (content instanceof Region) {
+                Region region = (Region) content;
+                region.setMaxWidth(Region.USE_PREF_SIZE);
+                region.setMaxHeight(Region.USE_PREF_SIZE);
+            }
+
             contentArea.getChildren().add(content);
-        } else {
-            System.out.println("contentArea es null");
         }
     }
 

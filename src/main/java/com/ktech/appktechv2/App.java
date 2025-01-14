@@ -36,8 +36,15 @@ public class App extends Application {
             System.out.println("Iniciando aplicación...");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ktech/appktechv2/vista/MainLayout.fxml"));
             Scene scene = new Scene(loader.load());
+
+            // Configurar la ventana
             stage.setScene(scene);
             stage.setTitle("AppKtech V2");
+            stage.setMaximized(true); // Esto hace que inicie en pantalla completa
+
+            // Hacer que la ventana sea redimensionable
+            stage.setResizable(true);
+
             stage.show();
             System.out.println("Aplicación iniciada correctamente");
         } catch (IOException e) {

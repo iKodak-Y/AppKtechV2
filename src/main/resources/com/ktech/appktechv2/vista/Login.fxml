@@ -7,9 +7,18 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.geometry.Insets?>
 
-<VBox spacing="10" alignment="CENTER" xmlns:fx="http://javafx.com/fxml/1" 
+<VBox spacing="10" alignment="CENTER" 
+      xmlns:fx="http://javafx.com/fxml/1" 
       xmlns="http://javafx.com/javafx/13"
-      fx:controller="com.ktech.appktechv2.controlador.LoginController">
+      fx:controller="com.ktech.appktechv2.controlador.LoginController"
+      style="-fx-background-color: white;">
+    
+    <!-- Establecer tamaño preferido para la vista -->
+    <prefWidth>600</prefWidth>
+    <prefHeight>400</prefHeight>
+    <minWidth>400</minWidth>
+    <minHeight>300</minHeight>
+    
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
