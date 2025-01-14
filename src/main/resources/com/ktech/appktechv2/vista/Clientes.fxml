@@ -17,7 +17,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktech.appktechv2.controlador.ClientesController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktech.appktechv2.controlador.ClientesController">
     <children>
         <GridPane prefHeight="590.0" prefWidth="760.0">
             <columnConstraints>
@@ -33,8 +33,8 @@
                     <children>
                         <Label layoutX="120.0" layoutY="5.0" text="Buscar Cliente:" />
                         <TextField fx:id="txt_buscar_cliente" layoutX="219.0" layoutY="1.0" prefHeight="25.0" prefWidth="215.0" />
-                        <Button fx:id="btn_buscar" layoutX="460.0" layoutY="-2.0" mnemonicParsing="false" onAction="#acc_buscar" prefHeight="32.0" prefWidth="79.0" text="Buscar" />
-                        <Button fx:id="btn_limpiar" layoutX="561.0" layoutY="-2.0" mnemonicParsing="false" onAction="#acc_limpiar" prefHeight="32.0" prefWidth="79.0" text="Limpiar" />
+                        <Button fx:id="btn_buscar" layoutX="460.0" layoutY="-2.0" mnemonicParsing="false" onAction="#acc_buscar" prefHeight="32.0" prefWidth="79.0" stylesheets="@../css/styles.css" text="Buscar" />
+                        <Button fx:id="btn_limpiar" layoutX="561.0" layoutY="-2.0" mnemonicParsing="false" onAction="#acc_limpiar" prefHeight="32.0" prefWidth="79.0" stylesheets="@../css/styles.css" text="Limpiar" />
                         <HBox layoutX="71.0" layoutY="49.0" prefHeight="140.0" prefWidth="619.0">
                             <children>
                                 <VBox prefHeight="168.0" prefWidth="111.0" spacing="20.0">
@@ -49,10 +49,10 @@
                                     <children>
                                         <TextField fx:id="txt_nombres" />
                                         <TextField fx:id="txt_apellidos" />
-                                        <HBox spacing="10.0">
+                                        <HBox>
                                             <children>
-                                                <TextField fx:id="txt_cedula" />
-                                                <ComboBox fx:id="cmb_tipo_documento" prefWidth="80.0" />
+                                                <TextField fx:id="txt_cedula" prefHeight="27.0" prefWidth="130.0" />
+                                                <ComboBox fx:id="cmb_tipo_documento" prefHeight="27.0" prefWidth="73.0" />
                                             </children>
                                         </HBox>
                                         <TextField fx:id="txt_direccion" />
@@ -80,9 +80,9 @@
                                 </VBox>
                             </children>
                         </HBox>
-                        <Button fx:id="btn_guardar" layoutX="395.0" layoutY="191.0" mnemonicParsing="false" onAction="#acc_guardar" prefHeight="32.0" prefWidth="79.0" text="Guardar" />
-                        <Button fx:id="btn_eliminar" layoutX="496.0" layoutY="191.0" mnemonicParsing="false" onAction="#acc_eliminar" prefHeight="32.0" prefWidth="79.0" text="Eliminar" />
-                        <Button fx:id="btn_cerrar" layoutX="597.0" layoutY="191.0" mnemonicParsing="false" onAction="#acc_cerrar" prefHeight="32.0" prefWidth="79.0" text="Cerrar" />
+                        <Button fx:id="btn_guardar" layoutX="395.0" layoutY="198.0" mnemonicParsing="false" onAction="#acc_guardar" prefHeight="32.0" prefWidth="79.0" stylesheets="@../css/styles.css" text="Guardar" />
+                        <Button fx:id="btn_eliminar" layoutX="496.0" layoutY="198.0" mnemonicParsing="false" onAction="#acc_eliminar" prefHeight="32.0" prefWidth="79.0" stylesheets="@../css/styles.css" text="Eliminar" />
+                        <Button fx:id="btn_cerrar" layoutX="597.0" layoutY="198.0" mnemonicParsing="false" onAction="#acc_cerrar" prefHeight="32.0" prefWidth="79.0" stylesheets="@../css/styles.css" text="Cerrar" />
                     </children>
                 </Pane>
                 <Pane prefHeight="200.0" prefWidth="200.0">
@@ -96,7 +96,7 @@
                 </Pane>
                 <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
                     <children>
-                        <TableView fx:id="tbl_clientes" layoutX="14.0" layoutY="17.0" prefHeight="255.0" prefWidth="732.0">
+                        <TableView fx:id="tbl_clientes" layoutX="14.0" layoutY="17.0" prefHeight="255.0" prefWidth="732.0" stylesheets="@../css/styles.css">
                             <columns>
                                 <TableColumn fx:id="col_nombres" prefWidth="114.4000244140625" text="Nombre" />
                                 <TableColumn fx:id="col_apellidos" prefWidth="122.39996337890625" text="Apellido" />

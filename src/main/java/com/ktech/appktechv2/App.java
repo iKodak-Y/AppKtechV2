@@ -1,6 +1,7 @@
 package com.ktech.appktechv2;
 
 import com.ktech.appktechv2.SqlConnection;
+import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -8,6 +9,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert;
 import java.sql.Connection;
+import static javafx.application.Application.launch;
 
 public class App extends Application {
 
@@ -42,8 +44,7 @@ public class App extends Application {
             stage.setTitle("Aplicación de Facturación");
             stage.setResizable(false);
             stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
 
             // Mostrar alerta al usuario
