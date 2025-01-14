@@ -9,6 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import java.io.IOException;
 import javafx.event.ActionEvent;
+import javafx.scene.CacheHint;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
@@ -34,6 +35,14 @@ public class MainLayoutController {
 
     @FXML
     private void initialize() {
+        // Configuración del ScrollPane para mejor renderizado
+        scrollPane.setCache(false);
+        scrollPane.setCacheHint(CacheHint.SPEED);
+
+        // Configuración del contentArea
+        contentArea.setCache(false);
+        contentArea.setCacheHint(CacheHint.SPEED);
+
         // Configurar el ScrollPane
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
@@ -46,6 +55,26 @@ public class MainLayoutController {
         navBar.setVisible(false);
         updateLoginStatus();
         handleLogin();
+    }
+
+    public void setContent(Parent content) {
+        if (contentArea != null) {
+            contentArea.getChildren().clear();
+
+            // Configurar el contenido para mejor renderizado
+            content.setCache(false);
+            content.setCacheHint(CacheHint.SPEED);
+
+            StackPane.setAlignment(content, javafx.geometry.Pos.CENTER);
+
+            if (content instanceof Region) {
+                Region region = (Region) content;
+                region.setMaxWidth(Region.USE_PREF_SIZE);
+                region.setMaxHeight(Region.USE_PREF_SIZE);
+            }
+
+            contentArea.getChildren().add(content);
+        }
     }
 
     @FXML
@@ -62,24 +91,6 @@ public class MainLayoutController {
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Error cargando vista de login: " + e.getMessage());
-        }
-    }
-
-    public void setContent(Parent content) {
-        if (contentArea != null) {
-            contentArea.getChildren().clear();
-
-            // Asegurar que el contenido se centre
-            StackPane.setAlignment(content, javafx.geometry.Pos.CENTER);
-
-            // Si el contenido es un Region, configurar sus propiedades
-            if (content instanceof Region) {
-                Region region = (Region) content;
-                region.setMaxWidth(Region.USE_PREF_SIZE);
-                region.setMaxHeight(Region.USE_PREF_SIZE);
-            }
-
-            contentArea.getChildren().add(content);
         }
     }
 

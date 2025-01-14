@@ -14,6 +14,8 @@ import static javafx.application.Application.launch;
 public class App extends Application {
 
     public static void main(String[] args) {
+        System.setProperty("prism.lcdtext", "false");
+        System.setProperty("prism.text", "t2k");
         launch(args);
     }
 
@@ -37,6 +39,9 @@ public class App extends Application {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ktech/appktechv2/vista/MainLayout.fxml"));
             Scene scene = new Scene(loader.load());
 
+            // Agregar esta línea después de crear la scene
+            scene.getRoot().setStyle("-fx-font-smoothing-type: LCD;");
+            
             // Configurar la ventana
             stage.setScene(scene);
             stage.setTitle("AppKtech V2");

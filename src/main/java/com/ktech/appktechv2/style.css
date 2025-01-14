@@ -1,0 +1,24 @@
+.root {
+    -fx-font-smoothing-type: LCD;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.text {
+    -fx-font-smoothing-type: LCD;
+}
+
+.label {
+    -fx-font-smoothing-type: LCD;
+}
+
+.button {
+    -fx-font-smoothing-type: LCD;
+}
