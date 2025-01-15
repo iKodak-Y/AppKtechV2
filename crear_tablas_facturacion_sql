@@ -1,0 +1,62 @@
+-- Tabla para almacenar datos del emisor
+CREATE TABLE Emisor (
+    id_emisor INT IDENTITY(1,1) PRIMARY KEY,
+    ruc CHAR(13) NOT NULL UNIQUE,
+    razon_social NVARCHAR(300) NOT NULL,
+    nombre_comercial NVARCHAR(300),
+    direccion NVARCHAR(300) NOT NULL,
+    codigo_establecimiento CHAR(3) NOT NULL,
+    punto_emision CHAR(3) NOT NULL,
+    tipo_ambiente CHAR(1) NOT NULL CHECK (tipo_ambiente IN ('1', '2')), -- 1: Pruebas, 2: Producción
+    obligado_contabilidad BIT NOT NULL,
+    certificado_path NVARCHAR(500) NOT NULL, -- Ruta del archivo .p12
+    contrasena_certificado NVARCHAR(100) NOT NULL,
+    fecha_registro DATETIME DEFAULT GETDATE()
+);
+
+-- Tabla para almacenar información de las facturas electrónicas
+CREATE TABLE FacturaElectronica (
+    id_factura INT IDENTITY(1,1) PRIMARY KEY,
+    id_emisor INT NOT NULL FOREIGN KEY REFERENCES Emisor(id_emisor),
+    clave_acceso CHAR(49) NOT NULL UNIQUE,
+    numero_secuencial CHAR(9) NOT NULL,
+    fecha_emision DATE NOT NULL,
+    ruc_comprador CHAR(13) NOT NULL,
+    razon_social_comprador NVARCHAR(300) NOT NULL,
+    direccion_comprador NVARCHAR(300),
+    estado NVARCHAR(20) NOT NULL CHECK (estado IN ('PPR', 'AUT', 'NAT')), -- PPR: En Procesamiento, AUT: Autorizado, NAT: No Autorizado
+    fecha_autorizacion DATETIME,
+    xml_autorizado XML, -- XML autorizado por el SRI
+    fecha_registro DATETIME DEFAULT GETDATE()
+);
+
+-- Tabla para almacenar los detalles de las facturas
+CREATE TABLE DetalleFactura (
+    id_detalle INT IDENTITY(1,1) PRIMARY KEY,
+    id_factura INT NOT NULL FOREIGN KEY REFERENCES FacturaElectronica(id_factura) ON DELETE CASCADE,
+    codigo_producto NVARCHAR(50) NOT NULL,
+    descripcion NVARCHAR(300) NOT NULL,
+    cantidad DECIMAL(18, 6) NOT NULL CHECK (cantidad > 0),
+    precio_unitario DECIMAL(18, 6) NOT NULL CHECK (precio_unitario >= 0),
+    subtotal DECIMAL(18, 6) NOT NULL CHECK (subtotal >= 0),
+    impuestos XML NOT NULL, -- Detalle de los impuestos aplicados
+    fecha_registro DATETIME DEFAULT GETDATE()
+);
+
+-- Tabla para registrar los errores específicos de facturas electrónicas
+CREATE TABLE LogErroresFactura (
+    id_error INT IDENTITY(1,1) PRIMARY KEY,
+    id_factura INT FOREIGN KEY REFERENCES FacturaElectronica(id_factura) ON DELETE CASCADE,
+    descripcion NVARCHAR(1000) NOT NULL,
+    fecha_error DATETIME DEFAULT GETDATE()
+);
+
+-- Tabla para configurar parámetros generales del SRI
+CREATE TABLE ConfiguracionSRI (
+    id_configuracion INT IDENTITY(1,1) PRIMARY KEY,
+    url_pruebas NVARCHAR(500) NOT NULL,
+    url_produccion NVARCHAR(500) NOT NULL,
+    fecha_vigencia_inicio DATE NOT NULL,
+    fecha_vigencia_fin DATE,
+    descripcion NVARCHAR(500)
+);
