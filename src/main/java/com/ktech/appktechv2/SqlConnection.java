@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class SqlConnection {
 
     // Cambia los datos de conexión según tus necesidades
-    private static final String URL = "jdbc:sqlserver://IKODAK;database=BD_KTECH;trustServerCertificate=true";
+    private static final String URL = "jdbc:sqlserver://IKODAK;database=BD_KTECH_V2;trustServerCertificate=true";
     private static final String USER = "sa";
     private static final String PASSWORD = "admin";
 

@@ -107,13 +107,13 @@ public class FacturaController implements Initializable {
     private Button btn_firmar_enviar;
     @FXML
     private Button btn_guardar_sin_firmar;
-    @FXML
-    private Button btn_cerrar;
 
     @FXML
     private TextField auto_field_producto_list;
     private ContextMenu autoCompletePopup;
     private ProductoDAO productoDAO;
+    @FXML
+    private Button btn_cancelar;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -155,9 +155,6 @@ public class FacturaController implements Initializable {
     private void acc_buscar_producto(ActionEvent event) {
     }
 
-    @FXML
-    private void acc_cerrar(ActionEvent event) {
-    }
 
     private void populatePopup(List<Producto> searchResult) {
         List<CustomMenuItem> menuItems = new LinkedList<>();
@@ -181,5 +178,17 @@ public class FacturaController implements Initializable {
 
         autoCompletePopup.getItems().clear();
         autoCompletePopup.getItems().addAll(menuItems);
+    }
+
+    @FXML
+    private void acc_firmar_enviar(ActionEvent event) {
+    }
+
+    @FXML
+    private void acc_guardar_sin_firmar(ActionEvent event) {
+    }
+
+    @FXML
+    private void acc_cancelar(ActionEvent event) {
     }
 }
