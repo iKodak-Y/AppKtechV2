@@ -191,4 +191,6 @@ public class FacturaController implements Initializable {
     @FXML
     private void acc_cancelar(ActionEvent event) {
     }
+    
+    
 }
