@@ -40,7 +40,7 @@ CREATE TABLE DetalleFactura (
     subtotal DECIMAL(18, 6) NOT NULL CHECK (subtotal >= 0),
     impuestos XML NOT NULL, -- Detalle de los impuestos aplicados
     fecha_registro DATETIME DEFAULT GETDATE()
-    id_producto INT NOT NULL FOREIGN KEY REFERENCES Productos(id_producto), -- Relación con ID del producto
+    IDProducto  INT NOT NULL FOREIGN KEY REFERENCES Productos(IDProducto ), -- Relación con ID del producto
 );
 
 -- Tabla para registrar los errores específicos de facturas electrónicas
