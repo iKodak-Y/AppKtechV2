@@ -9,10 +9,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import java.io.IOException;
 import javafx.event.ActionEvent;
-import javafx.scene.CacheHint;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Region;
 
 public class MainLayoutController {
 
@@ -28,62 +24,13 @@ public class MainLayoutController {
     private StackPane contentArea;
 
     private String currentUser = null;
-    @FXML
-    private BorderPane mainLayout;
-    @FXML
-    private ScrollPane scrollPane;
 
     @FXML
     private void initialize() {
-        // Configuración del ScrollPane para mejor renderizado
-        mainLayout.setSnapToPixel(true);
-        scrollPane.setCache(false);
-        scrollPane.setCacheHint(CacheHint.SPEED);
-
-        // Configuración del contentArea
-        contentArea.setCache(false);
-        contentArea.setCacheHint(CacheHint.SPEED);
-
-        // Configurar el ScrollPane
-        scrollPane.setFitToWidth(true);
-        scrollPane.setFitToHeight(true);
-
-        // Asegurar que el StackPane siempre use el espacio máximo disponible
-        contentArea.prefWidthProperty().bind(scrollPane.widthProperty());
-        contentArea.prefHeightProperty().bind(scrollPane.heightProperty());
-
-        // Inicializar el resto de componentes
         navBar.setVisible(false);
         updateLoginStatus();
+        // Cargar la vista de login automáticamente al inicio
         handleLogin();
-    }
-
-    public void setContent(Parent content) {
-        if (contentArea != null) {
-            contentArea.getChildren().clear();
-
-            // Configuración mejorada para el contenido
-            content.setCache(true);  // Cambiar a true
-            content.setCacheHint(CacheHint.QUALITY);
-
-            if (content instanceof Region) {
-                Region region = (Region) content;
-                region.setSnapToPixel(true);
-
-                // Agregar estas líneas
-                region.setCache(true);
-                region.setCacheShape(true);
-                region.setScaleShape(false);
-                region.setCenterShape(false);
-            }
-
-            StackPane.setAlignment(content, javafx.geometry.Pos.CENTER);
-            contentArea.getChildren().add(content);
-
-            // Forzar actualización del layout
-            content.applyCss();
-            content.layout();
-        }
     }
 
     @FXML
@@ -100,6 +47,15 @@ public class MainLayoutController {
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Error cargando vista de login: " + e.getMessage());
+        }
+    }
+
+    public void setContent(Parent content) {
+        if (contentArea != null) {
+            contentArea.getChildren().clear();
+            contentArea.getChildren().add(content);
+        } else {
+            System.out.println("contentArea es null");
         }
     }
 
@@ -142,12 +98,7 @@ public class MainLayoutController {
         if (currentUser == null) {
             return;
         }
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ktech/appktechv2/vista/Principal.fxml"));
-            setContent(loader.load());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // Cargar vista de inicio
     }
 
     @FXML
@@ -166,41 +117,14 @@ public class MainLayoutController {
     // Implementar los demás métodos de navegación de manera similar
     @FXML
     private void navigateToProductos(ActionEvent event) {
-        if (currentUser == null) {
-            return;
-        }
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ktech/appktechv2/vista/Gestion_Productos.fxml"));
-            setContent(loader.load());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @FXML
     private void navigateToFacturacion(ActionEvent event) {
-        if (currentUser == null) {
-            return;
-        }
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ktech/appktechv2/vista/Factura.fxml"));
-            setContent(loader.load());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @FXML
     private void navigateToVentas(ActionEvent event) {
-        if (currentUser == null) {
-            return;
-        }
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ktech/appktechv2/vista/TicketsVentas.fxml"));
-            setContent(loader.load());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @FXML

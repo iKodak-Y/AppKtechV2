@@ -1,3 +1,4 @@
+// src/main/java/com/ktech/appktechv2/controlador/RegisterController.java
 package com.ktech.appktechv2.controlador;
 
 import javafx.fxml.FXML;
@@ -6,18 +7,12 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.Label;
 
 public class RegisterController {
-
-    @FXML
-    private TextField nombreField;
-    @FXML
-    private TextField usernameField;
-    @FXML
-    private PasswordField passwordField;
-    @FXML
-    private PasswordField confirmPasswordField;
-    @FXML
-    private Label errorLabel;
-
+    @FXML private TextField nombreField;
+    @FXML private TextField usernameField;
+    @FXML private PasswordField passwordField;
+    @FXML private PasswordField confirmPasswordField;
+    @FXML private Label errorLabel;
+    
     @FXML
     private void handleRegister() {
         /* 
@@ -68,9 +63,9 @@ public class RegisterController {
             errorLabel.setText("Error al registrar el usuario");
             e.printStackTrace();
         }
-         */
+        */
     }
-
+    
     @FXML
     private void backToLogin() {
         // Volver a la vista de login
