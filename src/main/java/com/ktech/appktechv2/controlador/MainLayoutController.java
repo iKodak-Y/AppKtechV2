@@ -36,6 +36,7 @@ public class MainLayoutController {
     @FXML
     private void initialize() {
         // Configuración del ScrollPane para mejor renderizado
+        mainLayout.setSnapToPixel(true);
         scrollPane.setCache(false);
         scrollPane.setCacheHint(CacheHint.SPEED);
 
@@ -61,19 +62,27 @@ public class MainLayoutController {
         if (contentArea != null) {
             contentArea.getChildren().clear();
 
-            // Configurar el contenido para mejor renderizado
-            content.setCache(false);
-            content.setCacheHint(CacheHint.SPEED);
-
-            StackPane.setAlignment(content, javafx.geometry.Pos.CENTER);
+            // Configuración mejorada para el contenido
+            content.setCache(true);  // Cambiar a true
+            content.setCacheHint(CacheHint.QUALITY);
 
             if (content instanceof Region) {
                 Region region = (Region) content;
-                region.setMaxWidth(Region.USE_PREF_SIZE);
-                region.setMaxHeight(Region.USE_PREF_SIZE);
+                region.setSnapToPixel(true);
+
+                // Agregar estas líneas
+                region.setCache(true);
+                region.setCacheShape(true);
+                region.setScaleShape(false);
+                region.setCenterShape(false);
             }
 
+            StackPane.setAlignment(content, javafx.geometry.Pos.CENTER);
             contentArea.getChildren().add(content);
+
+            // Forzar actualización del layout
+            content.applyCss();
+            content.layout();
         }
     }
 

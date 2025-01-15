@@ -9,13 +9,22 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert;
 import java.sql.Connection;
-import static javafx.application.Application.launch;
+import java.net.URL;
+import javafx.scene.CacheHint;
+import javafx.scene.layout.Region;
 
 public class App extends Application {
 
     public static void main(String[] args) {
+        // Configuraciones básicas y probadas para mejorar el renderizado
         System.setProperty("prism.lcdtext", "false");
         System.setProperty("prism.text", "t2k");
+        System.setProperty("javafx.animation.fullspeed", "true");
+        System.setProperty("javafx.animation.pulse", "60");
+
+        // Agregar esta configuración para forzar el uso de DirectX en Windows
+        System.setProperty("prism.order", "d3d,sw");
+
         launch(args);
     }
 
@@ -35,27 +44,42 @@ public class App extends Application {
                 System.out.println("Main: Fallo al establecer conexión con la base de datos.");
             }
 
-            System.out.println("Iniciando aplicación...");
+            // Configurar el stage para mejor renderizado
+            stage.setResizable(true);
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ktech/appktechv2/vista/MainLayout.fxml"));
             Scene scene = new Scene(loader.load());
 
-            // Agregar esta línea después de crear la scene
+            // Configurar la scene para mejor renderizado
+            scene.snapshot(null); // Forzar el renderizado inicial
+
+            // Cargar el CSS
+            URL cssUrl = getClass().getResource("/com/ktech/appktechv2/style.css");
+            if (cssUrl != null) {
+                scene.getStylesheets().add(cssUrl.toExternalForm());
+            }
+
+            // Configurar DPI scaling
             scene.getRoot().setStyle("-fx-font-smoothing-type: LCD;");
-            
-            // Configurar la ventana
+
             stage.setScene(scene);
             stage.setTitle("AppKtech V2");
-            stage.setMaximized(true); // Esto hace que inicie en pantalla completa
+            stage.setMaximized(true);
 
-            // Hacer que la ventana sea redimensionable
-            stage.setResizable(true);
+            // Configuración adicional para mejor renderizado
+            if (scene.getRoot() instanceof Region) {
+                Region root = (Region) scene.getRoot();
+                root.setSnapToPixel(true);
+                root.setCache(true);
+                root.setCacheHint(CacheHint.QUALITY);
+            }
 
             stage.show();
-            System.out.println("Aplicación iniciada correctamente");
+
         } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
+            e.printStackTrace();
 
-            // Mostrar alerta al usuario
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setContentText("Error al iniciar la aplicación: " + e.getMessage());

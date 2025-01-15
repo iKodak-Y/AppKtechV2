@@ -4,7 +4,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
 
-<BorderPane fx:id="mainLayout" xmlns:fx="http://javafx.com/fxml" 
+<BorderPane fx:id="mainLayout" 
+            xmlns:fx="http://javafx.com/fxml" 
             fx:controller="com.ktech.appktechv2.controlador.MainLayoutController"
             style="-fx-font-smoothing-type: LCD;">
     <!-- Header -->
@@ -44,14 +45,19 @@
                     fitToWidth="true" 
                     fitToHeight="true"
                     style="-fx-background-color: transparent;"
-                    pannable="true">
-            <StackPane fx:id="contentArea" 
-                       alignment="CENTER"
-                       style="-fx-font-smoothing-type: LCD;">
-                <padding>
-                    <Insets top="20" right="20" bottom="20" left="20"/>
-                </padding>
-            </StackPane>
+                    pannable="true"
+                    hbarPolicy="AS_NEEDED"
+                    vbarPolicy="AS_NEEDED"
+                    snapToPixel="true">
+            <content>
+                <StackPane fx:id="contentArea" 
+                           alignment="CENTER"
+                           style="-fx-font-smoothing-type: GRAY; -fx-background-color: transparent;">
+                    <padding>
+                        <Insets top="20" right="20" bottom="20" left="20"/>
+                    </padding>
+                </StackPane>
+            </content>
         </ScrollPane>
     </center>
 </BorderPane>
