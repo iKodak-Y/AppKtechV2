@@ -16,6 +16,25 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
+import com.ktech.appktechv2.modelo.Producto;
+import com.ktech.appktechv2.modelo.ProductoDAO;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.Initializable;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.CustomMenuItem;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+
+import java.net.URL;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ResourceBundle;
+import javafx.geometry.Side;
+
 public class FacturaController implements Initializable {
 
     @FXML
@@ -91,8 +110,41 @@ public class FacturaController implements Initializable {
     @FXML
     private Button btn_cerrar;
 
+    @FXML
+    private TextField auto_field_producto_list;
+    private ContextMenu autoCompletePopup;
+    private ProductoDAO productoDAO;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        // Inicializa el ContextMenu para el autocompletado
+        autoCompletePopup = new ContextMenu();
+        // Inicializa el DAO de productos
+        productoDAO = new ProductoDAO();
+
+        // Añade un listener al campo de texto para manejar el autocompletado
+        auto_field_producto_list.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null || newValue.isEmpty()) {
+                autoCompletePopup.hide();
+            } else {
+                List<Producto> searchResult = productoDAO.buscarPorCodigoONombre(newValue);
+                if (!searchResult.isEmpty()) {
+                    populatePopup(searchResult);
+                    if (!autoCompletePopup.isShowing()) {
+                        autoCompletePopup.show(auto_field_producto_list, Side.BOTTOM, 0, 0);
+                    }
+                } else {
+                    autoCompletePopup.hide();
+                }
+            }
+        });
+
+        // Oculta el popup cuando el campo pierde el foco
+        auto_field_producto_list.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) { // si pierde el foco
+                autoCompletePopup.hide();
+            }
+        });
     }
 
     @FXML
@@ -107,4 +159,27 @@ public class FacturaController implements Initializable {
     private void acc_cerrar(ActionEvent event) {
     }
 
+    private void populatePopup(List<Producto> searchResult) {
+        List<CustomMenuItem> menuItems = new LinkedList<>();
+
+        // Limitar a 10 resultados para mejor rendimiento
+        int maxEntries = Math.min(searchResult.size(), 10);
+
+        for (int i = 0; i < maxEntries; i++) {
+            final Producto producto = searchResult.get(i);
+            Label entryLabel = new Label(producto.toString());
+            CustomMenuItem item = new CustomMenuItem(entryLabel, true);
+
+            item.setOnAction(event -> {
+                auto_field_producto_list.setText(producto.toString());
+                autoCompletePopup.hide();
+                // Aquí puedes añadir lógica adicional cuando un producto es seleccionado
+            });
+
+            menuItems.add(item);
+        }
+
+        autoCompletePopup.getItems().clear();
+        autoCompletePopup.getItems().addAll(menuItems);
+    }
 }
