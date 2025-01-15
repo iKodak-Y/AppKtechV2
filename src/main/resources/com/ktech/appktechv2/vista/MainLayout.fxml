@@ -1,43 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="mainLayout" xmlns:fx="http://javafx.com/fxml" fx:controller="com.ktech.appktechv2.controlador.MainLayoutController">
+<BorderPane fx:id="mainLayout" prefHeight="703.0" prefWidth="950.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/22" fx:controller="com.ktech.appktechv2.controlador.MainLayoutController">
     <!-- Header -->
     <top>
         <VBox spacing="10" style="-fx-background-color: #f0f0f0;">
             <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
+                <Insets bottom="10" left="10" right="10" top="10" />
             </padding>
             
-            <HBox spacing="10" alignment="CENTER_LEFT">
+            <HBox alignment="CENTER_LEFT" spacing="10">
                 <!-- Logo o título de la app -->
-                <Label text="AppKtech V2" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+                <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="AppKtech" />
                 
-                <Region HBox.hgrow="ALWAYS"/> <!-- Espaciador -->
+                <Region HBox.hgrow="ALWAYS" /> <!-- Espaciador -->
                 
                 <!-- Información de usuario -->
-                <Label fx:id="userNameLabel" text="No has iniciado sesión"/>
-                <Button fx:id="loginButton" text="Iniciar Sesión" onAction="#handleLogin"/>
-                <Button fx:id="logoutButton" text="Cerrar Sesión" onAction="#handleLogout" visible="false"/>
+                <Label fx:id="userNameLabel" text="No has iniciado sesión" />
+                <Button fx:id="loginButton" onAction="#handleLogin" text="Iniciar Sesión" />
+                <Button fx:id="logoutButton" onAction="#handleLogout" text="Cerrar Sesión" visible="false" />
             </HBox>
             
             <!-- Barra de navegación -->
             <HBox fx:id="navBar" spacing="10" visible="false">
-                <Button text="Inicio" onAction="#navigateToHome"/>
-                <Button text="Clientes" onAction="#navigateToClientes"/>
-                <Button text="Productos" onAction="#navigateToProductos"/>
-                <Button text="Facturación" onAction="#navigateToFacturacion"/>
-                <Button text="Ventas" onAction="#navigateToVentas"/>
-                <Button text="Reportes" onAction="#navigateToReportes"/>
+                <Button onAction="#navigateToHome" text="Inicio" />
+                <Button onAction="#navigateToClientes" text="Clientes" />
+                <Button onAction="#navigateToProductos" text="Productos" />
+                <Button onAction="#navigateToFacturacion" text="Facturación" />
+                <Button onAction="#navigateToVentas" text="Ventas" />
+                <Button onAction="#navigateToReportes" text="Reportes" />
             </HBox>
         </VBox>
     </top>
     
     <!-- Contenido dinámico -->
     <center>
-        <StackPane fx:id="contentArea"/>
+        <StackPane fx:id="contentArea" BorderPane.alignment="CENTER" />
     </center>
 </BorderPane>

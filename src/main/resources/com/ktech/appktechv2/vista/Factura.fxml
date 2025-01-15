@@ -21,353 +21,370 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" prefHeight="703.0" prefWidth="903.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktech.appktechv2.controlador.FacturaController">
+
+<HBox alignment="CENTER" spacing="10.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktech.appktechv2.controlador.FacturaController">
    <children>
-      <GridPane prefHeight="703.0" prefWidth="903.0">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints maxHeight="100.5999969482422" minHeight="7.000004673004156" prefHeight="38.80000343322754" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="402.4000305175781" minHeight="10.0" prefHeight="168.99999656677247" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="520.3999938964844" minHeight="10.0" prefHeight="490.0" vgrow="SOMETIMES" />
-        </rowConstraints>
+      <AnchorPane id="AnchorPane" prefHeight="703.0" prefWidth="903.0">
          <children>
-            <Pane prefHeight="200.0" prefWidth="200.0">
+            <GridPane prefHeight="703.0" prefWidth="903.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="100.5999969482422" minHeight="7.000004673004156" prefHeight="38.80000343322754" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="402.4000305175781" minHeight="10.0" prefHeight="168.99999656677247" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="520.3999938964844" minHeight="10.0" prefHeight="490.0" vgrow="SOMETIMES" />
+              </rowConstraints>
                <children>
-                  <Text layoutX="31.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="FACTURA" textAlignment="CENTER">
-                     <font>
-                        <Font name="System Bold" size="24.0" />
-                     </font>
-                  </Text>
-                  <Label layoutX="443.0" layoutY="12.0" prefHeight="26.0" prefWidth="398.0" style="-fx-background-color: #0c4597;" text="Adquirente" textFill="WHITE">
-                     <padding>
-                        <Insets left="10.0" />
-                     </padding>
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Label>
-               </children>
-            </Pane>
-            <Pane prefHeight="202.0" prefWidth="903.0" GridPane.rowIndex="1">
-               <children>
-                  <HBox layoutX="32.0" prefHeight="170.0" prefWidth="825.0">
+                  <Pane prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <VBox prefHeight="170.0" prefWidth="162.0">
-                           <children>
-                              <Label text="Establecimiento:*">
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                              </Label>
-                              <Label text="Nombre Comercial:*">
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                              </Label>
-                              <Label text="Fecha Emisión:">
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                              </Label>
-                              <Label text="Punto de Emisión*:">
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                              </Label>
-                              <Label text="Guia de remisión:">
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                              </Label>
-                           </children>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </VBox>
-                        <VBox prefHeight="200.0" prefWidth="250.2">
-                           <children>
-                              <ComboBox fx:id="cmb_establecimiento" prefWidth="230.0" stylesheets="@../css/styles.css">
-                                 <VBox.margin>
-                                    <Insets top="2.0" />
-                                 </VBox.margin>
-                              </ComboBox>
-                              <TextField fx:id="txt_nombre_comercial" maxWidth="230.0" prefWidth="230.0" stylesheets="@../css/styles.css">
-                                 <VBox.margin>
-                                    <Insets top="2.0" />
-                                 </VBox.margin>
-                              </TextField>
-                              <DatePicker fx:id="dtp_fecha" prefHeight="26.0" prefWidth="230.0" stylesheets="@../css/styles.css">
-                                 <VBox.margin>
-                                    <Insets top="2.0" />
-                                 </VBox.margin>
-                              </DatePicker>
-                              <ComboBox fx:id="cmb_punto_emision" prefWidth="230.0" stylesheets="@../css/styles.css">
-                                 <VBox.margin>
-                                    <Insets top="2.0" />
-                                 </VBox.margin>
-                              </ComboBox>
-                              <TextField fx:id="txt_guia_remision" maxWidth="230.0" prefWidth="230.0" stylesheets="@../css/styles.css">
-                                 <VBox.margin>
-                                    <Insets top="2.0" />
-                                 </VBox.margin>
-                              </TextField>
-                           </children>
-                        </VBox>
-                        <VBox prefHeight="200.0" prefWidth="162.0">
-                           <children>
-                              <Label text="Identificación:*">
-                                 <VBox.margin>
-                                    <Insets top="9.5" />
-                                 </VBox.margin>
-                              </Label>
-                              <Label text="Tipo identificación:*">
-                                 <VBox.margin>
-                                    <Insets top="9.5" />
-                                 </VBox.margin>
-                              </Label>
-                              <Label text="Razón social:*">
-                                 <VBox.margin>
-                                    <Insets top="9.5" />
-                                 </VBox.margin>
-                              </Label>
-                              <Label text="Dirección:">
-                                 <VBox.margin>
-                                    <Insets top="9.5" />
-                                 </VBox.margin>
-                              </Label>
-                              <Label text="Teléfono:">
-                                 <VBox.margin>
-                                    <Insets top="9.5" />
-                                 </VBox.margin>
-                              </Label>
-                              <Label text="Correo electrónico:*">
-                                 <VBox.margin>
-                                    <Insets top="9.5" />
-                                 </VBox.margin>
-                              </Label>
-                           </children>
-                        </VBox>
-                        <VBox prefHeight="200.0" prefWidth="250.2">
-                           <children>
-                              <HBox maxHeight="0.0" maxWidth="230.0" minHeight="25.0" prefHeight="25.0" prefWidth="250.0">
-                                 <children>
-                                    <TextField fx:id="txt_identificacion" prefHeight="26.0" prefWidth="200.0" />
-                                    <Button contentDisplay="GRAPHIC_ONLY" maxWidth="30.0" mnemonicParsing="false" prefWidth="30.0" style="-fx-background-color: #0c4597;" textFill="#0c4597">
-                                       <graphic>
-                                          <ImageView fx:id="btn_buscar_ident" fitHeight="112.0" fitWidth="15.0" onDragDetected="#acc_buscar_ident" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../img/search.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                              </HBox>
-                              <ComboBox fx:id="cmb_tipo_ident" maxWidth="230.0" prefWidth="230.0" stylesheets="@../css/styles.css">
-                                 <VBox.margin>
-                                    <Insets top="2.0" />
-                                 </VBox.margin>
-                              </ComboBox>
-                              <TextField fx:id="txt_razon_social" maxWidth="230.0" prefWidth="230.0" stylesheets="@../css/styles.css">
-                                 <VBox.margin>
-                                    <Insets top="2.0" />
-                                 </VBox.margin>
-                              </TextField>
-                              <TextField fx:id="txt_direccion" maxWidth="230.0" prefWidth="230.0" stylesheets="@../css/styles.css">
-                                 <VBox.margin>
-                                    <Insets top="2.0" />
-                                 </VBox.margin>
-                              </TextField>
-                              <TextField fx:id="txt_telefono" maxWidth="230.0" prefWidth="230.0" stylesheets="@../css/styles.css">
-                                 <VBox.margin>
-                                    <Insets top="2.0" />
-                                 </VBox.margin>
-                              </TextField>
-                              <TextField fx:id="txt_correo" maxWidth="230.0" prefWidth="230.0" stylesheets="@../css/styles.css">
-                                 <VBox.margin>
-                                    <Insets top="2.0" />
-                                 </VBox.margin>
-                              </TextField>
-                           </children>
-                        </VBox>
-                     </children>
-                  </HBox>
-               </children>
-            </Pane>
-            <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
-               <children>
-                  <HBox alignment="TOP_CENTER" layoutX="32.0" layoutY="26.0" prefHeight="32.0" prefWidth="840.0">
-                     <children>
-                        <Label text="Código / Descripción:">
-                           <HBox.margin>
-                              <Insets left="20.0" top="3.0" />
-                           </HBox.margin>
-                        </Label>
-                        <AutoCompleteTextField fx:id="auto_field_producto_list" prefHeight="42.0" prefWidth="298.0" stylesheets="@../css/styles.css">
-                           <HBox.margin>
-                              <Insets left="20.0" />
-                           </HBox.margin>
-                        </AutoCompleteTextField>
-                        <Button fx:id="btn_buscar_producto" mnemonicParsing="false" onAction="#acc_buscar_producto" stylesheets="@../css/styles.css" text="Buscar Producto" textFill="WHITE">
-                           <graphic>
-                              <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../img/search.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <HBox.margin>
-                              <Insets left="20.0" />
-                           </HBox.margin>
+                        <Text layoutX="31.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="FACTURA" textAlignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="24.0" />
+                           </font>
+                        </Text>
+                        <Label layoutX="443.0" layoutY="12.0" prefHeight="26.0" prefWidth="398.0" style="-fx-background-color: #0c4597;" text="Adquirente" textFill="WHITE">
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
-                        </Button>
+                        </Label>
                      </children>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                  </HBox>
-                  <Label layoutX="32.0" layoutY="1.0" text="Detalle:">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <TableView fx:id="tbl_detalle" layoutX="14.0" layoutY="58.0" prefHeight="180.0" prefWidth="877.0" stylesheets="@../css/styles.css">
-                    <columns>
-                      <TableColumn id="columna_1" fx:id="col_codigo" text="Código" />
-                      <TableColumn id="col" fx:id="col_cantidad" prefWidth="70.0" text="Cantidad" />
-                        <TableColumn fx:id="col_descripcion" prefWidth="280.0" text="Descripción" />
-                        <TableColumn fx:id="col_precio_unitario" prefWidth="90.0" sortType="DESCENDING" text="Precio unitario" />
-                        <TableColumn fx:id="col_tarifa" prefWidth="88.0" text="Tarifa" />
-                        <TableColumn fx:id="col_descuento" prefWidth="89.60003662109375" text="Descuento" />
-                        <TableColumn fx:id="col_valor_total" prefWidth="88.79998779296875" text="Valor total" />
-                        <TableColumn fx:id="col_acciones" prefWidth="91.199951171875" text="Acciones" />
-                    </columns>
-                  </TableView>
-                  <Label layoutX="611.0" layoutY="239.0" text="Totales:">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font></Label>
-                  <HBox layoutX="611.0" layoutY="263.0" prefHeight="126.0" prefWidth="275.0">
+                  </Pane>
+                  <Pane prefHeight="202.0" prefWidth="903.0" GridPane.rowIndex="1">
                      <children>
-                        <VBox prefHeight="200.0" prefWidth="180.0">
+                        <HBox layoutX="32.0" prefHeight="170.0" prefWidth="825.0">
                            <children>
-                              <Label alignment="CENTER" prefHeight="18.0" prefWidth="180.0" style="-fx-background-color: #0c4597;" text="Detalle" textAlignment="CENTER" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="14.0" />
-                                 </font>
-                              </Label>
-                              <Label text="Subtotal 15%">
-                                 <VBox.margin>
-                                    <Insets top="5.0" />
-                                 </VBox.margin></Label>
-                              <Label text="Subtotal 0%">
-                                 <VBox.margin>
-                                    <Insets top="5.0" />
-                                 </VBox.margin></Label>
-                              <Label text="IVA 15%">
-                                 <VBox.margin>
-                                    <Insets top="5.0" />
-                                 </VBox.margin></Label>
-                              <Label text="Total a Pagar">
-                                 <VBox.margin>
-                                    <Insets top="5.0" />
-                                 </VBox.margin></Label>
+                              <VBox prefHeight="170.0" prefWidth="162.0">
+                                 <children>
+                                    <Label text="Establecimiento:*">
+                                       <VBox.margin>
+                                          <Insets top="10.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label text="Nombre Comercial:*">
+                                       <VBox.margin>
+                                          <Insets top="10.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label text="Fecha Emisión:">
+                                       <VBox.margin>
+                                          <Insets top="10.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label text="Punto de Emisión*:">
+                                       <VBox.margin>
+                                          <Insets top="10.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label text="Guia de remisión:">
+                                       <VBox.margin>
+                                          <Insets top="10.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </VBox>
+                              <VBox prefHeight="200.0" prefWidth="250.2">
+                                 <children>
+                                    <ComboBox fx:id="cmb_establecimiento" prefWidth="230.0" stylesheets="@../css/styles.css">
+                                       <VBox.margin>
+                                          <Insets top="2.0" />
+                                       </VBox.margin>
+                                    </ComboBox>
+                                    <TextField fx:id="txt_nombre_comercial" maxWidth="230.0" prefWidth="230.0" stylesheets="@../css/styles.css">
+                                       <VBox.margin>
+                                          <Insets top="2.0" />
+                                       </VBox.margin>
+                                    </TextField>
+                                    <DatePicker fx:id="dtp_fecha" prefHeight="26.0" prefWidth="230.0" stylesheets="@../css/styles.css">
+                                       <VBox.margin>
+                                          <Insets top="2.0" />
+                                       </VBox.margin>
+                                    </DatePicker>
+                                    <ComboBox fx:id="cmb_punto_emision" prefWidth="230.0" stylesheets="@../css/styles.css">
+                                       <VBox.margin>
+                                          <Insets top="2.0" />
+                                       </VBox.margin>
+                                    </ComboBox>
+                                    <TextField fx:id="txt_guia_remision" maxWidth="230.0" prefWidth="230.0" stylesheets="@../css/styles.css">
+                                       <VBox.margin>
+                                          <Insets top="2.0" />
+                                       </VBox.margin>
+                                    </TextField>
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="200.0" prefWidth="162.0">
+                                 <children>
+                                    <Label text="Identificación:*">
+                                       <VBox.margin>
+                                          <Insets top="9.5" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label text="Tipo identificación:*">
+                                       <VBox.margin>
+                                          <Insets top="9.5" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label text="Razón social:*">
+                                       <VBox.margin>
+                                          <Insets top="9.5" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label text="Dirección:">
+                                       <VBox.margin>
+                                          <Insets top="9.5" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label text="Teléfono:">
+                                       <VBox.margin>
+                                          <Insets top="9.5" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label text="Correo electrónico:*">
+                                       <VBox.margin>
+                                          <Insets top="9.5" />
+                                       </VBox.margin>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="200.0" prefWidth="250.2">
+                                 <children>
+                                    <HBox maxHeight="0.0" maxWidth="230.0" minHeight="25.0" prefHeight="25.0" prefWidth="250.0">
+                                       <children>
+                                          <TextField fx:id="txt_identificacion" prefHeight="26.0" prefWidth="200.0" />
+                                          <Button contentDisplay="GRAPHIC_ONLY" maxWidth="30.0" mnemonicParsing="false" prefWidth="30.0" style="-fx-background-color: #0c4597;" textFill="#0c4597">
+                                             <graphic>
+                                                <ImageView fx:id="btn_buscar_ident" fitHeight="112.0" fitWidth="15.0" onDragDetected="#acc_buscar_ident" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../img/search.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </graphic>
+                                          </Button>
+                                       </children>
+                                    </HBox>
+                                    <ComboBox fx:id="cmb_tipo_ident" maxWidth="230.0" prefWidth="230.0" stylesheets="@../css/styles.css">
+                                       <VBox.margin>
+                                          <Insets top="2.0" />
+                                       </VBox.margin>
+                                    </ComboBox>
+                                    <TextField fx:id="txt_razon_social" maxWidth="230.0" prefWidth="230.0" stylesheets="@../css/styles.css">
+                                       <VBox.margin>
+                                          <Insets top="2.0" />
+                                       </VBox.margin>
+                                    </TextField>
+                                    <TextField fx:id="txt_direccion" maxWidth="230.0" prefWidth="230.0" stylesheets="@../css/styles.css">
+                                       <VBox.margin>
+                                          <Insets top="2.0" />
+                                       </VBox.margin>
+                                    </TextField>
+                                    <TextField fx:id="txt_telefono" maxWidth="230.0" prefWidth="230.0" stylesheets="@../css/styles.css">
+                                       <VBox.margin>
+                                          <Insets top="2.0" />
+                                       </VBox.margin>
+                                    </TextField>
+                                    <TextField fx:id="txt_correo" maxWidth="230.0" prefWidth="230.0" stylesheets="@../css/styles.css">
+                                       <VBox.margin>
+                                          <Insets top="2.0" />
+                                       </VBox.margin>
+                                    </TextField>
+                                 </children>
+                              </VBox>
                            </children>
-                        </VBox>
-                        <VBox prefHeight="219.0" prefWidth="95.0">
-                           <children>
-                              <Label alignment="CENTER" prefHeight="18.0" prefWidth="95.0" style="-fx-background-color: #0c4597;" text="Valores" textAlignment="CENTER" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="14.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="lbl_subtotal_15" alignment="CENTER_RIGHT" prefWidth="95.0" text="0.00">
-                                 <VBox.margin>
-                                    <Insets top="5.0" />
-                                 </VBox.margin></Label>
-                              <Label fx:id="lbl_subtotal_0" alignment="CENTER_RIGHT" prefWidth="95.0" text="0.00">
-                                 <VBox.margin>
-                                    <Insets top="5.0" />
-                                 </VBox.margin></Label>
-                              <Label fx:id="lbl_iva_15" alignment="CENTER_RIGHT" prefWidth="95.0" text="0.00">
-                                 <VBox.margin>
-                                    <Insets top="5.0" />
-                                 </VBox.margin></Label>
-                              <Label fx:id="lbl_total_pagar" alignment="CENTER_RIGHT" prefWidth="95.0" text="0.00">
-                                 <VBox.margin>
-                                    <Insets top="5.0" />
-                                 </VBox.margin></Label>
-                           </children>
-                        </VBox>
+                        </HBox>
                      </children>
-                  </HBox>
-                  <VBox layoutX="14.0" layoutY="238.5" prefHeight="170.0" prefWidth="500.0">
+                  </Pane>
+                  <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
                      <children>
-                        <Label text="Formas de pago">
+                        <HBox alignment="TOP_CENTER" layoutX="32.0" layoutY="26.0" prefHeight="32.0" prefWidth="840.0">
+                           <children>
+                              <Label text="Código / Descripción:">
+                                 <HBox.margin>
+                                    <Insets left="20.0" top="3.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <AutoCompleteTextField fx:id="auto_field_producto_list" prefHeight="42.0" prefWidth="298.0" stylesheets="@../css/styles.css">
+                                 <HBox.margin>
+                                    <Insets left="20.0" />
+                                 </HBox.margin>
+                              </AutoCompleteTextField>
+                              <Button fx:id="btn_buscar_producto" mnemonicParsing="false" onAction="#acc_buscar_producto" stylesheets="@../css/styles.css" text="Buscar Producto" textFill="WHITE">
+                                 <graphic>
+                                    <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../img/search.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <HBox.margin>
+                                    <Insets left="20.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </HBox>
+                        <Label layoutX="32.0" layoutY="1.0" text="Detalle:">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
-                           <padding>
-                              <Insets bottom="4.0" />
-                           </padding>
                         </Label>
-                        <TableView fx:id="tbl_forma_pago" prefHeight="99.0" prefWidth="498.0" stylesheets="@../css/styles.css">
+                        <TableView fx:id="tbl_detalle" layoutX="14.0" layoutY="58.0" prefHeight="180.0" prefWidth="877.0" stylesheets="@../css/styles.css">
                           <columns>
-                            <TableColumn fx:id="col_forma_pago" prefWidth="309.5999755859375" text="Forma de Pago" />
-                            <TableColumn fx:id="col_valor" prefWidth="92.00006103515625" text="Valor" />
-                              <TableColumn fx:id="col_acciones_forma_pago" prefWidth="97.60003662109375" text="Acciones" />
+                            <TableColumn id="columna_1" fx:id="col_codigo" text="Código" />
+                            <TableColumn id="col" fx:id="col_cantidad" prefWidth="70.0" text="Cantidad" />
+                              <TableColumn fx:id="col_descripcion" prefWidth="280.0" text="Descripción" />
+                              <TableColumn fx:id="col_precio_unitario" prefWidth="90.0" sortType="DESCENDING" text="Precio unitario" />
+                              <TableColumn fx:id="col_tarifa" prefWidth="88.0" text="Tarifa" />
+                              <TableColumn fx:id="col_descuento" prefWidth="89.60003662109375" text="Descuento" />
+                              <TableColumn fx:id="col_valor_total" prefWidth="88.79998779296875" text="Valor total" />
+                              <TableColumn fx:id="col_acciones" prefWidth="88.0" text="Acciones" />
                           </columns>
                         </TableView>
-                        <HBox prefHeight="38.0" prefWidth="498.0">
+                        <Label layoutX="611.0" layoutY="239.0" text="Totales:">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <HBox layoutX="611.0" layoutY="263.0" prefHeight="126.0" prefWidth="275.0">
                            <children>
-                              <Button fx:id="btn_efectivo" mnemonicParsing="false" styleClass="button-forma-pago" stylesheets="@../css/styles.css" text="Efectivo">
+                              <VBox prefHeight="200.0" prefWidth="180.0">
+                                 <children>
+                                    <Label alignment="CENTER" prefHeight="18.0" prefWidth="180.0" style="-fx-background-color: #0c4597;" text="Detalle" textAlignment="CENTER" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Subtotal 15%">
+                                       <VBox.margin>
+                                          <Insets top="5.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label text="Subtotal 0%">
+                                       <VBox.margin>
+                                          <Insets top="5.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label text="IVA 15%">
+                                       <VBox.margin>
+                                          <Insets top="5.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label text="Total a Pagar">
+                                       <VBox.margin>
+                                          <Insets top="5.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="219.0" prefWidth="95.0">
+                                 <children>
+                                    <Label alignment="CENTER" prefHeight="18.0" prefWidth="95.0" style="-fx-background-color: #0c4597;" text="Valores" textAlignment="CENTER" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="lbl_subtotal_15" alignment="CENTER_RIGHT" prefWidth="95.0" text="0.00">
+                                       <VBox.margin>
+                                          <Insets top="5.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label fx:id="lbl_subtotal_0" alignment="CENTER_RIGHT" prefWidth="95.0" text="0.00">
+                                       <VBox.margin>
+                                          <Insets top="5.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label fx:id="lbl_iva_15" alignment="CENTER_RIGHT" prefWidth="95.0" text="0.00">
+                                       <VBox.margin>
+                                          <Insets top="5.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label fx:id="lbl_total_pagar" alignment="CENTER_RIGHT" prefWidth="95.0" text="0.00">
+                                       <VBox.margin>
+                                          <Insets top="5.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <VBox layoutX="14.0" layoutY="238.5" prefHeight="170.0" prefWidth="500.0">
+                           <children>
+                              <Label text="Formas de pago">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets bottom="4.0" />
+                                 </padding>
+                              </Label>
+                              <TableView fx:id="tbl_forma_pago" prefHeight="99.0" prefWidth="498.0" stylesheets="@../css/styles.css">
+                                <columns>
+                                  <TableColumn fx:id="col_forma_pago" prefWidth="309.5999755859375" text="Forma de Pago" />
+                                  <TableColumn fx:id="col_valor" prefWidth="92.00006103515625" text="Valor" />
+                                    <TableColumn fx:id="col_acciones_forma_pago" prefWidth="97.60003662109375" text="Acciones" />
+                                </columns>
+                              </TableView>
+                              <HBox prefHeight="38.0" prefWidth="498.0">
+                                 <children>
+                                    <Button fx:id="btn_efectivo" mnemonicParsing="false" styleClass="button-forma-pago" stylesheets="@../css/styles.css" text="Efectivo">
+                                       <HBox.margin>
+                                          <Insets right="20.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="btn_tarjeta_debito" mnemonicParsing="false" styleClass="button-forma-pago" stylesheets="@../css/styles.css" text="Tarjeta de Débito">
+                                       <HBox.margin>
+                                          <Insets right="20.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="btn_tarjeta_credito" mnemonicParsing="false" styleClass="button-forma-pago" stylesheets="@../css/styles.css" text="Tarjeta de Crédito">
+                                       <HBox.margin>
+                                          <Insets right="20.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <HBox layoutX="611.0" layoutY="416.0" prefHeight="42.0" prefWidth="275.0">
+                           <children>
+                              <Button fx:id="btn_firmar_enviar" mnemonicParsing="false" styleClass="button-enviar" stylesheets="@../css/styles.css" text="Firmar y Enviar">
                                  <HBox.margin>
                                     <Insets right="20.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button fx:id="btn_tarjeta_debito" mnemonicParsing="false" styleClass="button-forma-pago" stylesheets="@../css/styles.css" text="Tarjeta de Débito">
+                              <Button fx:id="btn_guardar_sin_firmar" mnemonicParsing="false" styleClass="button-guardar" stylesheets="@../css/styles.css" text="Guardar sin Firmar">
                                  <HBox.margin>
-                                    <Insets right="20.0" />
-                                 </HBox.margin>
-                              </Button>
-                              <Button fx:id="btn_tarjeta_credito" mnemonicParsing="false" styleClass="button-forma-pago" stylesheets="@../css/styles.css" text="Tarjeta de Crédito">
-                                 <HBox.margin>
-                                    <Insets right="20.0" />
+                                    <Insets />
                                  </HBox.margin>
                               </Button>
                            </children>
                         </HBox>
-                     </children>
-                  </VBox>
-                  <HBox layoutX="611.0" layoutY="416.0" prefHeight="42.0" prefWidth="275.0">
-                     <children>
-                        <Button fx:id="btn_firmar_enviar" mnemonicParsing="false" styleClass="button-enviar" stylesheets="@../css/styles.css" text="Firmar y Enviar">
-                           <HBox.margin>
-                              <Insets right="20.0" />
-                           </HBox.margin>
-                        </Button>
-                        <Button fx:id="btn_guardar_sin_firmar" mnemonicParsing="false" styleClass="button-guardar" stylesheets="@../css/styles.css" text="Guardar sin Firmar">
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
+                        <Button fx:id="btn_cerrar" layoutX="528.0" layoutY="416.0" mnemonicParsing="false" onAction="#acc_cerrar" styleClass="button-cerrar" stylesheets="@../css/styles.css" text="Cerrar">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
                         </Button>
                      </children>
-                  </HBox>
-                  <Button fx:id="btn_cerrar" layoutX="528.0" layoutY="416.0" mnemonicParsing="false" onAction="#acc_cerrar" styleClass="button-cerrar" stylesheets="@../css/styles.css" text="Cerrar">
-                     <font>
-                        <Font size="13.0" />
-                     </font>
-                  </Button>
+                  </Pane>
                </children>
-            </Pane>
+            </GridPane>
          </children>
-      </GridPane>
+      </AnchorPane>
    </children>
-</AnchorPane>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</HBox>

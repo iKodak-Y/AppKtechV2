@@ -20,12 +20,9 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         try {
-            // Crear una instancia de SqlConection
-            SqlConnection conexion = new SqlConnection();
-
-            // Intentar conectar a la base de datos
-            Connection con = conexion.getConexion();
-
+            // ----------- CONEXION BASE DE DATOS   --------------
+            SqlConnection conexion = new SqlConnection(); // Crear una instancia de SqlConection
+            Connection con = conexion.getConexion(); // Intentar conectar a la base de datos
             // Verificar si la conexión fue exitosa
             if (con != null) {
                 System.out.println("Conexión establecida con éxito.");
@@ -33,11 +30,15 @@ public class App extends Application {
                 System.out.println("Main: Fallo al establecer conexión con la base de datos.");
             }
 
+            // ---------   CONFIGURACION PANTALLA     -------------- 
             System.out.println("Iniciando aplicación...");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ktech/appktechv2/vista/MainLayout.fxml"));
             Scene scene = new Scene(loader.load());
             stage.setScene(scene);
-            stage.setTitle("AppKtech V2");
+            stage.setTitle("AppKtech");
+            stage.setMaximized(true);
+            stage.setResizable(true);
+
             stage.show();
             System.out.println("Aplicación iniciada correctamente");
         } catch (IOException e) {

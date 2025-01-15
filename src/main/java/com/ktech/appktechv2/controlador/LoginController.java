@@ -1,4 +1,3 @@
-// src/main/java/com/ktech/appktechv2/controlador/LoginController.java
 package com.ktech.appktechv2.controlador;
 
 import javafx.fxml.FXML;

@@ -98,7 +98,13 @@ public class MainLayoutController {
         if (currentUser == null) {
             return;
         }
-        // Cargar vista de inicio
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ktech/appktechv2/vista/Principal.fxml"));
+            setContent(loader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -117,14 +123,41 @@ public class MainLayoutController {
     // Implementar los demás métodos de navegación de manera similar
     @FXML
     private void navigateToProductos(ActionEvent event) {
+        if (currentUser == null) {
+            return;
+        }
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ktech/appktechv2/vista/Gestion_Productos.fxml"));
+            setContent(loader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void navigateToFacturacion(ActionEvent event) {
+        if (currentUser == null) {
+            return;
+        }
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ktech/appktechv2/vista/Factura.fxml"));
+            setContent(loader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void navigateToVentas(ActionEvent event) {
+        if (currentUser == null) {
+            return;
+        }
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ktech/appktechv2/vista/TicketsVentas.fxml"));
+            setContent(loader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
