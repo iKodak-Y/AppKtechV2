@@ -34,13 +34,13 @@ CREATE TABLE FacturaElectronica (
 CREATE TABLE DetalleFactura (
     id_detalle INT IDENTITY(1,1) PRIMARY KEY,
     id_factura INT NOT NULL FOREIGN KEY REFERENCES FacturaElectronica(id_factura) ON DELETE CASCADE,
-    codigo_producto NVARCHAR(50) NOT NULL,
     descripcion NVARCHAR(300) NOT NULL,
     cantidad DECIMAL(18, 6) NOT NULL CHECK (cantidad > 0),
     precio_unitario DECIMAL(18, 6) NOT NULL CHECK (precio_unitario >= 0),
     subtotal DECIMAL(18, 6) NOT NULL CHECK (subtotal >= 0),
     impuestos XML NOT NULL, -- Detalle de los impuestos aplicados
     fecha_registro DATETIME DEFAULT GETDATE()
+    id_producto INT NOT NULL FOREIGN KEY REFERENCES Productos(id_producto), -- Relación con ID del producto
 );
 
 -- Tabla para registrar los errores específicos de facturas electrónicas
