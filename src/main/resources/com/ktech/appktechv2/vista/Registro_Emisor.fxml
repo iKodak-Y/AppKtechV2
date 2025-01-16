@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktech.appktechv2.controlador.Registro_EmisorController">
+   <children>
+      <Pane prefHeight="59.0" prefWidth="700.0">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="47.0" prefWidth="700.0" style="-fx-background-color: #0c4597;" text="REGISTRO EMISOR" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <HBox alignment="CENTER" prefHeight="450.0" prefWidth="700.0" spacing="20.0">
+         <children>
+            <VBox prefHeight="430.0" prefWidth="200.0">
+               <children>
+                  <Label text="RUC:*">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="15.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label text="Razón Social:*">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="25.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label text="Nombre Comercial:">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="25.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label text="Dirección:*">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="25.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label text="Código Establecimiento:*">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="25.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label text="Punto Emisión:*">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="25.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label text="Tipo de ambiente:*">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="25.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label text="Certificado (.p12):*">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="25.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label text="Contraseña Certificado:*">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="25.0" />
+                     </VBox.margin>
+                  </Label>
+               </children>
+            </VBox>
+            <VBox prefHeight="430.0" prefWidth="300.0" spacing="15.0">
+               <children>
+                  <TextField fx:id="txtRuc" promptText="Ingrese RUC" />
+                  <TextField fx:id="txtRazonSocial" promptText="Ingrese Razón Social" />
+                  <TextField fx:id="txtNombreComercial" promptText="Ingrese Nombre Comercial" />
+                  <TextField fx:id="txtDireccion" promptText="Ingrese Dirección" />
+                  <TextField fx:id="txtCodigoEstablecimiento" maxWidth="100.0" promptText="Ej: 001" />
+                  <TextField fx:id="txtPuntoEmision" maxWidth="100.0" promptText="Ej: 001" />
+                  <ComboBox fx:id="cmbTipoAmbiente" prefWidth="150.0" promptText="Seleccione..."/>
+                  <HBox spacing="10.0">
+                     <children>
+                        <TextField fx:id="txtCertificadoPath" editable="false" prefWidth="200.0" promptText="Seleccione archivo .p12" />
+                        <Button fx:id="btnSeleccionarCertificado" mnemonicParsing="false" onAction="#seleccionarCertificado" text="..." />
+                     </children>
+                  </HBox>
+                  <PasswordField fx:id="txtContrasena" promptText="Ingrese contraseña" />
+                  <CheckBox fx:id="chkObligadoContabilidad" mnemonicParsing="false" text="Obligado a llevar contabilidad" />
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </HBox>
+      <HBox alignment="CENTER" spacing="20.0">
+         <children>
+            <Button fx:id="btnGuardar" mnemonicParsing="false" onAction="#guardarEmisor" styleClass="button-primary" text="Guardar" />
+            <Button fx:id="btnConfigSri" mnemonicParsing="false" onAction="#abrirConfiguracionSRI" text="Configuración SRI" />
+            <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#cancelar" text="Cancelar" />
+         </children>
+         <padding>
+            <Insets bottom="20.0" top="10.0" />
+         </padding>
+      </HBox>
+   </children>
+</VBox>

@@ -77,6 +77,11 @@ public class MainLayoutController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ktech/appktechv2/vista/principal.fxml"));
             Parent mainView = loader.load();
+
+            // Configurar referencia al MainLayoutController
+            PrincipalController principalController = loader.getController();
+            principalController.setMainLayoutController(this);
+
             setContent(mainView);
         } catch (IOException e) {
             e.printStackTrace();
@@ -101,9 +106,16 @@ public class MainLayoutController {
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ktech/appktechv2/vista/Principal.fxml"));
-            setContent(loader.load());
+            Parent mainView = loader.load();
+
+            // Configurar referencia al MainLayoutController
+            PrincipalController principalController = loader.getController();
+            principalController.setMainLayoutController(this);
+
+            setContent(mainView);
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("Error cargando vista principal: " + e.getMessage());
         }
     }
 

@@ -7,79 +7,55 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.stage.Stage;
 
 public class PrincipalController implements Initializable {
 
-    @FXML
-    private Button btn_clientes;
-    @FXML
-    private Button btn_productos;
     @FXML
     private Button btn_reportes;
     @FXML
     private Button btn_facturacion;
     @FXML
-    private Button btn_cerrar;
-    @FXML
     private Button btn_venta;
+    @FXML
+    private Button btn_emisor;
 
-    /**
-     * Initializes the controller class.
-     */
+    private MainLayoutController mainLayoutController;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
     }
 
-    @FXML
-    private void acc_clientes(ActionEvent event) {
-        try {
-            String formulario = "/com/ktech/appktechv2/vista/Clientes.fxml";
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(formulario));
-            Parent root = loader.load();
-
-            ClientesController controlador = loader.getController();
-
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-
-            stage.setResizable(false);
-            stage.show();
-
-            Stage myStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            if (myStage != null) {
-                myStage.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void setMainLayoutController(MainLayoutController mainLayoutController) {
+        this.mainLayoutController = mainLayoutController;
     }
 
     @FXML
-    private void acc_productos(ActionEvent event) {
+    private void acc_facturacion(ActionEvent event) {
+        loadView("/com/ktech/appktechv2/vista/Factura.fxml");
+    }
+
+    @FXML
+    private void acc_venta(ActionEvent event) {
+        loadView("/com/ktech/appktechv2/vista/TicketsVentas.fxml");
+    }
+
+    @FXML
+    private void acc_emisor(ActionEvent event) {
+        loadView("/com/ktech/appktechv2/vista/Registro_Emisor.fxml");
+    }
+
+
+    private void loadView(String fxmlPath) {
+        if (mainLayoutController == null) {
+            System.out.println("MainLayoutController no está configurado");
+            return;
+        }
+
         try {
-            String formulario = "/com/ktech/appktechv2/vista/Gestion_Productos.fxml";
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(formulario));
-            Parent root = loader.load();
-
-            Gestion_ProductosController controlador = loader.getController();
-
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-
-            stage.setResizable(false);
-            stage.show();
-
-            Stage myStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            if (myStage != null) {
-                myStage.close();
-            }
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent view = loader.load();
+            mainLayoutController.setContent(view);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -88,65 +64,4 @@ public class PrincipalController implements Initializable {
     @FXML
     private void acc_reportes(ActionEvent event) {
     }
-
-    @FXML
-    private void acc_facturacion(ActionEvent event) {
-        try {
-            String formulario = "/com/ktech/appktechv2/vista/Factura.fxml";
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(formulario));
-            Parent root = loader.load();
-
-            FacturaController controlador = loader.getController();
-
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-
-            stage.setResizable(false);
-            stage.show();
-
-            Stage myStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            if (myStage != null) {
-                myStage.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void acc_cerrar(ActionEvent event) {
-        try {
-            System.exit(0);
-        } catch (Exception e) {
-        }
-    }
-
-    @FXML
-    private void acc_venta(ActionEvent event) {
-        try {
-            String formulario = "/com/ktech/appktechv2/vista/TicketsVentas.fxml";
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(formulario));
-            Parent root = loader.load();
-
-            TicketsVentasController controlador = loader.getController();
-
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-
-            stage.setResizable(false);
-            stage.show();
-
-            Stage myStage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            if (myStage != null) {
-                myStage.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 }

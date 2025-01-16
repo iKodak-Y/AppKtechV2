@@ -1,39 +1,36 @@
+
 package com.ktech.appktechv2.controlador;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
 import com.ktech.appktechv2.modelo.Producto;
 import com.ktech.appktechv2.modelo.ProductoDAO;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import com.ktech.appktechv2.modelo.Emisor;
+import com.ktech.appktechv2.modelo.EmisorDAO;
+import com.ktech.appktechv2.modelo.FacturaDAO;
+import com.ktech.appktechv2.modelo.ClaveAccesoGenerator;
+
 import javafx.fxml.Initializable;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.CustomMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.geometry.Side;
+import java.util.Date;
 
 public class FacturaController implements Initializable {
 
@@ -155,7 +152,6 @@ public class FacturaController implements Initializable {
     private void acc_buscar_producto(ActionEvent event) {
     }
 
-
     private void populatePopup(List<Producto> searchResult) {
         List<CustomMenuItem> menuItems = new LinkedList<>();
 
@@ -182,6 +178,45 @@ public class FacturaController implements Initializable {
 
     @FXML
     private void acc_firmar_enviar(ActionEvent event) {
+        try {
+            // Recuperar datos del emisor
+            EmisorDAO emisorDAO = new EmisorDAO();
+            Emisor emisor = emisorDAO.obtenerEmisorPorDefecto();
+
+            if (emisor == null) {
+                throw new IllegalArgumentException("No se encontraron datos del emisor en la base de datos.");
+            }
+
+            // Obtener el número secuencial
+            FacturaDAO facturaDAO = new FacturaDAO();
+            String secuencial = facturaDAO.obtenerSiguienteSecuencial(emisor.getIdEmisor());
+
+            // Generar código numérico
+            String codigoNumerico = ClaveAccesoGenerator.generarCodigoNumerico();
+
+            // Generar la clave de acceso
+            LocalDate localDate = dtp_fecha.getValue();
+            if (localDate == null) {
+                throw new IllegalArgumentException("La fecha de emisión no puede estar vacía.");
+            }
+            java.util.Date fechaEmision = java.sql.Date.valueOf(localDate);
+
+            String claveAcceso = ClaveAccesoGenerator.generarClaveAcceso(
+                    fechaEmision,
+                    "01",
+                    emisor.getRuc(),
+                    emisor.getTipoAmbiente(),
+                    emisor.getCodigoEstablecimiento() + emisor.getPuntoEmision(),
+                    secuencial,
+                    codigoNumerico
+            );
+
+            System.out.println("Clave de Acceso Generada: " + claveAcceso);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Ocurrió un error al generar la clave de acceso.");
+        }
     }
 
     @FXML
@@ -191,6 +226,5 @@ public class FacturaController implements Initializable {
     @FXML
     private void acc_cancelar(ActionEvent event) {
     }
-    
-    
+
 }

@@ -2,6 +2,8 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -11,42 +13,60 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<HBox alignment="CENTER" spacing="10.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktech.appktechv2.controlador.PrincipalController">
+<HBox alignment="CENTER" prefHeight="662.0" prefWidth="974.0" spacing="10.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktech.appktechv2.controlador.PrincipalController">
    <children>
-      <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0">
+      <AnchorPane id="AnchorPane" prefHeight="622.0" prefWidth="989.0">
           <children>
-              <GridPane prefHeight="330.0" prefWidth="600.0">
+              <GridPane prefHeight="622.0" prefWidth="934.0">
                   <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   </columnConstraints>
                   <rowConstraints>
-                      <RowConstraints maxHeight="85.00000610351563" minHeight="10.0" prefHeight="80.19998779296876" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="257.00000610351566" minHeight="10.0" prefHeight="190.60001220703126" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="129.20000610351565" minHeight="10.0" prefHeight="61.20000610351559" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="222.3999801635742" minHeight="10.0" prefHeight="222.3999801635742" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="423.20003051757806" minHeight="10.0" prefHeight="0.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="189.60000000000002" minHeight="0.0" prefHeight="149.60000000000002" vgrow="SOMETIMES" />
                   </rowConstraints>
                   <children>
-                      <Pane prefHeight="200.0" prefWidth="200.0">
+                      <Pane prefHeight="200.0" prefWidth="934.0">
                           <children>
-                              <Text layoutX="240.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="K-TECH" textAlignment="CENTER" wrappingWidth="119.8551025390625">
+                              <Text fill="#0c4597" layoutX="189.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SISTEMA DE FACTURACION" textAlignment="CENTER" wrappingWidth="555.05517578125">
                                   <font>
-                                      <Font size="33.0" />
+                                      <Font name="System Bold" size="40.0" />
                                   </font>
                               </Text>
                           </children>
                       </Pane>
                       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
                           <children>
-                              <Button fx:id="btn_clientes" layoutX="93.0" layoutY="110.0" mnemonicParsing="false" onAction="#acc_clientes" prefHeight="41.0" prefWidth="137.0" text="Gestión de Clientes" />
-                              <Button fx:id="btn_productos" layoutX="93.0" layoutY="44.0" mnemonicParsing="false" onAction="#acc_productos" prefHeight="41.0" prefWidth="137.0" text="Gestión de Productos" />
-                              <Button fx:id="btn_reportes" layoutX="363.0" layoutY="131.0" mnemonicParsing="false" onAction="#acc_reportes" prefHeight="41.0" prefWidth="137.0" text="Reportes" />
-                              <Button fx:id="btn_facturacion" layoutX="363.0" layoutY="76.0" mnemonicParsing="false" onAction="#acc_facturacion" prefHeight="41.0" prefWidth="137.0" text="Facturación" />
-                              <Button fx:id="btn_venta" layoutX="364.0" layoutY="21.0" mnemonicParsing="false" onAction="#acc_venta" prefHeight="41.0" prefWidth="137.0" text="Ticket Venta" />
+                              <Button fx:id="btn_reportes" contentDisplay="TOP" layoutX="609.0" layoutY="45.0" mnemonicParsing="false" onAction="#acc_reportes" prefHeight="120.0" prefWidth="180.0" styleClass="button-inicio" text="Reportes">
+                           <graphic>
+                              <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../img/reporte.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></Button>
+                              <Button fx:id="btn_facturacion" contentDisplay="TOP" layoutX="379.0" layoutY="45.0" mnemonicParsing="false" onAction="#acc_facturacion" prefHeight="120.0" prefWidth="180.0" styleClass="button-inicio" text="Facturación">
+                           <graphic>
+                              <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../img/factura.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></Button>
+                              <Button fx:id="btn_venta" contentDisplay="TOP" layoutX="146.0" layoutY="45.0" mnemonicParsing="false" onAction="#acc_venta" prefHeight="120.0" prefWidth="180.0" styleClass="button-inicio" text="Ticket Venta">
+                           <graphic>
+                              <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../img/ticket.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></Button>
                           </children>
                       </Pane>
-                      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+                      <Pane prefHeight="151.0" prefWidth="600.0" GridPane.rowIndex="2">
                           <children>
-                              <Button fx:id="btn_cerrar" layoutX="276.0" layoutY="17.0" mnemonicParsing="false" onAction="#acc_cerrar" prefHeight="27.0" prefWidth="49.0" text="Salir" />
+                        <Button fx:id="btn_emisor" layoutX="399.0" layoutY="54.0" mnemonicParsing="false" onAction="#acc_emisor" prefHeight="41.0" prefWidth="137.0" text="Registrar Emisor" />
                           </children>
                       </Pane>
                   </children>
