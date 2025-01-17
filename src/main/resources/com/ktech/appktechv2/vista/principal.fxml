@@ -29,7 +29,7 @@
                   <children>
                       <Pane prefHeight="200.0" prefWidth="934.0">
                           <children>
-                              <Text fill="#0c4597" layoutX="189.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SISTEMA DE FACTURACION" textAlignment="CENTER" wrappingWidth="555.05517578125">
+                              <Text fill="#0c4597" layoutX="189.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SISTEMA DE FACTURACIÓN" textAlignment="CENTER" wrappingWidth="555.05517578125">
                                   <font>
                                       <Font name="System Bold" size="40.0" />
                                   </font>

@@ -17,7 +17,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <HBox alignment="CENTER" spacing="10.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktech.appktechv2.controlador.TicketsVentasController">
    <children>
       <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/styles.css">
@@ -150,7 +149,6 @@
                                           <Button onAction="#acc_registrar_venta" text="Finalizar Venta" />
                                       </children>
                                   </HBox>
-                                  <Button fx:id="btn_cerrar" layoutX="602.0" layoutY="300.0" mnemonicParsing="false" onAction="#acc_cerrar" prefHeight="26.0" prefWidth="68.0" text="Cerrar" />
                               </children>
                           </Pane>
                       </children>

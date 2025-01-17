@@ -15,7 +15,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <HBox alignment="CENTER" spacing="10.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktech.appktechv2.controlador.Gestion_CategoriasController">
    <children>
       <AnchorPane id="AnchorPane" prefHeight="321.0" prefWidth="600.0">
@@ -43,7 +42,7 @@
                                     <TextField fx:id="txt_nombre" GridPane.columnIndex="1" GridPane.rowIndex="0" />
                                     <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                         <children>
-                                            <Button onAction="#agregarCategoria" text="Agregar" />
+                                            <Button onAction="#agregarCategoria" styleClass="button-enviar" text="Agregar" />
                                         </children>
                                     </HBox>
                                 </children>

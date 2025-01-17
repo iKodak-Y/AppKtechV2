@@ -72,6 +72,31 @@
     -fx-font-weight: bold;
 }
 
+.button-sesion {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.button-sesion:hover {
+    -fx-background-color: #d1d1d1;
+    -fx-font-weight: bold;
+}
+
+
+.button-nav {
+    -fx-background-color: transparent;
+    -fx-text-fill: black;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.button-nav:hover {
+    -fx-background-color: transparent;
+    -fx-text-fill: #b7b7b7;
+    -fx-font-weight: bold;
+}
 .button-cerrar {
     -fx-background-color: #b21515 !important;
     -fx-font-weight: bold!important;

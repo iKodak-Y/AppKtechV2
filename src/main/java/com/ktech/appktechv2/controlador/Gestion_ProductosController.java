@@ -76,7 +76,6 @@ public class Gestion_ProductosController implements Initializable {
     private Producto productoSeleccionado; // Variable para almacenar el producto seleccionado
     @FXML
     private Button btn_limpiar;
-    @FXML
     private Button btn_cerrar;
     @FXML
     private Button btn_categoria;
@@ -215,7 +214,6 @@ public class Gestion_ProductosController implements Initializable {
         limpiarCampos();
     }
 
-    @FXML
     private void acc_cerrar(ActionEvent event) {
         try {
             // abrir formulario

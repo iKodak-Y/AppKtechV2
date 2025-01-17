@@ -25,7 +25,7 @@ public class App extends Application {
             Connection con = conexion.getConexion(); // Intentar conectar a la base de datos
             // Verificar si la conexión fue exitosa
             if (con != null) {
-                System.out.println("Conexión establecida con éxito.");
+                System.out.println("Conexion establecida con exito.");
             } else {
                 System.out.println("Main: Fallo al establecer conexión con la base de datos.");
             }

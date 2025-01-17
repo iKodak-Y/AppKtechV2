@@ -3,23 +3,67 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane fx:id="mainLayout" prefHeight="703.0" prefWidth="950.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/22" fx:controller="com.ktech.appktechv2.controlador.MainLayoutController">
+<BorderPane fx:id="mainLayout" prefHeight="703.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktech.appktechv2.controlador.MainLayoutController">
     <!-- Header -->
     <top>
-        <VBox spacing="10" style="-fx-background-color: #f0f0f0;">
+        <VBox spacing="10" style="-fx-background-color: #f0f0f0;" stylesheets="@../css/styles.css">
             <padding>
                 <Insets bottom="10" left="10" right="10" top="10" />
             </padding>
             
             <HBox alignment="CENTER_LEFT" spacing="10">
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../img/logo.png" />
+               </image>
+            </ImageView>
                 <!-- Logo o título de la app -->
-                <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="AppKtech" />
+                <Label style="-fx-font-size: 30PX; -fx-font-weight: bold;" text="K-TECH">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin></Label>
+               
+               <!-- Barra de navegación -->
+               <HBox fx:id="navBar" alignment="CENTER_LEFT" spacing="10" visible="false">
+                   <Button onAction="#navigateToHome" styleClass="button-nav" text="Inicio">
+                  <HBox.margin>
+                     <Insets left="20.0" />
+                  </HBox.margin>
+               </Button>
+                   <Button onAction="#navigateToClientes" styleClass="button-nav" text="Clientes">
+                  <HBox.margin>
+                     <Insets />
+                  </HBox.margin>
+               </Button>
+                   <Button onAction="#navigateToProductos" styleClass="button-nav" text="Productos">
+                  <HBox.margin>
+                     <Insets />
+                  </HBox.margin>
+               </Button>
+                   <Button onAction="#navigateToFacturacion" styleClass="button-nav" text="Facturación">
+                  <HBox.margin>
+                     <Insets />
+                  </HBox.margin>
+               </Button>
+                   <Button onAction="#navigateToVentas" styleClass="button-nav" text="Ventas">
+                  <HBox.margin>
+                     <Insets />
+                  </HBox.margin>
+               </Button>
+                   <Button onAction="#navigateToReportes" styleClass="button-nav" text="Reportes">
+                  <HBox.margin>
+                     <Insets />
+                  </HBox.margin>
+               </Button>
+               </HBox>
                 
                 <Region HBox.hgrow="ALWAYS" /> <!-- Espaciador -->
                 
@@ -27,16 +71,6 @@
                 <Label fx:id="userNameLabel" text="No has iniciado sesión" />
                 <Button fx:id="loginButton" onAction="#handleLogin" text="Iniciar Sesión" />
                 <Button fx:id="logoutButton" onAction="#handleLogout" text="Cerrar Sesión" visible="false" />
-            </HBox>
-            
-            <!-- Barra de navegación -->
-            <HBox fx:id="navBar" spacing="10" visible="false">
-                <Button onAction="#navigateToHome" text="Inicio" />
-                <Button onAction="#navigateToClientes" text="Clientes" />
-                <Button onAction="#navigateToProductos" text="Productos" />
-                <Button onAction="#navigateToFacturacion" text="Facturación" />
-                <Button onAction="#navigateToVentas" text="Ventas" />
-                <Button onAction="#navigateToReportes" text="Reportes" />
             </HBox>
         </VBox>
     </top>

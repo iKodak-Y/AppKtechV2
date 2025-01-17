@@ -51,7 +51,6 @@ public class ClientesController implements Initializable {
     private Button btn_guardar;
     @FXML
     private Button btn_eliminar;
-    @FXML
     private Button btn_cerrar;
     @FXML
     private TableView<Cliente> tbl_clientes;
@@ -230,7 +229,6 @@ public class ClientesController implements Initializable {
         limpiarCampos();
     }
 
-    @FXML
     private void acc_cerrar(ActionEvent event) {
         try {
             // abrir formulario

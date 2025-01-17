@@ -155,9 +155,9 @@
                                                 <HBox maxHeight="0.0" maxWidth="230.0" minHeight="25.0" prefHeight="25.0" prefWidth="250.0">
                                                     <children>
                                                         <TextField fx:id="txt_identificacion" prefHeight="26.0" prefWidth="200.0" />
-                                                        <Button contentDisplay="GRAPHIC_ONLY" maxWidth="30.0" mnemonicParsing="false" prefWidth="30.0" style="-fx-background-color: #0c4597;" textFill="#0c4597">
+                                                        <Button fx:id="btn_buscar_ident" contentDisplay="GRAPHIC_ONLY" maxWidth="30.0" mnemonicParsing="false" onAction="#acc_buscar_ident" prefWidth="30.0" style="-fx-background-color: #0c4597;" textFill="#0c4597">
                                                             <graphic>
-                                                                <ImageView fx:id="btn_buscar_ident" fitHeight="112.0" fitWidth="15.0" onDragDetected="#acc_buscar_ident" pickOnBounds="true" preserveRatio="true">
+                                                                <ImageView fitHeight="112.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                                                                     <image>
                                                                         <Image url="@../img/search.png" />
                                                                     </image>
@@ -337,17 +337,17 @@
                                         </TableView>
                                         <HBox prefHeight="38.0" prefWidth="498.0">
                                             <children>
-                                                <Button fx:id="btn_efectivo" mnemonicParsing="false" styleClass="button-forma-pago" stylesheets="@../css/styles.css" text="Efectivo">
+                                                <Button fx:id="btn_efectivo" mnemonicParsing="false" onAction="#acc_metodo_pago_efectivo" styleClass="button-forma-pago" stylesheets="@../css/styles.css" text="Efectivo">
                                                     <HBox.margin>
                                                         <Insets right="20.0" />
                                                     </HBox.margin>
                                                 </Button>
-                                                <Button fx:id="btn_tarjeta_debito" mnemonicParsing="false" styleClass="button-forma-pago" stylesheets="@../css/styles.css" text="Tarjeta de Débito">
+                                                <Button fx:id="btn_tarjeta_debito" mnemonicParsing="false" onAction="#acc_metodo_pago_tarjeta_debito" styleClass="button-forma-pago" stylesheets="@../css/styles.css" text="Tarjeta de Débito">
                                                     <HBox.margin>
                                                         <Insets right="20.0" />
                                                     </HBox.margin>
                                                 </Button>
-                                                <Button fx:id="btn_tarjeta_credito" mnemonicParsing="false" styleClass="button-forma-pago" stylesheets="@../css/styles.css" text="Tarjeta de Crédito">
+                                                <Button fx:id="btn_tarjeta_credito" mnemonicParsing="false" onAction="#acc_metodo_pago_tarjeta_credito" styleClass="button-forma-pago" stylesheets="@../css/styles.css" text="Tarjeta de Crédito">
                                                     <HBox.margin>
                                                         <Insets right="20.0" />
                                                     </HBox.margin>

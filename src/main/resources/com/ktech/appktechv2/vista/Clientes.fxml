@@ -17,7 +17,6 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <HBox alignment="CENTER" spacing="10.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktech.appktechv2.controlador.ClientesController">
    <children>
       <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/styles.css">
@@ -28,8 +27,8 @@
                   </columnConstraints>
                   <rowConstraints>
                       <RowConstraints maxHeight="127.00000610351563" minHeight="0.0" prefHeight="38.40001106262207" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="452.8" minHeight="10.0" prefHeight="247.9999889373779" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="372.8000183105469" minHeight="10.0" prefHeight="282.4000244140625" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="452.8" minHeight="10.0" prefHeight="208.60000610351562" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="372.8000183105469" minHeight="10.0" prefHeight="335.59999389648436" vgrow="SOMETIMES" />
                   </rowConstraints>
                   <children>
                       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
@@ -83,14 +82,11 @@
                                       </VBox>
                                   </children>
                               </HBox>
-                              <Button fx:id="btn_guardar" layoutX="395.0" layoutY="198.0" mnemonicParsing="false" onAction="#acc_guardar" prefHeight="32.0" prefWidth="79.0" stylesheets="@../css/styles.css" text="Guardar" />
-                              <Button fx:id="btn_eliminar" layoutX="496.0" layoutY="198.0" mnemonicParsing="false" onAction="#acc_eliminar" prefHeight="32.0" prefWidth="79.0" stylesheets="@../css/styles.css" text="Eliminar" />
-                              <Button fx:id="btn_cerrar" layoutX="597.0" layoutY="198.0" mnemonicParsing="false" onAction="#acc_cerrar" prefHeight="32.0" prefWidth="79.0" stylesheets="@../css/styles.css" text="Cerrar" />
                           </children>
                       </Pane>
                       <Pane prefHeight="200.0" prefWidth="200.0">
                           <children>
-                              <Label layoutX="276.0" layoutY="7.0" text="Gestión de Clientes">
+                              <Label layoutX="286.0" layoutY="5.0" text="Gestión de Clientes">
                                   <font>
                                       <Font size="22.0" />
                                   </font>
@@ -110,6 +106,8 @@
                                       <TableColumn fx:id="col_sexo" prefWidth="63.199951171875" text="Sexo" />
                                   </columns>
                               </TableView>
+                        <Button fx:id="btn_guardar" layoutX="667.0" layoutY="292.0" mnemonicParsing="false" onAction="#acc_guardar" prefHeight="32.0" prefWidth="79.0" styleClass="button-enviar" stylesheets="@../css/styles.css" text="Guardar" />
+                        <Button fx:id="btn_eliminar" layoutX="559.0" layoutY="292.0" mnemonicParsing="false" onAction="#acc_eliminar" prefHeight="32.0" prefWidth="79.0" styleClass="button-cerrar" stylesheets="@../css/styles.css" text="Eliminar" />
                           </children>
                       </Pane>
                   </children>

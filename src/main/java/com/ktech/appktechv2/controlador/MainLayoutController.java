@@ -9,6 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import java.io.IOException;
 import javafx.event.ActionEvent;
+import javafx.scene.layout.BorderPane;
 
 public class MainLayoutController {
 
@@ -24,8 +25,9 @@ public class MainLayoutController {
     private StackPane contentArea;
 
     private String currentUser = null;
-
     @FXML
+    private BorderPane mainLayout;
+
     private void initialize() {
         navBar.setVisible(false);
         updateLoginStatus();

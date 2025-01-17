@@ -82,7 +82,6 @@ public class TicketsVentasController implements Initializable {
     private TextField txtNombreProducto;
     @FXML
     private TextField txtPrecioUnitario; // txtPVP
-    @FXML
     private Button btn_cerrar;
 
     @Override
@@ -224,7 +223,6 @@ public class TicketsVentasController implements Initializable {
         }
     }
 
-    @FXML
     private void acc_limpiar(ActionEvent event) {
         limpiarCampos();
     }
@@ -258,7 +256,6 @@ public class TicketsVentasController implements Initializable {
         alert.showAndWait();
     }
 
-    @FXML
     private void acc_cerrar(ActionEvent event) {
         try {
             // abrir formulario

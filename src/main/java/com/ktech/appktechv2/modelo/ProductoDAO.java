@@ -5,15 +5,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-
-import java.util.List;
-
 public class ProductoDAO {
 
     public List<Producto> obtenerTodos() {
@@ -145,8 +136,13 @@ public class ProductoDAO {
                     producto.setId(rs.getInt("IDProducto"));
                     producto.setCodigo(rs.getString("Codigo"));
                     producto.setNombre(rs.getString("Nombre"));
+                    producto.setPrecio(rs.getDouble("Precio"));
                     producto.setPvp(rs.getDouble("PVP"));
-                    // Otros campos...
+                    producto.setStockInicial(rs.getInt("StockInicial"));
+                    producto.setStockActual(rs.getInt("StockActual"));
+                    producto.setIva(rs.getDouble("IVA"));
+                    producto.setEstado(rs.getString("Estado"));
+                    producto.setIdCategoria(rs.getInt("IDCategoria"));
                     productos.add(producto);
                 }
             }

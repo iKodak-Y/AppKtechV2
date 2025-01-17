@@ -16,24 +16,23 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<HBox alignment="CENTER" spacing="10.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktech.appktechv2.controlador.Gestion_ProductosController">
+<HBox alignment="CENTER" prefHeight="661.0" prefWidth="800.0" spacing="10.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktech.appktechv2.controlador.Gestion_ProductosController">
    <children>
-      <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/styles.css">
+      <AnchorPane id="AnchorPane" prefHeight="682.0" prefWidth="760.0" stylesheets="@../css/styles.css">
          <children>
-            <GridPane prefHeight="587.0" prefWidth="760.0">
+            <GridPane prefHeight="622.0" prefWidth="760.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints maxHeight="76.60001220703126" minHeight="10.0" prefHeight="42.99999084472656" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="380.4000129699707" minHeight="10.0" prefHeight="240.00000610351566" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="355.99999389648434" minHeight="0.0" prefHeight="304.79999389648435" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="380.4000129699707" minHeight="10.0" prefHeight="236.6000183105469" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="355.99999389648434" minHeight="0.0" prefHeight="330.9999816894531" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
                   <Pane prefHeight="232.0" prefWidth="760.0" GridPane.rowIndex="1">
                      <children>
-                        <HBox layoutX="32.0" layoutY="58.0" prefHeight="177.0" prefWidth="690.0">
+                        <HBox layoutX="32.0" layoutY="51.0" prefHeight="177.0" prefWidth="690.0">
                            <children>
                               <VBox prefHeight="224.0" prefWidth="189.0" spacing="20.0">
                                  <children>
@@ -78,28 +77,25 @@
                               </VBox>
                            </children>
                         </HBox>
-                        <Button fx:id="btn_guardar" layoutX="417.0" layoutY="207.0" mnemonicParsing="false" onAction="#acc_guardar" prefHeight="32.0" prefWidth="79.0" text="Guardar" />
-                        <Button fx:id="btn_eliminar" layoutX="515.0" layoutY="207.0" mnemonicParsing="false" onAction="#acc_eliminar" prefHeight="32.0" prefWidth="79.0" text="Eliminar" />
-                        <Label layoutX="176.0" layoutY="20.0" text="Buscar Producto:" />
-                        <TextField fx:id="txt_buscar_producto" layoutX="282.0" layoutY="17.0" prefHeight="25.0" prefWidth="215.0" />
-                        <Button fx:id="btn_buscar" layoutX="515.0" layoutY="14.0" mnemonicParsing="false" onAction="#acc_buscar" prefHeight="32.0" prefWidth="79.0" text="Buscar" />
-                        <Button fx:id="btn_limpiar" layoutX="613.0" layoutY="14.0" mnemonicParsing="false" onAction="#acc_limpiar" prefHeight="32.0" prefWidth="79.0" text="Limpiar" />
-                        <Button fx:id="btn_cerrar" layoutX="613.0" layoutY="208.0" mnemonicParsing="false" onAction="#acc_cerrar" prefHeight="32.0" prefWidth="79.0" text="Cerrar" />
-                        <Button fx:id="btn_categoria" layoutX="32.0" layoutY="13.0" mnemonicParsing="false" onAction="#acc_categoria" prefHeight="32.0" prefWidth="123.0" text="Agregar Categoria" />
+                        <Label layoutX="176.0" layoutY="13.0" text="Buscar Producto:" />
+                        <TextField fx:id="txt_buscar_producto" layoutX="282.0" layoutY="10.0" prefHeight="25.0" prefWidth="215.0" />
+                        <Button fx:id="btn_buscar" layoutX="515.0" layoutY="7.0" mnemonicParsing="false" onAction="#acc_buscar" prefHeight="32.0" prefWidth="79.0" text="Buscar" />
+                        <Button fx:id="btn_limpiar" layoutX="613.0" layoutY="7.0" mnemonicParsing="false" onAction="#acc_limpiar" prefHeight="32.0" prefWidth="79.0" text="Limpiar" />
+                        <Button fx:id="btn_categoria" layoutX="32.0" layoutY="6.0" mnemonicParsing="false" onAction="#acc_categoria" prefHeight="32.0" prefWidth="123.0" text="Agregar Categoria" />
                      </children>
                   </Pane>
                   <Pane prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <Label layoutX="276.0" layoutY="10.0" text="Gestión de Productos">
+                        <Label layoutX="276.0" layoutY="6.0" text="Gestión de Productos">
                            <font>
                               <Font size="22.0" />
                            </font>
                         </Label>
                      </children>
                   </Pane>
-                  <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+                  <Pane prefHeight="331.0" prefWidth="760.0" GridPane.rowIndex="2">
                      <children>
-                        <TableView fx:id="tbl_productos" layoutX="14.0" layoutY="16.0" prefHeight="273.0" prefWidth="733.0">
+                        <TableView fx:id="tbl_productos" layoutX="14.0" layoutY="2.0" prefHeight="273.0" prefWidth="733.0">
                          <columns>
                            <TableColumn fx:id="col_codigo" prefWidth="82.4000244140625" text="Código" />
                            <TableColumn fx:id="col_nombre" prefWidth="147.20001220703125" text="Nombre" />
@@ -110,6 +106,8 @@
                            <TableColumn fx:id="col_estado" prefWidth="89.60003662109375" text="Estado" />
                          </columns>
                         </TableView>
+                        <Button fx:id="btn_guardar" layoutX="667.0" layoutY="289.0" mnemonicParsing="false" onAction="#acc_guardar" prefHeight="32.0" prefWidth="79.0" styleClass="button-enviar" text="Guardar" />
+                        <Button fx:id="btn_eliminar" layoutX="557.0" layoutY="289.0" mnemonicParsing="false" onAction="#acc_eliminar" prefHeight="32.0" prefWidth="79.0" styleClass="button-cerrar" text="Eliminar" />
                      </children>
                   </Pane>
                </children>
