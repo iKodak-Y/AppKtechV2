@@ -7,9 +7,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+
 import java.io.IOException;
-import javafx.event.ActionEvent;
-import javafx.scene.layout.BorderPane;
 
 public class MainLayoutController {
 
@@ -20,19 +19,21 @@ public class MainLayoutController {
     @FXML
     private Button logoutButton;
     @FXML
+    private Button registerButton; // Nuevo botón para navegar al registro
+    @FXML
     private HBox navBar;
     @FXML
     private StackPane contentArea;
 
     private String currentUser = null;
-    @FXML
-    private BorderPane mainLayout;
+    private String currentUserRole = null;
 
-    private void initialize() {
+    @FXML
+    public void initialize() {
         navBar.setVisible(false);
+        registerButton.setVisible(false); // Ocultar botón de registro por defecto
         updateLoginStatus();
-        // Cargar la vista de login automáticamente al inicio
-        handleLogin();
+        handleLogin(); // Cargar login al inicio
     }
 
     @FXML
@@ -41,7 +42,6 @@ public class MainLayoutController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ktech/appktechv2/vista/Login.fxml"));
             Parent loginView = loader.load();
 
-            // Obtener el controlador y establecer la referencia
             LoginController loginController = loader.getController();
             loginController.setMainLayoutController(this);
 
@@ -64,15 +64,23 @@ public class MainLayoutController {
     @FXML
     private void handleLogout() {
         currentUser = null;
+        currentUserRole = null;
         updateLoginStatus();
         handleLogin();
     }
 
-    public void setLoggedInUser(String username) {
+    public void setLoggedInUser(String username, String role) {
         this.currentUser = username;
+        this.currentUserRole = role;
         updateLoginStatus();
-        // Aquí podrías cargar la vista principal después del login
-        loadMainView();
+
+        if ("Administrador".equals(role)) {
+            registerButton.setVisible(true); // Mostrar botón de registro solo para administradores
+        } else {
+            registerButton.setVisible(false);
+        }
+
+        loadMainView(); // Navegar a la vista principal
     }
 
     private void loadMainView() {
@@ -80,7 +88,6 @@ public class MainLayoutController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ktech/appktechv2/vista/principal.fxml"));
             Parent mainView = loader.load();
 
-            // Configurar referencia al MainLayoutController
             PrincipalController principalController = loader.getController();
             principalController.setMainLayoutController(this);
 
@@ -99,82 +106,49 @@ public class MainLayoutController {
         navBar.setVisible(isLoggedIn);
     }
 
-    // Métodos de navegación
     @FXML
     private void navigateToHome() {
-        if (currentUser == null) {
-            return;
-        }
-
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ktech/appktechv2/vista/Principal.fxml"));
-            Parent mainView = loader.load();
-
-            // Configurar referencia al MainLayoutController
-            PrincipalController principalController = loader.getController();
-            principalController.setMainLayoutController(this);
-
-            setContent(mainView);
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Error cargando vista principal: " + e.getMessage());
-        }
+        navigateToView("/com/ktech/appktechv2/vista/Principal.fxml");
     }
 
     @FXML
     private void navigateToClientes() {
-        if (currentUser == null) {
-            return;
-        }
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ktech/appktechv2/vista/Clientes.fxml"));
-            setContent(loader.load());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // Implementar los demás métodos de navegación de manera similar
-    @FXML
-    private void navigateToProductos(ActionEvent event) {
-        if (currentUser == null) {
-            return;
-        }
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ktech/appktechv2/vista/Gestion_Productos.fxml"));
-            setContent(loader.load());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        navigateToView("/com/ktech/appktechv2/vista/Clientes.fxml");
     }
 
     @FXML
-    private void navigateToFacturacion(ActionEvent event) {
-        if (currentUser == null) {
-            return;
-        }
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ktech/appktechv2/vista/Factura.fxml"));
-            setContent(loader.load());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void navigateToProductos() {
+        navigateToView("/com/ktech/appktechv2/vista/Gestion_Productos.fxml");
     }
 
     @FXML
-    private void navigateToVentas(ActionEvent event) {
-        if (currentUser == null) {
-            return;
-        }
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ktech/appktechv2/vista/TicketsVentas.fxml"));
-            setContent(loader.load());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void navigateToFacturacion() {
+        navigateToView("/com/ktech/appktechv2/vista/Factura.fxml");
     }
 
     @FXML
-    private void navigateToReportes(ActionEvent event) {
+    private void navigateToVentas() {
+        navigateToView("/com/ktech/appktechv2/vista/TicketsVentas.fxml");
+    }
+
+    @FXML
+    private void navigateToReportes() {
+        navigateToView("/com/ktech/appktechv2/vista/Reportes.fxml");
+    }
+
+    @FXML
+    private void navigateToRegister() {
+        navigateToView("/com/ktech/appktechv2/vista/Register.fxml");
+    }
+
+    private void navigateToView(String viewPath) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(viewPath));
+            Parent view = loader.load();
+            setContent(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error cargando vista: " + e.getMessage());
+        }
     }
 }

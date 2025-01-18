@@ -1,72 +1,108 @@
 package com.ktech.appktechv2.controlador;
 
+import com.ktech.appktechv2.SqlConnection;
+import com.ktech.appktechv2.util.PasswordUtil;
 import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
-import javafx.scene.control.PasswordField;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.Parent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class RegisterController {
-    @FXML private TextField nombreField;
-    @FXML private TextField usernameField;
-    @FXML private PasswordField passwordField;
-    @FXML private PasswordField confirmPasswordField;
-    @FXML private Label errorLabel;
-    
+
+    @FXML
+    private TextField nombreField;
+    @FXML
+    private TextField usernameField;
+    @FXML
+    private PasswordField passwordField;
+    @FXML
+    private PasswordField confirmPasswordField;
+    @FXML
+    private ComboBox<String> rolComboBox;
+    @FXML
+    private Label errorLabel;
+
+    private MainLayoutController mainLayoutController;
+
+    @FXML
+    public void initialize() {
+        rolComboBox.getItems().addAll("Administrador", "Trabajador");
+    }
+
+    public void setMainLayoutController(MainLayoutController mainLayoutController) {
+        this.mainLayoutController = mainLayoutController;
+    }
+
     @FXML
     private void handleRegister() {
-        /* 
-        // IMPLEMENTACIÓN FUTURA CON BASE DE DATOS:
-        
-        // 1. Validar que todos los campos estén llenos
-        if (nombreField.getText().isEmpty() || usernameField.getText().isEmpty() || 
-            passwordField.getText().isEmpty() || confirmPasswordField.getText().isEmpty()) {
-            errorLabel.setText("Todos los campos son obligatorios");
+        if (nombreField.getText().isEmpty() || usernameField.getText().isEmpty()
+                || passwordField.getText().isEmpty() || confirmPasswordField.getText().isEmpty()
+                || rolComboBox.getValue() == null) {
+            errorLabel.setText("Todos los campos son obligatorios.");
             return;
         }
-        
-        // 2. Validar que las contraseñas coincidan
+
         if (!passwordField.getText().equals(confirmPasswordField.getText())) {
-            errorLabel.setText("Las contraseñas no coinciden");
+            errorLabel.setText("Las contraseñas no coinciden.");
             return;
         }
-        
-        try {
-            Connection conn = SqlConnection.getConexion();
-            
-            // 3. Verificar si el usuario ya existe
-            String checkQuery = "SELECT COUNT(*) FROM usuarios WHERE username = ?";
-            PreparedStatement checkStmt = conn.prepareStatement(checkQuery);
-            checkStmt.setString(1, usernameField.getText());
-            ResultSet rs = checkStmt.executeQuery();
-            
-            if (rs.next() && rs.getInt(1) > 0) {
-                errorLabel.setText("El nombre de usuario ya está en uso");
-                return;
+
+        try (Connection conn = new SqlConnection().getConexion()) {
+            String checkQuery = "SELECT COUNT(*) FROM Usuarios WHERE username = ?";
+            try (PreparedStatement checkStmt = conn.prepareStatement(checkQuery)) {
+                checkStmt.setString(1, usernameField.getText());
+                try (ResultSet rs = checkStmt.executeQuery()) {
+                    if (rs.next() && rs.getInt(1) > 0) {
+                        errorLabel.setText("El nombre de usuario ya está en uso.");
+                        return;
+                    }
+                }
             }
-            
-            // 4. Insertar nuevo usuario
-            String insertQuery = "INSERT INTO usuarios (nombre_completo, username, password) VALUES (?, ?, ?)";
-            PreparedStatement insertStmt = conn.prepareStatement(insertQuery);
-            insertStmt.setString(1, nombreField.getText());
-            insertStmt.setString(2, usernameField.getText());
-            // IMPORTANTE: Hashear la contraseña antes de guardarla
-            // String hashedPassword = hashPassword(passwordField.getText());
-            insertStmt.setString(3, passwordField.getText());
-            
-            insertStmt.executeUpdate();
-            
-            // 5. Volver a la pantalla de login
-            backToLogin();
-            
+
+            String hashedPassword = PasswordUtil.hashPassword(passwordField.getText());
+            String insertQuery = "INSERT INTO Usuarios (nombre_completo, username, password, rol) VALUES (?, ?, ?, ?)";
+            try (PreparedStatement insertStmt = conn.prepareStatement(insertQuery)) {
+                insertStmt.setString(1, nombreField.getText());
+                insertStmt.setString(2, usernameField.getText());
+                insertStmt.setString(3, hashedPassword);
+                insertStmt.setString(4, rolComboBox.getValue());
+                insertStmt.executeUpdate();
+                errorLabel.setText("Registro exitoso. Puede iniciar sesión.");
+            }
         } catch (SQLException e) {
-            errorLabel.setText("Error al registrar el usuario");
+            errorLabel.setText("Error al registrar el usuario.");
             e.printStackTrace();
         }
-        */
     }
-    
+
     @FXML
     private void backToLogin() {
-        // Volver a la vista de login
+        loadView("/com/ktech/appktechv2/vista/Login.fxml");
+
+    }
+
+    private void loadView(String fxmlPath) {
+        if (mainLayoutController == null) {
+            System.out.println("MainLayoutController no está configurado");
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent view = loader.load();
+            mainLayoutController.setContent(view);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

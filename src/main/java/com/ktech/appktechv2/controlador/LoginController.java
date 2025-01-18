@@ -1,9 +1,19 @@
 package com.ktech.appktechv2.controlador;
 
+import com.ktech.appktechv2.SqlConnection;
+import com.ktech.appktechv2.util.PasswordUtil;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 
 public class LoginController {
 
@@ -13,6 +23,8 @@ public class LoginController {
     private PasswordField passwordField;
     @FXML
     private Label errorLabel;
+    @FXML
+    private Button registerButton;
 
     private MainLayoutController mainLayoutController;
 
@@ -22,36 +34,75 @@ public class LoginController {
 
     @FXML
     public void initialize() {
-        // Asegurarse de que el errorLabel está vacío al inicio
-        if (errorLabel != null) {
-            errorLabel.setText("");
-        }
+        checkAdminExistence();
     }
 
     @FXML
     private void handleLogin() {
-        if (mainLayoutController == null) {
-            System.out.println("mainLayoutController es null");
-            return;
-        }
-
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        System.out.println("Intento de login - Usuario: " + username);
+        try (Connection conn = new SqlConnection().getConexion()) {
+            String query = "SELECT nombre_completo, rol, password FROM Usuarios WHERE username = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setString(1, username);
 
-        // Validación con las credenciales especificadas
-        if (username.equals("isaac") && password.equals("admin")) {
-            System.out.println("Login exitoso");
-            mainLayoutController.setLoggedInUser(username);
-            if (errorLabel != null) {
-                errorLabel.setText("");
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        String storedPassword = rs.getString("password");
+                        String nombreCompleto = rs.getString("nombre_completo");
+                        String rol = rs.getString("rol");
+
+                        if (PasswordUtil.hashPassword(password).equals(storedPassword)) {
+                            mainLayoutController.setLoggedInUser(nombreCompleto, rol);
+                            errorLabel.setText("");
+                        } else {
+                            errorLabel.setText("Contraseña incorrecta.");
+                        }
+                    } else {
+                        errorLabel.setText("Usuario no encontrado.");
+                    }
+                }
             }
-        } else {
-            System.out.println("Login fallido");
-            if (errorLabel != null) {
-                errorLabel.setText("Usuario o contraseña incorrectos");
+        } catch (SQLException e) {
+            errorLabel.setText("Error al intentar iniciar sesión.");
+            e.printStackTrace();
+        }
+    }
+
+    private void checkAdminExistence() {
+        try (Connection conn = new SqlConnection().getConexion()) {
+            String query = "SELECT COUNT(*) FROM Usuarios WHERE rol = 'Administrador'";
+            try (PreparedStatement stmt = conn.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
+                if (rs.next() && rs.getInt(1) == 0) {
+                    registerButton.setVisible(true); // Mostrar botón si no hay admin
+                } else {
+                    registerButton.setVisible(false); // Ocultar botón si hay admin
+                }
             }
+        } catch (SQLException e) {
+            System.err.println("Error al verificar administradores: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void navigateToRegister() {
+        loadView("/com/ktech/appktechv2/vista/Register.fxml");
+
+    }
+
+    private void loadView(String fxmlPath) {
+        if (mainLayoutController == null) {
+            System.out.println("MainLayoutController no está configurado");
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent view = loader.load();
+            mainLayoutController.setContent(view);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
