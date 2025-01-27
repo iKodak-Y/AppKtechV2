@@ -1,12 +1,4 @@
-//
-// Este archivo ha sido generado por Eclipse Implementation of JAXB v2.3.3 
-// Visite https://eclipse-ee4j.github.io/jaxb-ri 
-// Todas las modificaciones realizadas en este archivo se perderán si se vuelve a compilar el esquema de origen. 
-// Generado el: 2025.01.20 a las 06:23:43 PM COT 
-//
-
-
-package generated;
+package com.ktech.appktechv2.sri.generated;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -19,7 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
-import org.w3._2000._09.xmldsig_.SignatureType;
+import com.ktech.appktechv2.sri.org.w3._2000._09.xmldsig_.SignatureType;
 
 
 /**
@@ -563,7 +555,7 @@ public class Factura {
     }
 
     /**
-     *  Conjunto de datos asociados a la factura que garantizarán la autoría y la integridad del mensaje. Se define como opcional para facilitar la verificación y el tránsito del fichero. No obstante, debe cumplimentarse este bloque de firma electrónica para que se considere una factura electrónica válida legalmente frente a terceros.
+     *  Conjunto de datos asociados a la factura que garantizarï¿½n la autorï¿½a y la integridad del mensaje. Se define como opcional para facilitar la verificaciï¿½n y el trï¿½nsito del fichero. No obstante, debe cumplimentarse este bloque de firma electrï¿½nica para que se considere una factura electrï¿½nica vï¿½lida legalmente frente a terceros.
      * 
      * @return
      *     possible object is

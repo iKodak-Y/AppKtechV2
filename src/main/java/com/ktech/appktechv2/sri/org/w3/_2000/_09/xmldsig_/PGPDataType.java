@@ -1,12 +1,4 @@
-//
-// Este archivo ha sido generado por Eclipse Implementation of JAXB v2.3.3 
-// Visite https://eclipse-ee4j.github.io/jaxb-ri 
-// Todas las modificaciones realizadas en este archivo se perderán si se vuelve a compilar el esquema de origen. 
-// Generado el: 2025.01.20 a las 06:23:43 PM COT 
-//
-
-
-package org.w3._2000._09.xmldsig_;
+package com.ktech.appktechv2.sri.org.w3._2000._09.xmldsig_;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,11 +57,11 @@ public class PGPDataType {
      * 
      * &lt;p&gt;
      * Ha obtenido esta propiedad que permite capturar todo por el siguiente motivo: 
-     * El nombre de campo "PGPKeyPacket" se está utilizando en dos partes diferentes de un esquema. Consulte: 
-     * línea 218 de file:/C:/jaxb-ri/bin/xmldsig-core-schema.xsd
-     * línea 213 de file:/C:/jaxb-ri/bin/xmldsig-core-schema.xsd
+     * El nombre de campo "PGPKeyPacket" se estï¿½ utilizando en dos partes diferentes de un esquema. Consulte: 
+     * lï¿½nea 218 de file:/C:/jaxb-ri/bin/xmldsig-core-schema.xsd
+     * lï¿½nea 213 de file:/C:/jaxb-ri/bin/xmldsig-core-schema.xsd
      * &lt;p&gt;
-     * Para deshacerse de esta propiedad, aplique una personalización de propiedad a una
+     * Para deshacerse de esta propiedad, aplique una personalizaciï¿½n de propiedad a una
      * de las dos declaraciones siguientes para cambiarles de nombre: 
      * Gets the value of the content property.
      * 

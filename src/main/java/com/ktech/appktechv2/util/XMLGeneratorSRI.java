@@ -12,39 +12,85 @@ import java.util.List;
 
 public class XMLGeneratorSRI {
 
-    public String generarXMLFactura(Factura factura, Emisor emisor, List<DetalleFactura> detalles, List<FormaPago> formasPago) {
-        try {
-            // Crear el objeto principal del XML
-            ComprobanteXML comprobante = new ComprobanteXML();
-            comprobante.setId("comprobante");
-            comprobante.setVersion("2.1.0");
+    public String generarXMLFactura(Factura factura, Emisor emisor,
+            List<DetalleFactura> detalles,
+            List<FormaPago> formasPago) throws JAXBException {
 
-            // Generar información tributaria
-            InfoTributaria infoTrib = generarInfoTributaria(factura, emisor);
-            comprobante.setInfoTributaria(infoTrib);
+        // 1. Crear el comprobante raíz
+        ComprobanteXML comprobante = new ComprobanteXML();
+        comprobante.setId("comprobante");
+        comprobante.setVersion("2.1.0");
 
-            // Generar información de factura
-            InfoFactura infoFact = generarInfoFactura(factura, emisor, detalles, formasPago);
-            comprobante.setInfoFactura(infoFact);
+        // 2. Generar información tributaria
+        InfoTributaria infoTributaria = new InfoTributaria();
+        infoTributaria.setAmbiente(emisor.getTipoAmbiente());
+        infoTributaria.setTipoEmision("1"); // Emisión normal
+        infoTributaria.setRazonSocial(emisor.getRazonSocial());
+        infoTributaria.setNombreComercial(emisor.getNombreComercial());
+        infoTributaria.setRuc(emisor.getRuc());
+        infoTributaria.setClaveAcceso(factura.getClaveAcceso());
+        infoTributaria.setCodDoc("01"); // 01 para Factura
+        infoTributaria.setEstab(emisor.getCodigoEstablecimiento());
+        infoTributaria.setPtoEmi(emisor.getPuntoEmision());
+        infoTributaria.setSecuencial(factura.getNumeroSecuencial());
+        infoTributaria.setDirMatriz(emisor.getDireccion());
 
-            // Generar detalles
-            Detalles detallesXml = generarDetalles(detalles);
-            comprobante.setDetalles(detallesXml);
+        comprobante.setInfoTributaria(infoTributaria);
 
-            // Generar XML
-            JAXBContext context = JAXBContext.newInstance(ComprobanteXML.class);
-            Marshaller marshaller = context.createMarshaller();
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+        // 3. Generar información de factura
+        InfoFactura infoFactura = new InfoFactura();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        infoFactura.setFechaEmision(dateFormat.format(factura.getFechaEmision()));
+        infoFactura.setDirEstablecimiento(emisor.getDireccion());
+        infoFactura.setObligadoContabilidad("SI"); // Ajustar según el caso
+        infoFactura.setTipoIdentificacionComprador(obtenerTipoIdentificacion(factura.getRucComprador()));
+        infoFactura.setRazonSocialComprador(factura.getRazonSocialComprador());
+        infoFactura.setIdentificacionComprador(factura.getRucComprador());
+        infoFactura.setDireccionComprador(factura.getDireccionComprador());
 
-            StringWriter writer = new StringWriter();
-            marshaller.marshal(comprobante, writer);
+        // 4. Calcular totales
+        double totalSinImpuestos = detalles.stream()
+                .mapToDouble(DetalleFactura::getSubtotal)
+                .sum();
+        double totalIva = detalles.stream()
+                .mapToDouble(d -> d.getSubtotal() * 0.12)
+                .sum();
+        double importeTotal = totalSinImpuestos + totalIva;
 
-            return writer.toString();
+        infoFactura.setTotalSinImpuestos(totalSinImpuestos);
+        infoFactura.setTotalDescuento(0.0); // Ajustar si hay descuentos
 
-        } catch (JAXBException e) {
-            throw new RuntimeException("Error al generar el XML: " + e.getMessage(), e);
-        }
+        // 5. Generar impuestos
+        TotalConImpuestos totalConImpuestos = generarTotalConImpuestos(totalSinImpuestos, totalIva);
+        infoFactura.setTotalConImpuestos(totalConImpuestos);
+
+        infoFactura.setPropina(0.0);
+        infoFactura.setImporteTotal(importeTotal);
+        infoFactura.setMoneda("DOLAR");
+
+        // 6. Generar pagos
+        Pagos pagos = generarPagos(formasPago);
+        infoFactura.setPagos(pagos);
+
+        comprobante.setInfoFactura(infoFactura);
+
+        // 7. Generar detalles
+        Detalles detallesXml = generarDetalles(detalles);
+        comprobante.setDetalles(detallesXml);
+
+        // 8. Generar XML
+        return marshallXML(comprobante);
+    }
+
+    private String marshallXML(ComprobanteXML comprobante) throws JAXBException {
+        JAXBContext context = JAXBContext.newInstance(ComprobanteXML.class);
+        Marshaller marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+
+        StringWriter writer = new StringWriter();
+        marshaller.marshal(comprobante, writer);
+        return writer.toString();
     }
 
     private InfoTributaria generarInfoTributaria(Factura factura, Emisor emisor) {
