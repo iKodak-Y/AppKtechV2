@@ -1,6 +1,9 @@
 package com.ktech.appktechv2.controlador;
 
 import com.ktech.appktechv2.modelo.*;
+import com.ktech.appktechv2.util.XMLGeneratorSRI;
+import java.io.FileWriter;
+import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,6 +17,9 @@ import javafx.util.converter.DoubleStringConverter;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -309,8 +315,107 @@ public class FacturaController implements Initializable {
 
     @FXML
     private void acc_firmar_enviar(ActionEvent event) {
-        // Implementar generación de clave de acceso y
-        // la lógica de firma y envío de la factura
+        try {
+            // Obtener el emisor primero
+            String codigoEstablecimiento = cmb_establecimiento.getValue().split(" - ")[0];
+            EmisorDAO emisorDAO = new EmisorDAO();
+            Emisor emisor = emisorDAO.obtenerEmisorPorCodigoEstablecimiento(codigoEstablecimiento);
+
+            if (emisor == null) {
+                mostrarAlerta("Error", "No se encontró el emisor para el establecimiento seleccionado", Alert.AlertType.ERROR);
+                return;
+            }
+
+            // Crear la factura con los datos del formulario
+            Factura factura = new Factura();
+            factura.setIdEmisor(emisor.getIdEmisor()); // Establecer el ID del emisor
+            factura.setFechaEmision(Date.from(dtp_fecha.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+            factura.setRucComprador(txt_identificacion.getText());
+            factura.setRazonSocialComprador(txt_razon_social.getText());
+            factura.setDireccionComprador(txt_direccion.getText());
+            factura.setEstado("PPR");
+
+            // Generar clave de acceso
+            String claveAcceso = ClaveAccesoGenerator.generarClaveAcceso(
+                    factura.getFechaEmision(),
+                    "01", // tipo comprobante factura
+                    emisor.getCodigoEstablecimiento(),
+                    emisor.getTipoAmbiente(),
+                    emisor.getPuntoEmision(),
+                    emisor.getRuc(),
+                    ClaveAccesoGenerator.generarCodigoNumerico()
+            );
+            factura.setClaveAcceso(claveAcceso);
+
+            // Obtener número secuencial
+            FacturaDAO facturaDAO = new FacturaDAO();
+            String secuencial = facturaDAO.obtenerSiguienteSecuencial(emisor.getIdEmisor());
+            factura.setNumeroSecuencial(secuencial);
+
+            // Convertir productos de la tabla a detalles
+            List<DetalleFactura> detalles = new ArrayList<>();
+            for (Producto producto : tbl_detalle.getItems()) {
+                DetalleFactura detalle = new DetalleFactura();
+                detalle.setIdProducto(producto.getId());
+                detalle.setDescripcion(producto.getNombre());
+                detalle.setCantidad(producto.getCantidad());
+                detalle.setPrecioUnitario(producto.getPvp());
+                detalle.setSubtotal(producto.getSubtotal());
+                detalle.setImpuestos("2"); // Código para IVA
+                detalles.add(detalle);
+            }
+
+            // Obtener formas de pago
+            List<FormaPago> formasPago = new ArrayList<>(tbl_forma_pago.getItems());
+
+            // Generar XML
+            XMLGeneratorSRI xmlGenerator = new XMLGeneratorSRI();
+            // En FacturaController, dentro del método acc_firmar_enviar
+            String xmlGenerado = xmlGenerator.generarXMLFactura(factura, emisor, detalles, formasPago);
+
+            // Agregar estas líneas para ver el XML
+            System.out.println("XML Generado:");
+            System.out.println(xmlGenerado);
+
+               // También puedes guardarlo en un archivo
+            try {
+                FileWriter fileWriter = new FileWriter("factura_" + factura.getNumeroSecuencial() + ".xml");
+                fileWriter.write(xmlGenerado);
+                fileWriter.close();
+                mostrarAlerta("Éxito", "XML generado y guardado como 'factura_"
+                        + factura.getNumeroSecuencial() + ".xml'", Alert.AlertType.INFORMATION);
+            } catch (IOException e) {
+                e.printStackTrace();
+                mostrarAlerta("Error", "No se pudo guardar el archivo XML", Alert.AlertType.ERROR);
+            }
+
+            // Guardar la factura
+            factura.setXmlAutorizado(xmlGenerado);
+            if (facturaDAO.guardarFactura(factura)) {
+                // Guardar los detalles
+                DetalleFacturaDAO detalleDAO = new DetalleFacturaDAO();
+                for (DetalleFactura detalle : detalles) {
+                    detalle.setIdFactura(factura.getIdFactura());
+                    detalleDAO.guardarDetalle(detalle);
+                }
+
+                mostrarAlerta("Éxito", "Factura generada y guardada correctamente", Alert.AlertType.INFORMATION);
+
+                // Actualizar stock de productos
+                ProductoDAO productoDAO = new ProductoDAO();
+                for (Producto producto : tbl_detalle.getItems()) {
+                    Producto productoActual = productoDAO.buscarPorId(producto.getId());
+                    productoActual.setStockActual(productoActual.getStockActual() - producto.getCantidad());
+                    productoDAO.actualizar(productoActual);
+                }
+            } else {
+                mostrarAlerta("Error", "No se pudo guardar la factura", Alert.AlertType.ERROR);
+            }
+
+        } catch (Exception e) {
+            mostrarAlerta("Error", "Error al generar la factura: " + e.getMessage(), Alert.AlertType.ERROR);
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -398,5 +503,13 @@ public class FacturaController implements Initializable {
             // Manejar caso donde no se encuentra el cliente
             System.out.println("Cliente no encontrado");
         }
+    }
+
+    private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
+        Alert alert = new Alert(tipo);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 }

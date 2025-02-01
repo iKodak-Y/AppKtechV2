@@ -1,26 +1,29 @@
 package com.ktech.appktechv2.modelo.xml;
 
-import java.util.List;
 import javax.xml.bind.annotation.*;
 
 @XmlRootElement(name = "factura")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ComprobanteXML {
 
-    @XmlAttribute
+    @XmlAttribute(name = "id")
     private String id;
 
-    @XmlAttribute
+    @XmlAttribute(name = "version")
     private String version;
 
-    @XmlElement(name = "infoTributaria")
+    @XmlElement(name = "infoTributaria", required = true)
     private InfoTributaria infoTributaria;
 
-    @XmlElement(name = "infoFactura")
+    @XmlElement(name = "infoFactura", required = true)
     private InfoFactura infoFactura;
 
-    @XmlElement(name = "detalles")
-    private Detalles detalles;  // Cambiado de List<Detalle> a Detalles
+    @XmlElement(name = "detalles", required = true)
+    private Detalles detalles;
+
+    // Constructor
+    public ComprobanteXML() {
+    }
 
     // Getters y Setters
     public String getId() {

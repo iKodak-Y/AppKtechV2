@@ -11,6 +11,16 @@ public class Emisor {
     private String puntoEmision;
     private String tipoAmbiente;
 
+    private boolean obligadoContabilidad;
+
+    public boolean getObligadoContabilidad() {
+        return obligadoContabilidad;
+    }
+
+    public void setObligadoContabilidad(boolean obligadoContabilidad) {
+        this.obligadoContabilidad = obligadoContabilidad;
+    }
+
     // Getters y Setters
     public int getIdEmisor() {
         return idEmisor;
