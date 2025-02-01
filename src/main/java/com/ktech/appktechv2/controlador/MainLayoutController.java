@@ -9,6 +9,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
+import javafx.event.ActionEvent;
+import javafx.scene.layout.BorderPane;
 
 public class MainLayoutController {
 
@@ -27,8 +29,11 @@ public class MainLayoutController {
 
     private String currentUser = null;
     private String currentUserRole = null;
-
     @FXML
+    private BorderPane mainLayout;
+    @FXML
+    private Button register_emisor;
+
     public void initialize() {
         navBar.setVisible(false);
         registerButton.setVisible(false); // Ocultar botón de registro por defecto
@@ -76,8 +81,10 @@ public class MainLayoutController {
 
         if ("Administrador".equals(role)) {
             registerButton.setVisible(true); // Mostrar botón de registro solo para administradores
+            register_emisor.setVisible(true);
         } else {
             registerButton.setVisible(false);
+            register_emisor.setVisible(false);
         }
 
         loadMainView(); // Navegar a la vista principal
@@ -150,5 +157,11 @@ public class MainLayoutController {
             e.printStackTrace();
             System.out.println("Error cargando vista: " + e.getMessage());
         }
+    }
+
+    @FXML
+    private void navigateToRegisterEmisor(ActionEvent event) {
+        navigateToView("/com/ktech/appktechv2/vista/Registro_Emisor.fxml");
+
     }
 }

@@ -38,7 +38,7 @@
                       </Pane>
                       <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
                           <children>
-                              <Button fx:id="btn_reportes" contentDisplay="TOP" layoutX="609.0" layoutY="45.0" mnemonicParsing="false" onAction="#acc_reportes" prefHeight="120.0" prefWidth="180.0" styleClass="button-inicio" text="Reportes">
+                              <Button fx:id="btn_reportes" contentDisplay="TOP" layoutX="609.0" layoutY="45.0" mnemonicParsing="false" onAction="#goToReportes" prefHeight="120.0" prefWidth="180.0" styleClass="button-inicio" text="Reportes">
                            <graphic>
                               <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -46,7 +46,7 @@
                                  </image>
                               </ImageView>
                            </graphic></Button>
-                              <Button fx:id="btn_facturacion" contentDisplay="TOP" layoutX="379.0" layoutY="45.0" mnemonicParsing="false" onAction="#acc_facturacion" prefHeight="120.0" prefWidth="180.0" styleClass="button-inicio" text="Facturación">
+                              <Button fx:id="btn_facturacion" contentDisplay="TOP" layoutX="379.0" layoutY="45.0" mnemonicParsing="false" onAction="#goToFacturacion" prefHeight="120.0" prefWidth="180.0" styleClass="button-inicio" text="Facturación">
                            <graphic>
                               <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -54,7 +54,7 @@
                                  </image>
                               </ImageView>
                            </graphic></Button>
-                              <Button fx:id="btn_venta" contentDisplay="TOP" layoutX="146.0" layoutY="45.0" mnemonicParsing="false" onAction="#acc_venta" prefHeight="120.0" prefWidth="180.0" styleClass="button-inicio" text="Ticket Venta">
+                              <Button fx:id="btn_venta" contentDisplay="TOP" layoutX="146.0" layoutY="45.0" mnemonicParsing="false" onAction="#goToVenta" prefHeight="120.0" prefWidth="180.0" styleClass="button-inicio" text="Ticket Venta">
                            <graphic>
                               <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -64,11 +64,7 @@
                            </graphic></Button>
                           </children>
                       </Pane>
-                      <Pane prefHeight="151.0" prefWidth="600.0" GridPane.rowIndex="2">
-                          <children>
-                        <Button fx:id="btn_emisor" layoutX="399.0" layoutY="54.0" mnemonicParsing="false" onAction="#acc_emisor" prefHeight="41.0" prefWidth="137.0" text="Registrar Emisor" />
-                          </children>
-                      </Pane>
+                      <Pane prefHeight="151.0" prefWidth="600.0" GridPane.rowIndex="2" />
                   </children>
               </GridPane>
           </children>

@@ -64,6 +64,7 @@
                             <Insets />
                         </HBox.margin>
                     </Button>
+               <Button fx:id="register_emisor" onAction="#navigateToRegisterEmisor" styleClass="button-nav" text="Registrar Emisor" visible="false" />
                     <Button fx:id="registerButton" onAction="#navigateToRegister" styleClass="button-nav" text="Registrar Usuario" visible="false" />
                     <HBox.margin>
                         <Insets />

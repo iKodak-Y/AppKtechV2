@@ -231,7 +231,7 @@ public class XMLGeneratorSRI {
     }
 
     private String obtenerTipoIdentificacion(String identificacion) {
-        if (identificacion == null || identificacion.isEmpty()) {
+        if ("9999999999999".equals(identificacion) || identificacion.isEmpty()) {
             return "07"; // Consumidor Final
         }
         switch (identificacion.length()) {

@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 
 public class PrincipalController implements Initializable {
 
@@ -17,8 +18,6 @@ public class PrincipalController implements Initializable {
     private Button btn_facturacion;
     @FXML
     private Button btn_venta;
-    @FXML
-    private Button btn_emisor;
 
     private MainLayoutController mainLayoutController;
 
@@ -29,22 +28,6 @@ public class PrincipalController implements Initializable {
     public void setMainLayoutController(MainLayoutController mainLayoutController) {
         this.mainLayoutController = mainLayoutController;
     }
-
-    @FXML
-    private void acc_facturacion(ActionEvent event) {
-        loadView("/com/ktech/appktechv2/vista/Factura.fxml");
-    }
-
-    @FXML
-    private void acc_venta(ActionEvent event) {
-        loadView("/com/ktech/appktechv2/vista/TicketsVentas.fxml");
-    }
-
-    @FXML
-    private void acc_emisor(ActionEvent event) {
-        loadView("/com/ktech/appktechv2/vista/Registro_Emisor.fxml");
-    }
-
 
     private void loadView(String fxmlPath) {
         if (mainLayoutController == null) {
@@ -62,6 +45,17 @@ public class PrincipalController implements Initializable {
     }
 
     @FXML
-    private void acc_reportes(ActionEvent event) {
+    private void goToVenta(ActionEvent event) {
+        loadView("/com/ktech/appktechv2/vista/TicketsVentas.fxml");
+    }
+
+    @FXML
+    private void goToReportes(ActionEvent event) {
+    }
+
+    @FXML
+    private void goToFacturacion(ActionEvent event) {
+        loadView("/com/ktech/appktechv2/vista/Factura.fxml");
+
     }
 }

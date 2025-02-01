@@ -105,6 +105,7 @@ public class FacturaController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        cmb_tipo_ident.getItems().addAll("CEDULA", "RUC", "PASAPORTE", "VENTA A CONSUMIDOR FINAL", "IDENTIFICACION DEL EXTERIOR");
         // hacer la tabla editable
         tbl_detalle.setEditable(true);
 
@@ -370,14 +371,12 @@ public class FacturaController implements Initializable {
 
             // Generar XML
             XMLGeneratorSRI xmlGenerator = new XMLGeneratorSRI();
-            // En FacturaController, dentro del método acc_firmar_enviar
             String xmlGenerado = xmlGenerator.generarXMLFactura(factura, emisor, detalles, formasPago);
 
-            // Agregar estas líneas para ver el XML
-            System.out.println("XML Generado:");
-            System.out.println(xmlGenerado);
-
-               // También puedes guardarlo en un archivo
+            //Ver el XML en consola
+            /*System.out.println("XML Generado:");
+            System.out.println(xmlGenerado);*/
+            // También puedes guardarlo en un archivo
             try {
                 FileWriter fileWriter = new FileWriter("factura_" + factura.getNumeroSecuencial() + ".xml");
                 fileWriter.write(xmlGenerado);
@@ -411,7 +410,7 @@ public class FacturaController implements Initializable {
             } else {
                 mostrarAlerta("Error", "No se pudo guardar la factura", Alert.AlertType.ERROR);
             }
-
+            limpiarCampos();
         } catch (Exception e) {
             mostrarAlerta("Error", "Error al generar la factura: " + e.getMessage(), Alert.AlertType.ERROR);
             e.printStackTrace();
@@ -425,7 +424,18 @@ public class FacturaController implements Initializable {
 
     @FXML
     private void acc_cancelar(ActionEvent event) {
-        // Implementar lógica para cancelar la operación
+        // Mostrar mensaje de confirmación
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmación");
+        alert.setHeaderText(null);
+        alert.setContentText("¿Está seguro de que desea cancelar? Todos los datos ingresados se perderán.");
+
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                // Limpiar todos los campos si el usuario confirma
+                limpiarCampos();
+            }
+        });
     }
 
     @FXML
@@ -491,17 +501,48 @@ public class FacturaController implements Initializable {
     @FXML
     private void acc_buscar_ident(ActionEvent event) {
         System.out.println("ENTRANDO A CLIENTES");
-        String identificacion = txt_identificacion.getText();
+
+        // Obtener el número de identificación ingresado
+        String identificacion = txt_identificacion.getText().trim();
+
+        // Validar que el campo no esté vacío
+        if (identificacion.isEmpty()) {
+            mostrarAlerta("Error", "Ingrese un número de identificación.", Alert.AlertType.ERROR);
+            return;
+        }
+
+        // Determinar el tipo de identificación basado en la longitud o valor específico
+        String tipoIdentificacion;
+        if (identificacion.equals("9999999999999")) {
+            tipoIdentificacion = "VENTA A CONSUMIDOR FINAL";
+        } else if (identificacion.length() == 10) {
+            tipoIdentificacion = "CEDULA";
+        } else if (identificacion.length() == 13) {
+            tipoIdentificacion = "RUC";
+        } else {
+            tipoIdentificacion = "PASAPORTE"; // Para cualquier otro caso, asumimos pasaporte
+        }
+
+        // Actualizar el ComboBox de Tipo de Identificación
+        cmb_tipo_ident.getSelectionModel().select(tipoIdentificacion);
+
+        // Buscar el cliente en la base de datos
         ClienteDAO clienteDAO = new ClienteDAO();
         Cliente cliente = clienteDAO.buscarPorCedulaONombre(identificacion);
+
         if (cliente != null) {
+            // Rellenar los campos del adquirente
             txt_razon_social.setText(cliente.getNombre() + " " + cliente.getApellido());
             txt_direccion.setText(cliente.getDireccion());
             txt_telefono.setText(cliente.getTelefono());
             txt_correo.setText(cliente.getEmail());
         } else {
-            // Manejar caso donde no se encuentra el cliente
-            System.out.println("Cliente no encontrado");
+            // Limpiar los campos si no se encuentra el cliente
+            mostrarAlerta("Advertencia", "Cliente no encontrado.", Alert.AlertType.WARNING);
+            txt_razon_social.clear();
+            txt_direccion.clear();
+            txt_telefono.clear();
+            txt_correo.clear();
         }
     }
 
@@ -511,5 +552,36 @@ public class FacturaController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
+    }
+
+    private void limpiarCampos() {
+        // Limpiar campos de identificación y cliente
+        txt_identificacion.clear();
+        cmb_tipo_ident.getSelectionModel().clearSelection();
+        txt_razon_social.clear();
+        txt_direccion.clear();
+        txt_telefono.clear();
+        txt_correo.clear();
+
+        // Limpiar campos de emisor
+        cmb_establecimiento.getSelectionModel().clearSelection();
+        txt_nombre_comercial.clear();
+        cmb_punto_emision.getSelectionModel().clearSelection();
+
+        // Limpiar campos de productos
+        tbl_detalle.getItems().clear();
+
+        // Limpiar campos de formas de pago
+        tbl_forma_pago.getItems().clear();
+
+        // Limpiar campos de totales
+        lbl_subtotal_15.setText("0.00");
+        lbl_subtotal_0.setText("0.00");
+        lbl_iva_15.setText("0.00");
+        lbl_total_pagar.setText("0.00");
+
+        // Limpiar otros campos
+        txt_guia_remision.clear();
+        dtp_fecha.setValue(LocalDate.now()); // Restablecer la fecha actual
     }
 }
