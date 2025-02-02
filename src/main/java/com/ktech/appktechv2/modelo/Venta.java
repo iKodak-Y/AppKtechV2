@@ -4,12 +4,19 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class Venta {
+
     private int idVenta;
     private int idCliente;
     private LocalDateTime fecha;
     private double total;
-    private String estado; // Cambiar a String para permitir cadenas
+    private String estado;
+    private String numeroSecuencial;
     private List<DetalleVenta> detalles;
+    private int idEmisor;
+    private String rucComprador;              
+    private String razonSocialComprador;      
+    private String direccionComprador;    
+    private LocalDateTime fechaEmision;
 
     // Getters y Setters
     public int getIdVenta() {
@@ -59,4 +66,53 @@ public class Venta {
     public void setDetalles(List<DetalleVenta> detalles) {
         this.detalles = detalles;
     }
+
+    public String getNumeroSecuencial() {
+        return numeroSecuencial;
+    }
+
+    public void setNumeroSecuencial(String numeroSecuencial) {
+        this.numeroSecuencial = numeroSecuencial;
+    }
+
+    public int getIdEmisor() {
+        return idEmisor;
+    }
+
+    public void setIdEmisor(int idEmisor) {
+        this.idEmisor = idEmisor;
+    }
+
+    public String getRucComprador() {
+        return rucComprador;
+    }
+
+    public void setRucComprador(String rucComprador) {
+        this.rucComprador = rucComprador;
+    }
+
+    public String getRazonSocialComprador() {
+        return razonSocialComprador;
+    }
+
+    public void setRazonSocialComprador(String razonSocialComprador) {
+        this.razonSocialComprador = razonSocialComprador;
+    }
+
+    public String getDireccionComprador() {
+        return direccionComprador;
+    }
+
+    public void setDireccionComprador(String direccionComprador) {
+        this.direccionComprador = direccionComprador;
+    }
+
+    public LocalDateTime getFechaEmision() {
+        return fechaEmision;
+    }
+
+    public void setFechaEmision(LocalDateTime fechaEmision) {
+        this.fechaEmision = fechaEmision;
+    }
+
 }

@@ -1,48 +1,40 @@
 package com.ktech.appktechv2.modelo;
 
 import com.ktech.appktechv2.SqlConnection;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
-import java.util.ArrayList;
+import java.sql.*;
 import java.util.List;
 
 public class VentaDAO {
 
     public boolean registrarVenta(Venta venta) {
-        // SQL para insertar en la tabla Ventas
-        String sqlVenta = "INSERT INTO Ventas (IdCliente, Fecha, Total, Estado) VALUES (?, ?, ?, ?)";
-        
-        // SQL para insertar en la tabla DetalleVenta
+        String sqlVenta = "INSERT INTO Ventas (IdCliente, id_emisor, Fecha, Total, Estado, NumeroSecuencial, RucComprador, RazonSocialComprador, DireccionComprador, FechaEmision) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         String sqlDetalle = "INSERT INTO DetalleVenta (IdVenta, IdProducto, Cantidad, PrecioUnitario, Subtotal, IVA, Total) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        
-        // SQL para actualizar el stock de los productos
-        String sqlUpdateStock = "UPDATE dbo.Productos SET StockActual = StockActual - ? WHERE IdProducto = ?";
 
         try (Connection con = new SqlConnection().getConexion()) {
-            // Iniciar transacción
             con.setAutoCommit(false);
 
-            // Insertar en la tabla Ventas
+            // Insertar la Venta
             try (PreparedStatement psVenta = con.prepareStatement(sqlVenta, Statement.RETURN_GENERATED_KEYS)) {
                 psVenta.setInt(1, venta.getIdCliente());
-                psVenta.setTimestamp(2, Timestamp.valueOf(venta.getFecha()));
-                psVenta.setDouble(3, venta.getTotal());
-                psVenta.setString(4, venta.getEstado());
+                psVenta.setInt(2, venta.getIdEmisor());
+                psVenta.setTimestamp(3, Timestamp.valueOf(venta.getFecha()));
+                psVenta.setDouble(4, venta.getTotal());
+                psVenta.setString(5, venta.getEstado());
+                psVenta.setString(6, venta.getNumeroSecuencial());
+                psVenta.setString(7, venta.getRucComprador());
+                psVenta.setString(8, venta.getRazonSocialComprador());
+                psVenta.setString(9, venta.getDireccionComprador());
+                psVenta.setTimestamp(10, Timestamp.valueOf(venta.getFechaEmision()));
 
-                int affectedRows = psVenta.executeUpdate();
-                if (affectedRows == 0) {
+                if (psVenta.executeUpdate() == 0) {
                     con.rollback();
                     return false;
                 }
 
-                // Obtener el ID de la venta recién insertada
-                try (ResultSet generatedKeys = psVenta.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        venta.setIdVenta(generatedKeys.getInt(1));
+                try (ResultSet rs = psVenta.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        venta.setIdVenta(rs.getInt(1));
                     } else {
                         con.rollback();
                         return false;
@@ -50,7 +42,7 @@ public class VentaDAO {
                 }
             }
 
-            // Insertar en la tabla DetalleVenta
+            // Insertar Detalles de Venta
             try (PreparedStatement psDetalle = con.prepareStatement(sqlDetalle)) {
                 for (DetalleVenta detalle : venta.getDetalles()) {
                     psDetalle.setInt(1, venta.getIdVenta());
@@ -65,17 +57,6 @@ public class VentaDAO {
                 psDetalle.executeBatch();
             }
 
-            // Actualizar el stock de los productos
-            try (PreparedStatement psUpdateStock = con.prepareStatement(sqlUpdateStock)) {
-                for (DetalleVenta detalle : venta.getDetalles()) {
-                    psUpdateStock.setInt(1, detalle.getCantidad());
-                    psUpdateStock.setInt(2, detalle.getIdProducto());
-                    psUpdateStock.addBatch();
-                }
-                psUpdateStock.executeBatch();
-            }
-
-            // Confirmar transacción
             con.commit();
             return true;
 
@@ -83,30 +64,5 @@ public class VentaDAO {
             e.printStackTrace();
             return false;
         }
-    }
-
-    public List<Venta> obtenerVentas() {
-        List<Venta> ventas = new ArrayList<>();
-        String sql = "SELECT * FROM Ventas";
-
-        try (Connection con = new SqlConnection().getConexion();
-             Statement stmt = con.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-
-            while (rs.next()) {
-                Venta venta = new Venta();
-                venta.setIdVenta(rs.getInt("IdVenta"));
-                venta.setIdCliente(rs.getInt("IdCliente"));
-                venta.setFecha(rs.getTimestamp("Fecha").toLocalDateTime());
-                venta.setTotal(rs.getDouble("Total"));
-                venta.setEstado(rs.getString("Estado"));
-                ventas.add(venta);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return ventas;
     }
 }

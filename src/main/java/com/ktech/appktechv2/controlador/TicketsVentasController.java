@@ -1,278 +1,532 @@
 package com.ktech.appktechv2.controlador;
 
-import com.ktech.appktechv2.modelo.Venta;
-import com.ktech.appktechv2.modelo.VentaDAO;
-import com.ktech.appktechv2.modelo.DetalleVenta;
-import com.ktech.appktechv2.modelo.Producto;
-import com.ktech.appktechv2.modelo.ProductoDAO;
-import com.ktech.appktechv2.modelo.Cliente;
-import com.ktech.appktechv2.modelo.ClienteDAO;
-
+import com.ktech.appktechv2.SqlConnection;
+import com.ktech.appktechv2.modelo.*;
 import java.net.URL;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.ResourceBundle;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.geometry.Side;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.RadioButton;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.CustomMenuItem;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.VBox;
-
-import javafx.stage.Stage;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.converter.DoubleStringConverter;
+import javafx.util.converter.IntegerStringConverter;
 
 public class TicketsVentasController implements Initializable {
 
     @FXML
-    private TextField txt_buscar_producto;
+    private ComboBox<String> cmb_establecimiento;
     @FXML
-    private TextField txt_cliente_id;
+    private TextField txt_nombre_comercial;
     @FXML
-    private TextField txt_producto_id;
+    private DatePicker dtp_fecha;
     @FXML
-    private TextField txt_cantidad;
+    private TextField txt_identificacion;
     @FXML
-    private TextField txt_total;
+    private Button btn_buscar_ident;
     @FXML
-    private ComboBox<String> cmb_metodo_pago;
-
+    private ComboBox<String> cmb_tipo_ident;
     @FXML
-    private TableView<DetalleVenta> tbl_detalle_venta;
+    private TextField txt_razon_social;
     @FXML
-    private TableColumn<DetalleVenta, String> colCodigo; // Cambiamos el nombre para que coincida con el FXML
+    private TextField txt_direccion;
     @FXML
-    private TableColumn<DetalleVenta, String> col_producto;
+    private TextField txt_telefono;
     @FXML
-    private TableColumn<DetalleVenta, Integer> col_cantidad;
+    private TextField txt_correo;
     @FXML
-    private TableColumn<DetalleVenta, Double> col_precio;
+    private TextField auto_field_producto_list;
     @FXML
-    private TableColumn<DetalleVenta, Double> col_total;
-
-    private ObservableList<DetalleVenta> listaDetalleVenta;
-    private ProductoDAO productoDAO = new ProductoDAO();
-    private ClienteDAO clienteDAO = new ClienteDAO();
-    private VentaDAO ventaDAO = new VentaDAO();
+    private Button btn_buscar_producto;
     @FXML
-    private RadioButton radioConsumidorFinal;
+    private TableView<Producto> tbl_detalle;
     @FXML
-    private RadioButton radioConDatos;
+    private TableColumn<Producto, String> col_codigo;
     @FXML
-    private VBox clienteBox;
+    private TableColumn<Producto, Integer> col_cantidad;
     @FXML
-    private TextField txtNombreCliente;
+    private TableColumn<Producto, String> col_descripcion;
     @FXML
-    private TextField txtApellidoCliente;
+    private TableColumn<Producto, Double> col_precio_unitario;
     @FXML
-    private TextField txtTelefonoCliente;
+    private TableColumn<Producto, Double> col_tarifa;
     @FXML
-    private TextField txtDireccionCliente;
+    private TableColumn<Producto, Double> col_descuento;
     @FXML
-    private TextField txtNombreProducto;
+    private TableColumn<Producto, Double> col_valor_total;
     @FXML
-    private TextField txtPrecioUnitario; // txtPVP
-    private Button btn_cerrar;
+    private TableColumn<Producto, Void> col_acciones;
+    @FXML
+    private Label lbl_subtotal_15;
+    @FXML
+    private Label lbl_subtotal_0;
+    @FXML
+    private Label lbl_iva_15;
+    @FXML
+    private Label lbl_total_pagar;
+    @FXML
+    private TableView<FormaPago> tbl_forma_pago;
+    @FXML
+    private TableColumn<FormaPago, String> col_forma_pago;
+    @FXML
+    private TableColumn<FormaPago, Double> col_valor;
+    @FXML
+    private TableColumn<FormaPago, Void> col_acciones_forma_pago;
+    @FXML
+    private Button btn_efectivo;
+    @FXML
+    private Button btn_tarjeta_debito;
+    @FXML
+    private Button btn_tarjeta_credito;
+    @FXML
+    private Button btn_cancelar;
+    private ContextMenu autoCompletePopup;
+    private ProductoDAO productoDAO;
+    @FXML
+    private Button btn_guardar_enviar;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigoProducto")); // Mostrar el código del producto
-        col_producto.setCellValueFactory(new PropertyValueFactory<>("productoNombre"));
+        cmb_tipo_ident.getItems().addAll("CEDULA", "RUC", "PASAPORTE", "VENTA A CONSUMIDOR FINAL", "IDENTIFICACION DEL EXTERIOR");
+        // hacer la tabla editable
+        tbl_detalle.setEditable(true);
+
+        // Inicializar el ContextMenu para el autocompletado
+        autoCompletePopup = new ContextMenu();
+        // Inicializar el DAO de productos
+        productoDAO = new ProductoDAO();
+
+        // Autocompletar la fecha de emisión con la fecha actual
+        dtp_fecha.setValue(LocalDate.now());
+
+        // Cargar datos en ComboBox de establecimientos y puntos de emisión
+        cargarDatosEstablecimientos();
+
+        // Añadir listener al ComboBox de establecimientos
+        cmb_establecimiento.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                EmisorDAO emisorDAO = new EmisorDAO();
+                Emisor emisor = emisorDAO.obtenerEmisorPorCodigoEstablecimiento(newValue.split(" - ")[0]);
+                if (emisor != null) {
+                    txt_nombre_comercial.setText(emisor.getNombreComercial());
+                    txt_nombre_comercial.setEditable(false);
+                }
+            }
+        });
+
+        // Añadir listener al campo de texto para manejar el autocompletado
+        auto_field_producto_list.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null || newValue.isEmpty()) {
+                autoCompletePopup.hide();
+            } else {
+                List<Producto> searchResult = productoDAO.buscarPorCodigoONombre(newValue);
+                if (!searchResult.isEmpty()) {
+                    populatePopup(searchResult);
+                    if (!autoCompletePopup.isShowing()) {
+                        autoCompletePopup.show(auto_field_producto_list, Side.BOTTOM, 0, 0);
+                    }
+                } else {
+                    autoCompletePopup.hide();
+                }
+            }
+        });
+        // Ocultar el popup cuando el campo pierde el foco
+        auto_field_producto_list.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) { // si pierde el foco
+                autoCompletePopup.hide();
+            }
+        });
+        // Configurar las columnas de la tabla de detalles de productos
+        col_codigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
+
+        // Columna cantidad (editable)
         col_cantidad.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
-        col_precio.setCellValueFactory(new PropertyValueFactory<>("precioUnitario")); // Mostrar el PVP
-        col_total.setCellValueFactory(new PropertyValueFactory<>("subtotal"));
+        col_cantidad.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+        col_cantidad.setOnEditCommit(event -> {
+            Producto producto = event.getRowValue();
+            if (event.getNewValue() > 0) {
+                producto.setCantidad(event.getNewValue());
+                calcularTotales();
+                tbl_detalle.refresh();
+            }
+        });
+        col_descripcion.setCellValueFactory(new PropertyValueFactory<>("nombre"));
 
-        listaDetalleVenta = FXCollections.observableArrayList();
-        tbl_detalle_venta.setItems(listaDetalleVenta);
+        // Columna precio unitario (editable)
+        col_precio_unitario.setCellValueFactory(new PropertyValueFactory<>("pvp"));
+        col_precio_unitario.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter() {
+            @Override
+            public String toString(Double value) {
+                return String.format("%.2f", value);
+            }
+        }));
+        col_precio_unitario.setOnEditCommit(event -> {
+            Producto producto = event.getRowValue();
+            if (event.getNewValue() > 0) {
+                producto.setPvp(event.getNewValue());
+                calcularTotales();
+                tbl_detalle.refresh();
+            }
+        });
 
-        cmb_metodo_pago.setItems(FXCollections.observableArrayList("Efectivo", "Tarjeta", "Transferencia"));
+        // Columna tarifa (no editable)
+        col_tarifa.setCellValueFactory(new PropertyValueFactory<>("iva"));
+        col_tarifa.setEditable(false);
 
-        // Listener para mostrar/ocultar el VBox de cliente según el RadioButton seleccionado
-        radioConsumidorFinal.setOnAction(e -> clienteBox.setVisible(false));
-        radioConDatos.setOnAction(e -> clienteBox.setVisible(true));
+        // Columna valor total (muestra el subtotal sin IVA)
+        col_valor_total.setCellValueFactory(new PropertyValueFactory<>("subtotal"));
+        col_valor_total.setCellFactory(column -> new TableCell<Producto, Double>() {
+            @Override
+            protected void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(String.format("%.2f", item));
+                }
+            }
+        });
+
+        // Configurar botones de acción para eliminar productos
+        col_acciones.setCellFactory(param -> new TableCell<>() {
+            private final Button btnEliminar = new Button("Eliminar");
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    btnEliminar.setOnAction(event -> {
+                        Producto producto = getTableView().getItems().get(getIndex());
+                        tbl_detalle.getItems().remove(producto);
+                        calcularTotales();
+                    });
+                    setGraphic(btnEliminar);
+                }
+            }
+        });
+
+        // Configurar columnas y botones de acción en la tabla de forma de pago
+        col_forma_pago.setCellValueFactory(new PropertyValueFactory<>("formaPago"));
+        col_valor.setCellValueFactory(new PropertyValueFactory<>("valorPago"));
+        col_valor.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter() {
+            @Override
+            public String toString(Double value) {
+                return String.format("%.2f", value);
+            }
+
+            @Override
+            public Double fromString(String string) {
+                return Double.parseDouble(string);
+            }
+        }));
+        col_valor.setOnEditCommit(event -> {
+            FormaPago formaPago = event.getRowValue();
+            formaPago.setValorPago(event.getNewValue());
+            calcularTotales();
+        });
+        col_acciones_forma_pago.setCellFactory(param -> new TableCell<>() {
+            private final Button btnEliminar = new Button("Eliminar");
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    btnEliminar.setOnAction(event -> {
+                        FormaPago formaPago = getTableView().getItems().get(getIndex());
+                        tbl_forma_pago.getItems().remove(formaPago);
+                        calcularTotales();
+                    });
+                    setGraphic(btnEliminar);
+                }
+            }
+        });
+    }
+
+    @FXML
+    private void acc_buscar_ident(ActionEvent event) {
+        System.out.println("ENTRANDO A CLIENTES");
+
+        // Obtener el número de identificación ingresado
+        String identificacion = txt_identificacion.getText().trim();
+
+        // Validar que el campo no esté vacío
+        if (identificacion.isEmpty()) {
+            mostrarAlerta("Error", "Ingrese un número de identificación.", Alert.AlertType.ERROR);
+            return;
+        }
+
+        // Determinar el tipo de identificación basado en la longitud o valor específico
+        String tipoIdentificacion;
+        if (identificacion.equals("9999999999999")) {
+            tipoIdentificacion = "VENTA A CONSUMIDOR FINAL";
+        } else if (identificacion.length() == 10) {
+            tipoIdentificacion = "CEDULA";
+        } else if (identificacion.length() == 13) {
+            tipoIdentificacion = "RUC";
+        } else {
+            tipoIdentificacion = "PASAPORTE"; // Para cualquier otro caso, asumimos pasaporte
+        }
+
+        // Actualizar el ComboBox de Tipo de Identificación
+        cmb_tipo_ident.getSelectionModel().select(tipoIdentificacion);
+
+        // Buscar el cliente en la base de datos
+        ClienteDAO clienteDAO = new ClienteDAO();
+        Cliente cliente = clienteDAO.buscarPorCedulaONombre(identificacion);
+
+        if (cliente != null) {
+            // Rellenar los campos del adquirente
+            txt_razon_social.setText(cliente.getNombre() + " " + cliente.getApellido());
+            txt_direccion.setText(cliente.getDireccion());
+            txt_telefono.setText(cliente.getTelefono());
+            txt_correo.setText(cliente.getEmail());
+        } else {
+            // Limpiar los campos si no se encuentra el cliente
+            mostrarAlerta("Advertencia", "Cliente no encontrado.", Alert.AlertType.WARNING);
+            txt_razon_social.clear();
+            txt_direccion.clear();
+            txt_telefono.clear();
+            txt_correo.clear();
+        }
     }
 
     @FXML
     private void acc_buscar_producto(ActionEvent event) {
-        String termino = txt_buscar_producto.getText();
-        if (termino.isEmpty()) {
-            mostrarAlerta("Error", "Debe ingresar un nombre o código de producto para buscar.");
-            return;
-        }
-
-        Producto producto = productoDAO.buscarUnoPorCodigoONombre(termino);
-        if (producto != null) {
-            txt_producto_id.setText(String.valueOf(producto.getId()));
-            txtNombreProducto.setText(producto.getNombre());
-            txtPrecioUnitario.setText(String.valueOf(producto.getPvp())); // Mostrar PVP
-        } else {
-            mostrarAlerta("No encontrado", "No se encontró ningún producto con el término ingresado.");
-        }
     }
 
     @FXML
-    private void acc_buscar_cliente(ActionEvent event) {
-        String clienteId = txt_cliente_id.getText();
-        if (clienteId.isEmpty()) {
-            mostrarAlerta("Error", "Debe ingresar un ID de cliente para buscar.");
-            return;
-        }
-
-        Cliente cliente = clienteDAO.buscarPorCedulaONombre(clienteId);
-        if (cliente != null) {
-            txtNombreCliente.setText(cliente.getNombre());
-            txtApellidoCliente.setText(cliente.getApellido());
-            txtTelefonoCliente.setText(cliente.getTelefono());
-            txtDireccionCliente.setText(cliente.getDireccion());
-        } else {
-            mostrarAlerta("No encontrado", "No se encontró ningún cliente con el ID ingresado.");
-        }
+    private void acc_metodo_pago_efectivo(ActionEvent event) {
+        double totalConIVA = obtenerTotalConIVA();
+        FormaPago formaPago = new FormaPago("01 - SIN UTILIZACIÓN DEL SISTEMA FINANCIERO", totalConIVA);
+        tbl_forma_pago.getItems().add(formaPago);
     }
 
     @FXML
-    private void acc_agregar_producto(ActionEvent event) {
-        try {
-            int productoId = Integer.parseInt(txt_producto_id.getText());
-            int cantidad = Integer.parseInt(txt_cantidad.getText());
-
-            Producto producto = productoDAO.buscarPorId(productoId);
-            if (producto == null) {
-                mostrarAlerta("Error", "El producto no existe.");
-                return;
-            }
-
-            if (cantidad <= 0 || cantidad > producto.getStockActual()) {
-                mostrarAlerta("Error", "La cantidad debe ser válida y no superar el stock disponible.");
-                return;
-            }
-
-            double pvp = Double.parseDouble(txtPrecioUnitario.getText()); // Usar PVP para el cálculo
-            double subtotal = cantidad * pvp;
-            double iva = subtotal * producto.getIva(); // Usar el IVA del producto
-            double total = subtotal + iva;
-
-            DetalleVenta detalle = new DetalleVenta();
-            detalle.setIdProducto(productoId);
-            detalle.setCodigoProducto(producto.getCodigo()); // Usar el código del producto
-            detalle.setProductoNombre(producto.getNombre());
-            detalle.setCantidad(cantidad);
-            detalle.setPrecioUnitario(pvp); // Usar el PVP para el cálculo
-            detalle.setSubtotal(subtotal);
-            detalle.setIva(iva);
-            detalle.setTotal(total);
-
-            listaDetalleVenta.add(detalle);
-            calcularTotalVenta();
-
-        } catch (NumberFormatException e) {
-            mostrarAlerta("Error", "Debe ingresar valores válidos para el producto y la cantidad.");
-        }
+    private void acc_metodo_pago_tarjeta_debito(ActionEvent event) {
+        double totalConIVA = obtenerTotalConIVA();
+        FormaPago formaPago = new FormaPago("16 - TARJETA DE DÉBITO", totalConIVA);
+        tbl_forma_pago.getItems().add(formaPago);
     }
 
     @FXML
-    private void acc_registrar_venta(ActionEvent event) {
-        try {
-            // Validar y obtener datos del cliente
-            Integer clienteId = null;
-            if (!radioConsumidorFinal.isSelected()) {
-                if (txt_cliente_id.getText().isEmpty()) {
-                    mostrarAlerta("Error", "Debe ingresar un ID de cliente o seleccionar 'Consumidor Final'.");
-                    return;
-                }
-                clienteId = Integer.parseInt(txt_cliente_id.getText());
-            } else {
-                clienteId = 1; // Usar 1 para "Consumidor Final"
-            }
+    private void acc_metodo_pago_tarjeta_credito(ActionEvent event) {
+        double totalConIVA = obtenerTotalConIVA();
+        FormaPago formaPago = new FormaPago("19 - TARJETA DE CRÉDITO", totalConIVA);
+        tbl_forma_pago.getItems().add(formaPago);
+    }
 
-            String metodoPago = cmb_metodo_pago.getValue();
-            double total = Double.parseDouble(txt_total.getText());
+    private double obtenerTotalConIVA() {
+        // Obtener el valor de lbl_total_pagar y convertirlo a double
+        return Double.parseDouble(lbl_total_pagar.getText());
+    }
 
-            if (metodoPago == null || listaDetalleVenta.isEmpty()) {
-                mostrarAlerta("Error", "Debe seleccionar un método de pago y agregar productos.");
-                return;
-            }
+    @FXML
+    private void acc_cancelar(ActionEvent event) {
+        // Mostrar mensaje de confirmación
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmación");
+        alert.setHeaderText(null);
+        alert.setContentText("¿Está seguro de que desea cancelar? Todos los datos ingresados se perderán.");
 
-            // Crear la venta y registrar
-            Venta venta = new Venta();
-            venta.setIdCliente(clienteId); // Asegurar que el clienteId es correcto
-            venta.setFecha(LocalDateTime.now());
-            venta.setTotal(total);
-            venta.setEstado("Emitida"); // Usar 'Emitida' para representar "Emitida"
-            venta.setDetalles(new ArrayList<>(listaDetalleVenta));
-
-            boolean exito = ventaDAO.registrarVenta(venta);
-            if (exito) {
-                mostrarAlerta("Éxito", "La venta fue registrada correctamente.");
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
                 limpiarCampos();
-            } else {
-                mostrarAlerta("Error", "Ocurrió un error al registrar la venta.");
             }
+        });
+    }
 
-        } catch (NumberFormatException e) {
-            mostrarAlerta("Error", "Debe ingresar valores válidos para los campos de cliente y total.");
+    private void cargarDatosEstablecimientos() {
+        EmisorDAO emisorDAO = new EmisorDAO();
+        List<Emisor> emisores = emisorDAO.obtenerTodosLosEmisores();
+        for (Emisor emisor : emisores) {
+            cmb_establecimiento.getItems().add(emisor.getCodigoEstablecimiento() + " - " + emisor.getDireccion());
         }
     }
 
-    private void acc_limpiar(ActionEvent event) {
-        limpiarCampos();
+    private void populatePopup(List<Producto> searchResult) {
+        List<CustomMenuItem> menuItems = new LinkedList<>();
+        int maxEntries = Math.min(searchResult.size(), 10);
+
+        for (int i = 0; i < maxEntries; i++) {
+            final Producto producto = searchResult.get(i);
+            Label entryLabel = new Label(producto.toString());
+            CustomMenuItem item = new CustomMenuItem(entryLabel, true);
+
+            item.setOnAction(event -> {
+                auto_field_producto_list.setText("");
+                producto.setCantidad(1);
+                producto.calcularTotal();
+                tbl_detalle.getItems().add(producto);
+                autoCompletePopup.hide();
+                calcularTotales();
+            });
+
+            menuItems.add(item);
+        }
+
+        autoCompletePopup.getItems().clear();
+        autoCompletePopup.getItems().addAll(menuItems);
     }
 
-    private void limpiarCampos() {
-        txt_buscar_producto.clear();
-        txt_cliente_id.clear();
-        txt_producto_id.clear();
-        txt_cantidad.clear();
-        txt_total.clear();
-        cmb_metodo_pago.getSelectionModel().clearSelection();
-        listaDetalleVenta.clear();
-        txtNombreCliente.clear();
-        txtApellidoCliente.clear();
-        txtTelefonoCliente.clear();
-        txtDireccionCliente.clear();
-        txtNombreProducto.clear();
-        txtPrecioUnitario.clear();
+    private void calcularTotales() {
+        double subtotal15 = 0;
+        double subtotal0 = 0;
+        double iva15 = 0;
+
+        for (Producto producto : tbl_detalle.getItems()) {
+            if (producto.getIva() > 0) {
+                subtotal15 += producto.getSubtotal();
+                iva15 += producto.getTotal() - producto.getSubtotal();
+            } else {
+                subtotal0 += producto.getSubtotal();
+            }
+        }
+
+        double totalPagar = subtotal15 + subtotal0 + iva15;
+
+        lbl_subtotal_15.setText(String.format("%.2f", subtotal15));
+        lbl_subtotal_0.setText(String.format("%.2f", subtotal0));
+        lbl_iva_15.setText(String.format("%.2f", iva15));
+        lbl_total_pagar.setText(String.format("%.2f", totalPagar));
     }
 
-    private void calcularTotalVenta() {
-        double total = listaDetalleVenta.stream().mapToDouble(DetalleVenta::getTotal).sum();
-        txt_total.setText(String.valueOf(total));
-    }
-
-    private void mostrarAlerta(String titulo, String contenido) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
+        Alert alert = new Alert(tipo);
         alert.setTitle(titulo);
         alert.setHeaderText(null);
-        alert.setContentText(contenido);
+        alert.setContentText(mensaje);
         alert.showAndWait();
     }
 
-    private void acc_cerrar(ActionEvent event) {
-        try {
-            // abrir formulario
-            String formulario = "/com/ktech/appktechv2/vista/principal.fxml";
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(formulario));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.setScene(scene);
+    private void limpiarCampos() {
+        // Limpiar campos de identificación y cliente
+        txt_identificacion.clear();
+        cmb_tipo_ident.getSelectionModel().clearSelection();
+        txt_razon_social.clear();
+        txt_direccion.clear();
+        txt_telefono.clear();
+        txt_correo.clear();
 
-            stage.setResizable(false);
-            stage.show();
-            //cerrar formulario
-            Stage myStage = (Stage) this.btn_cerrar.getScene().getWindow();
-            myStage.close();
+        // Limpiar campos de emisor
+        cmb_establecimiento.getSelectionModel().clearSelection();
+        txt_nombre_comercial.clear();
+
+        // Limpiar campos de productos
+        tbl_detalle.getItems().clear();
+
+        // Limpiar campos de formas de pago
+        tbl_forma_pago.getItems().clear();
+
+        // Limpiar campos de totales
+        lbl_subtotal_15.setText("0.00");
+        lbl_subtotal_0.setText("0.00");
+        lbl_iva_15.setText("0.00");
+        lbl_total_pagar.setText("0.00");
+
+        // Limpiar otros campos
+        dtp_fecha.setValue(LocalDate.now()); // Restablecer la fecha actual
+    }
+
+    @FXML
+    private void acc_guardar_enviar(ActionEvent event) {
+        try {
+            int idEmisor = obtenerIdEmisorSeleccionado();
+            String numeroSecuencial = generarNumeroSecuencial(idEmisor);
+
+            ClienteDAO clienteDAO = new ClienteDAO();
+            Cliente cliente = clienteDAO.buscarPorCedulaONombre(txt_identificacion.getText());
+
+            if (cliente == null) {
+                mostrarAlerta("Error", "Cliente no encontrado.", Alert.AlertType.ERROR);
+                return;
+            }
+
+            Venta venta = new Venta();
+            venta.setIdCliente(cliente.getIdCliente());  // Asignar el ID del cliente encontrado
+            venta.setIdEmisor(idEmisor);
+            venta.setFecha(LocalDateTime.now());
+            venta.setFechaEmision(dtp_fecha.getValue().atStartOfDay().atZone(java.time.ZoneId.systemDefault()).toLocalDateTime());
+            venta.setTotal(Double.parseDouble(lbl_total_pagar.getText()));
+            venta.setEstado("Emitida");
+            venta.setNumeroSecuencial(numeroSecuencial);
+            venta.setRucComprador(txt_identificacion.getText());
+            venta.setRazonSocialComprador(txt_razon_social.getText());
+            venta.setDireccionComprador(txt_direccion.getText());
+
+            List<DetalleVenta> detalles = new ArrayList<>();
+            for (Producto producto : tbl_detalle.getItems()) {
+                DetalleVenta detalle = new DetalleVenta();
+                detalle.setIdProducto(producto.getId());
+                detalle.setCantidad(producto.getCantidad());
+                detalle.setPrecioUnitario(producto.getPvp());
+                detalle.setSubtotal(producto.getSubtotal());
+                detalle.setIva(producto.getIva());
+                detalle.setTotal(producto.getTotal());
+                detalles.add(detalle);
+            }
+            venta.setDetalles(detalles);
+
+            VentaDAO ventaDAO = new VentaDAO();
+            if (ventaDAO.registrarVenta(venta)) {
+                mostrarAlerta("Éxito", "Venta registrada correctamente.", Alert.AlertType.INFORMATION);
+                limpiarCampos();
+
+            } else {
+                mostrarAlerta("Error", "No se pudo registrar la venta.", Alert.AlertType.ERROR);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
+            mostrarAlerta("Error", "Error al procesar la venta.", Alert.AlertType.ERROR);
         }
     }
+
+    private int obtenerIdEmisorSeleccionado() {
+        EmisorDAO emisorDAO = new EmisorDAO();
+        String codigoEstablecimiento = cmb_establecimiento.getSelectionModel().getSelectedItem().split(" - ")[0];
+        Emisor emisor = emisorDAO.obtenerEmisorPorCodigoEstablecimiento(codigoEstablecimiento);
+        return emisor != null ? emisor.getIdEmisor() : 0;
+    }
+
+    private String generarNumeroSecuencial(int idEmisor) throws SQLException {
+        String numeroSecuencial = "";
+        String sql = "{ call ObtenerSiguienteSecuencialVenta(?, ?) }";
+
+        try (Connection con = new SqlConnection().getConexion(); CallableStatement cs = con.prepareCall(sql)) {
+
+            cs.setInt(1, idEmisor);
+            cs.registerOutParameter(2, Types.CHAR);
+            cs.execute();
+            numeroSecuencial = cs.getString(2);
+        }
+
+        return numeroSecuencial;
+    }
+
 }
