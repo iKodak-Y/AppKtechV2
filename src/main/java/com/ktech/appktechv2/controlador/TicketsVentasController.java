@@ -2,6 +2,8 @@ package com.ktech.appktechv2.controlador;
 
 import com.ktech.appktechv2.SqlConnection;
 import com.ktech.appktechv2.modelo.*;
+import com.ktech.appktechv2.util.EmailSender;
+import com.ktech.appktechv2.util.TicketPDFGenerator;
 import java.net.URL;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -453,20 +455,31 @@ public class TicketsVentasController implements Initializable {
         dtp_fecha.setValue(LocalDate.now()); // Restablecer la fecha actual
     }
 
+    private Emisor obtenerEmisorSeleccionado() {
+        EmisorDAO emisorDAO = new EmisorDAO();
+        String codigoEstablecimiento = cmb_establecimiento.getSelectionModel().getSelectedItem().split(" - ")[0];
+        return emisorDAO.obtenerEmisorPorCodigoEstablecimiento(codigoEstablecimiento);
+    }
+
     @FXML
     private void acc_guardar_enviar(ActionEvent event) {
         try {
+            // Obtener datos necesarios
             int idEmisor = obtenerIdEmisorSeleccionado();
             String numeroSecuencial = generarNumeroSecuencial(idEmisor);
-
             ClienteDAO clienteDAO = new ClienteDAO();
             Cliente cliente = clienteDAO.buscarPorCedulaONombre(txt_identificacion.getText());
-
             if (cliente == null) {
                 mostrarAlerta("Error", "Cliente no encontrado.", Alert.AlertType.ERROR);
                 return;
             }
+            Emisor emisor = obtenerEmisorSeleccionado();
+            if (emisor == null) {
+                mostrarAlerta("Error", "No se pudo obtener el emisor.", Alert.AlertType.ERROR);
+                return;
+            }
 
+            // Crear objeto Venta
             Venta venta = new Venta();
             venta.setIdCliente(cliente.getIdCliente());  // Asignar el ID del cliente encontrado
             venta.setIdEmisor(idEmisor);
@@ -479,6 +492,7 @@ public class TicketsVentasController implements Initializable {
             venta.setRazonSocialComprador(txt_razon_social.getText());
             venta.setDireccionComprador(txt_direccion.getText());
 
+            // Detalles de la venta
             List<DetalleVenta> detalles = new ArrayList<>();
             for (Producto producto : tbl_detalle.getItems()) {
                 DetalleVenta detalle = new DetalleVenta();
@@ -492,15 +506,49 @@ public class TicketsVentasController implements Initializable {
             }
             venta.setDetalles(detalles);
 
+            // Registrar la venta
             VentaDAO ventaDAO = new VentaDAO();
             if (ventaDAO.registrarVenta(venta)) {
-                mostrarAlerta("Éxito", "Venta registrada correctamente.", Alert.AlertType.INFORMATION);
-                limpiarCampos();
+                // Generar el PDF
+                venta.setMetodoPago(obtenerMetodoPagoSeleccionado()); // Implementa este método según tu lógica
 
+                String pdfPath = "src/main/resources/tickets/ticket_" + numeroSecuencial + ".pdf";
+                String generatedPdf = TicketPDFGenerator.generateTicket(emisor, venta, tbl_detalle.getItems(), pdfPath);
+                // enviar por correo electronico
+                if (generatedPdf != null) {
+                    mostrarAlerta("Éxito", "Venta registrada correctamente. Ticket generado en: " + pdfPath, Alert.AlertType.INFORMATION);
+
+                    // Enviar el correo con el PDF adjunto
+                    String correoCliente = cliente.getEmail(); // Suponiendo que el cliente tiene un campo "email"
+                    if (correoCliente != null && !correoCliente.isEmpty()) {
+                        // Configuración del servidor SMTP (ejemplo para Gmail)
+                        String host = "smtp.gmail.com";
+                        String port = "587";
+                        String username = "kodakacell@gmail.com"; // Tu correo de Gmail
+                        String appPassword = "rzzn shqq aoyz xzja"; // Contraseña de aplicación
+
+                        // Crear instancia de EmailSender
+                        EmailSender emailSender = new EmailSender(host, port, username, appPassword);
+
+                        // Datos del correo
+                        String toAddress = correoCliente; // Usar el correo del cliente
+                        String subject = "Ticket de Compra - " + numeroSecuencial;
+                        String message = "Estimado/a " + cliente.getNombre() + ",\n\nAdjuntamos su ticket de compra. Gracias por preferirnos.";
+                        String attachmentPath = pdfPath;
+
+                        // Enviar el correo
+                        emailSender.sendEmailWithAttachment(toAddress, subject, message, attachmentPath);
+                        mostrarAlerta("Éxito", "Correo enviado exitosamente al cliente.", Alert.AlertType.INFORMATION);
+                    } else {
+                        mostrarAlerta("Advertencia", "El cliente no tiene un correo registrado.", Alert.AlertType.WARNING);
+                    }
+                } else {
+                    mostrarAlerta("Error", "No se pudo generar el ticket en PDF.", Alert.AlertType.ERROR);
+                }
+                limpiarCampos();
             } else {
                 mostrarAlerta("Error", "No se pudo registrar la venta.", Alert.AlertType.ERROR);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             mostrarAlerta("Error", "Error al procesar la venta.", Alert.AlertType.ERROR);
@@ -527,6 +575,26 @@ public class TicketsVentasController implements Initializable {
         }
 
         return numeroSecuencial;
+    }
+
+    private String obtenerMetodoPagoSeleccionado() {
+        // Obtener los métodos de pago de la tabla
+        List<FormaPago> formasPago = tbl_forma_pago.getItems();
+
+        // Validar que haya al menos un método de pago seleccionado
+        if (formasPago == null || formasPago.isEmpty()) {
+            mostrarAlerta("Error", "Debe seleccionar al menos un método de pago.", Alert.AlertType.ERROR);
+            return null;
+        }
+
+        // Concatenar todos los métodos de pago en una sola cadena
+        StringBuilder metodoPago = new StringBuilder();
+        for (FormaPago formaPago : formasPago) {
+            metodoPago.append(formaPago.getFormaPago()).append("\n");
+        }
+
+        // Retornar la cadena con los métodos de pago
+        return metodoPago.toString().trim(); // Eliminar el último salto de línea
     }
 
 }

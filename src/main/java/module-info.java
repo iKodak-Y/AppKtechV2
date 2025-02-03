@@ -6,6 +6,13 @@ module com.ktech.appktechv2 {
     requires java.xml.bind;
     requires java.activation;
     requires java.desktop;
+    requires java.mail;
+    
+    // iText 7 modules
+    requires kernel;
+    requires io;
+    requires layout;
+    requires forms;
     
     opens com.ktech.appktechv2 to javafx.fxml;
     opens com.ktech.appktechv2.controlador to javafx.fxml;

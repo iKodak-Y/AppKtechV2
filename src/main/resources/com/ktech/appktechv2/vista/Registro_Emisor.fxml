@@ -32,7 +32,7 @@
                         <Font size="13.0" />
                      </font>
                      <VBox.margin>
-                        <Insets top="15.0" />
+                        <Insets top="6.0" />
                      </VBox.margin>
                   </Label>
                   <Label text="Razón Social:*">
@@ -40,7 +40,7 @@
                         <Font size="13.0" />
                      </font>
                      <VBox.margin>
-                        <Insets top="25.0" />
+                        <Insets top="22.0" />
                      </VBox.margin>
                   </Label>
                   <Label text="Nombre Comercial:">
@@ -48,7 +48,7 @@
                         <Font size="13.0" />
                      </font>
                      <VBox.margin>
-                        <Insets top="25.0" />
+                        <Insets top="22.0" />
                      </VBox.margin>
                   </Label>
                   <Label text="Dirección:*">
@@ -56,7 +56,7 @@
                         <Font size="13.0" />
                      </font>
                      <VBox.margin>
-                        <Insets top="25.0" />
+                        <Insets top="22.0" />
                      </VBox.margin>
                   </Label>
                   <Label text="Código Establecimiento:*">
@@ -64,7 +64,7 @@
                         <Font size="13.0" />
                      </font>
                      <VBox.margin>
-                        <Insets top="25.0" />
+                        <Insets top="22.0" />
                      </VBox.margin>
                   </Label>
                   <Label text="Punto Emisión:*">
@@ -72,7 +72,7 @@
                         <Font size="13.0" />
                      </font>
                      <VBox.margin>
-                        <Insets top="25.0" />
+                        <Insets top="22.0" />
                      </VBox.margin>
                   </Label>
                   <Label text="Tipo de ambiente:*">
@@ -80,7 +80,7 @@
                         <Font size="13.0" />
                      </font>
                      <VBox.margin>
-                        <Insets top="25.0" />
+                        <Insets top="22.0" />
                      </VBox.margin>
                   </Label>
                   <Label text="Certificado (.p12):*">
@@ -88,7 +88,7 @@
                         <Font size="13.0" />
                      </font>
                      <VBox.margin>
-                        <Insets top="25.0" />
+                        <Insets top="22.0" />
                      </VBox.margin>
                   </Label>
                   <Label text="Contraseña Certificado:*">
@@ -96,7 +96,7 @@
                         <Font size="13.0" />
                      </font>
                      <VBox.margin>
-                        <Insets top="25.0" />
+                        <Insets top="22.0" />
                      </VBox.margin>
                   </Label>
                </children>
@@ -109,7 +109,7 @@
                   <TextField fx:id="txtDireccion" promptText="Ingrese Dirección" />
                   <TextField fx:id="txtCodigoEstablecimiento" maxWidth="100.0" promptText="Ej: 001" />
                   <TextField fx:id="txtPuntoEmision" maxWidth="100.0" promptText="Ej: 001" />
-                  <ComboBox fx:id="cmbTipoAmbiente" prefWidth="150.0" promptText="Seleccione..."/>
+                  <ComboBox fx:id="cmbTipoAmbiente" prefWidth="150.0" promptText="Seleccione..." />
                   <HBox spacing="10.0">
                      <children>
                         <TextField fx:id="txtCertificadoPath" editable="false" prefWidth="200.0" promptText="Seleccione archivo .p12" />

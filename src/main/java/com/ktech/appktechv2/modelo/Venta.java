@@ -17,6 +17,9 @@ public class Venta {
     private String razonSocialComprador;      
     private String direccionComprador;    
     private LocalDateTime fechaEmision;
+    private String emailComprador;
+    private String telefonoComprador;
+    private String metodoPago;
 
     // Getters y Setters
     public int getIdVenta() {
@@ -115,4 +118,29 @@ public class Venta {
         this.fechaEmision = fechaEmision;
     }
 
+    public String getEmailComprador() {
+        return emailComprador;
+    }
+
+    public void setEmailComprador(String mailComprador) {
+        this.emailComprador = mailComprador;
+    }
+
+    public String getTelefonoComprador() {
+        return telefonoComprador;
+    }
+
+    public void setTelefonoComprador(String telefonoComprador) {
+        this.telefonoComprador = telefonoComprador;
+    }
+
+    public String getMetodoPago() {
+        return metodoPago;
+    }
+
+    public void setMetodoPago(String metodoPago) {
+        this.metodoPago = metodoPago;
+    }
+    
+    
 }
