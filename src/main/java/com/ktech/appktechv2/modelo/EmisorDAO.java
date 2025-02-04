@@ -19,9 +19,7 @@ public class EmisorDAO {
     // Método para obtener el emisor por defecto
     public Emisor obtenerEmisorPorDefecto() {
         String sql = "SELECT TOP 1 * FROM Emisor";
-
         try (Connection con = new SqlConnection().getConexion(); PreparedStatement stmt = con.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
-
             if (rs.next()) {
                 Emisor emisor = new Emisor();
                 emisor.setIdEmisor(rs.getInt("id_emisor"));
@@ -32,13 +30,15 @@ public class EmisorDAO {
                 emisor.setCodigoEstablecimiento(rs.getString("codigo_establecimiento"));
                 emisor.setPuntoEmision(rs.getString("punto_emision"));
                 emisor.setTipoAmbiente(rs.getString("tipo_ambiente"));
+                emisor.setObligadoContabilidad(rs.getBoolean("obligado_contabilidad"));
+                emisor.setLogo(rs.getBytes("Logo")); // Leer el logotipo como bytes
                 return emisor;
             }
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Error al recuperar los datos del emisor: " + e.getMessage());
         }
-        return null; // Si no se encuentra un emisor
+        return null;
     }
 
     // Método para obtener todos los emisores

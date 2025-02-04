@@ -85,17 +85,28 @@
 }
 
 
+/* Estilo base para los botones de navegación */
 .button-nav {
     -fx-background-color: transparent;
     -fx-text-fill: black;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
+    -fx-padding: 5px 10px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
 }
 
+/* Efecto hover para los botones de navegación */
 .button-nav:hover {
-    -fx-background-color: transparent;
-    -fx-text-fill: #b7b7b7;
-    -fx-font-weight: bold;
+    -fx-background-color: #d1d1d1;
+    -fx-text-fill: black;
+}
+
+/* Estilo para el botón activo (pestaña seleccionada) */
+.button-nav.active {
+    -fx-background-color: #d1d1d1; /* Fondo blanco */
+    -fx-text-fill: #0c4597; /* Texto azul */
+    -fx-background-radius: 5px;
 }
 .button-cerrar {
     -fx-background-color: #b21515 !important;

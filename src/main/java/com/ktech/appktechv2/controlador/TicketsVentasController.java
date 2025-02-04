@@ -524,8 +524,8 @@ public class TicketsVentasController implements Initializable {
                         // Configuración del servidor SMTP (ejemplo para Gmail)
                         String host = "smtp.gmail.com";
                         String port = "587";
-                        String username = "kodakacell@gmail.com"; // Tu correo de Gmail
-                        String appPassword = "rzzn shqq aoyz xzja"; // Contraseña de aplicación
+                        String username = "facturaktech@gmail.com"; // Tu correo de Gmail
+                        String appPassword = "xsdo ylll xeyt khur"; // Contraseña de aplicación
 
                         // Crear instancia de EmailSender
                         EmailSender emailSender = new EmailSender(host, port, username, appPassword);

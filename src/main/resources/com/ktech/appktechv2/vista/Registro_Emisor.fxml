@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktech.appktechv2.controlador.Registro_EmisorController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="625.0" prefWidth="700.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktech.appktechv2.controlador.Registro_EmisorController">
    <children>
       <Pane prefHeight="59.0" prefWidth="700.0">
          <children>
@@ -44,6 +44,14 @@
                      </VBox.margin>
                   </Label>
                   <Label text="Nombre Comercial:">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="22.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label text="Logotipo:*">
                      <font>
                         <Font size="13.0" />
                      </font>
@@ -106,6 +114,12 @@
                   <TextField fx:id="txtRuc" promptText="Ingrese RUC" />
                   <TextField fx:id="txtRazonSocial" promptText="Ingrese Razón Social" />
                   <TextField fx:id="txtNombreComercial" promptText="Ingrese Nombre Comercial" />
+                  <HBox spacing="10.0">
+                     <children>
+                        <TextField fx:id="txtLogoPath" editable="false" prefWidth="200.0" promptText="Seleccione archivo .png" />
+                        <Button fx:id="btnSeleccionarLogo" mnemonicParsing="false" onAction="#seleccionarLogo" text="..." />
+                     </children>
+                  </HBox>
                   <TextField fx:id="txtDireccion" promptText="Ingrese Dirección" />
                   <TextField fx:id="txtCodigoEstablecimiento" maxWidth="100.0" promptText="Ej: 001" />
                   <TextField fx:id="txtPuntoEmision" maxWidth="100.0" promptText="Ej: 001" />
@@ -118,6 +132,7 @@
                   </HBox>
                   <PasswordField fx:id="txtContrasena" promptText="Ingrese contraseña" />
                   <CheckBox fx:id="chkObligadoContabilidad" mnemonicParsing="false" text="Obligado a llevar contabilidad" />
+                  <HBox spacing="10.0" />
                </children>
             </VBox>
          </children>
@@ -125,11 +140,12 @@
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
       </HBox>
-      <HBox alignment="CENTER" spacing="20.0">
+      <HBox alignment="CENTER" prefHeight="76.0" prefWidth="700.0" spacing="20.0">
          <children>
             <Button fx:id="btnGuardar" mnemonicParsing="false" onAction="#guardarEmisor" styleClass="button-primary" text="Guardar" />
             <Button fx:id="btnConfigSri" mnemonicParsing="false" onAction="#abrirConfiguracionSRI" text="Configuración SRI" />
-            <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#cancelar" text="Cancelar" />
+            <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#cancelarEdicion" text="Cancelar" />
+            <Button fx:id="btnEditar" mnemonicParsing="false" onAction="#editarEmisor" text="Editar" />
          </children>
          <padding>
             <Insets bottom="20.0" top="10.0" />

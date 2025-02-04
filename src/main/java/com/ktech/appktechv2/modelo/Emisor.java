@@ -10,8 +10,16 @@ public class Emisor {
     private String codigoEstablecimiento;
     private String puntoEmision;
     private String tipoAmbiente;
-
     private boolean obligadoContabilidad;
+    private byte[] logo;
+
+    public byte[] getLogo() {
+        return logo;
+    }
+
+    public void setLogo(byte[] logo) {
+        this.logo = logo;
+    }
 
     public boolean getObligadoContabilidad() {
         return obligadoContabilidad;
