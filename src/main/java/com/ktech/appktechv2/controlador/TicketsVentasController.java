@@ -3,7 +3,9 @@ package com.ktech.appktechv2.controlador;
 import com.ktech.appktechv2.SqlConnection;
 import com.ktech.appktechv2.modelo.*;
 import com.ktech.appktechv2.util.EmailSender;
+import com.ktech.appktechv2.util.InventarioManager;
 import com.ktech.appktechv2.util.TicketPDFGenerator;
+import com.ktech.appktechv2.util.ValidadorDocumento;
 import java.net.URL;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -17,8 +19,11 @@ import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Side;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -33,6 +38,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.Stage;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 
@@ -104,10 +110,10 @@ public class TicketsVentasController implements Initializable {
     private Button btn_tarjeta_credito;
     @FXML
     private Button btn_cancelar;
-    private ContextMenu autoCompletePopup;
-    private ProductoDAO productoDAO;
     @FXML
     private Button btn_guardar_enviar;
+    private ContextMenu autoCompletePopup;
+    private ProductoDAO productoDAO;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -272,31 +278,50 @@ public class TicketsVentasController implements Initializable {
 
     @FXML
     private void acc_buscar_ident(ActionEvent event) {
-        System.out.println("ENTRANDO A CLIENTES");
-
         // Obtener el número de identificación ingresado
         String identificacion = txt_identificacion.getText().trim();
 
         // Validar que el campo no esté vacío
-        if (identificacion.isEmpty()) {
+        if (ValidadorDocumento.esCampoVacio(identificacion)) {
             mostrarAlerta("Error", "Ingrese un número de identificación.", Alert.AlertType.ERROR);
             return;
         }
 
         // Determinar el tipo de identificación basado en la longitud o valor específico
         String tipoIdentificacion;
+        boolean esValido = false;
+
         if (identificacion.equals("9999999999999")) {
             tipoIdentificacion = "VENTA A CONSUMIDOR FINAL";
+            esValido = true; // Este caso siempre es válido
         } else if (identificacion.length() == 10) {
             tipoIdentificacion = "CEDULA";
+            esValido = ValidadorDocumento.validarCedula(identificacion);
         } else if (identificacion.length() == 13) {
             tipoIdentificacion = "RUC";
+            esValido = ValidadorDocumento.validarRUC(identificacion);
         } else {
             tipoIdentificacion = "PASAPORTE"; // Para cualquier otro caso, asumimos pasaporte
+            esValido = true; // No se valida el pasaporte
+        }
+
+        // Validar el número de identificación
+        if (!esValido) {
+            mostrarAlerta("Error", "El número de identificación no es válido.", Alert.AlertType.ERROR);
+            return;
         }
 
         // Actualizar el ComboBox de Tipo de Identificación
         cmb_tipo_ident.getSelectionModel().select(tipoIdentificacion);
+
+        // Manejar el caso "VENTA A CONSUMIDOR FINAL"
+        if (tipoIdentificacion.equals("VENTA A CONSUMIDOR FINAL")) {
+            txt_razon_social.setText("CONSUMIDOR FINAL");
+            txt_direccion.setText("DIRECCIÓN NO ESPECIFICADA");
+            txt_telefono.clear();
+            txt_correo.clear();
+            return;
+        }
 
         // Buscar el cliente en la base de datos
         ClienteDAO clienteDAO = new ClienteDAO();
@@ -309,12 +334,42 @@ public class TicketsVentasController implements Initializable {
             txt_telefono.setText(cliente.getTelefono());
             txt_correo.setText(cliente.getEmail());
         } else {
-            // Limpiar los campos si no se encuentra el cliente
-            mostrarAlerta("Advertencia", "Cliente no encontrado.", Alert.AlertType.WARNING);
-            txt_razon_social.clear();
-            txt_direccion.clear();
-            txt_telefono.clear();
-            txt_correo.clear();
+            // Mostrar ventana emergente para registrar al cliente
+            mostrarAlerta("Advertencia", "Cliente no encontrado. ¿Desea registrar un nuevo cliente?", Alert.AlertType.WARNING);
+
+            try {
+                // Cargar la vista de registro de clientes
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ktech/appktechv2/vista/Clientes.fxml"));
+                Parent root = loader.load();
+
+                // Obtener el controlador de la ventana emergente
+                ClientesController clientesController = loader.getController();
+
+                // Crear una nueva escena y mostrarla como ventana emergente
+                Stage stage = new Stage();
+                stage.setTitle("Registrar Nuevo Cliente");
+                stage.setScene(new Scene(root));
+                stage.setResizable(false);
+
+                // Hacer que la ventana sea modal
+                stage.initOwner(txt_identificacion.getScene().getWindow());
+
+                // Mostrar la ventana y esperar a que se cierre
+                stage.showAndWait();
+
+                // Verificar si se registró un nuevo cliente
+                Cliente nuevoCliente = clientesController.obtenerClienteSeleccionado();
+                if (nuevoCliente != null) {
+                    // Rellenar los campos con los datos del nuevo cliente
+                    txt_razon_social.setText(nuevoCliente.getNombre() + " " + nuevoCliente.getApellido());
+                    txt_direccion.setText(nuevoCliente.getDireccion());
+                    txt_telefono.setText(nuevoCliente.getTelefono());
+                    txt_correo.setText(nuevoCliente.getEmail());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                mostrarAlerta("Error", "Ocurrió un error al abrir la ventana de registro de clientes.", Alert.AlertType.ERROR);
+            }
         }
     }
 
@@ -509,45 +564,74 @@ public class TicketsVentasController implements Initializable {
             // Registrar la venta
             VentaDAO ventaDAO = new VentaDAO();
             if (ventaDAO.registrarVenta(venta)) {
-                // Generar el PDF
-                venta.setMetodoPago(obtenerMetodoPagoSeleccionado()); // Implementa este método según tu lógica
-                String pdfPath = "src/main/resources/tickets/ticket_" + numeroSecuencial + ".pdf";
-                String generatedPdf = TicketPDFGenerator.generateTicket(emisor, venta, tbl_detalle.getItems(), pdfPath);
-                // enviar por correo electronico
-                if (generatedPdf != null) {
-                    mostrarAlerta("Éxito", "Venta registrada correctamente. Ticket generado en: " + pdfPath, Alert.AlertType.INFORMATION);
+                // Actualizar el stock usando InventarioManager
+                InventarioManager inventarioManager = new InventarioManager();
+                boolean stockActualizado = true;
 
-                    // Enviar el correo con el PDF adjunto
-                    String correoCliente = cliente.getEmail(); // Suponiendo que el cliente tiene un campo "email"
-                    if (correoCliente != null && !correoCliente.isEmpty()) {
-                        // Configuración del servidor SMTP (ejemplo para Gmail)
-                        String host = "smtp.gmail.com";
-                        String port = "587";
-                        
-                        ConfiguracionEmailDAO configDAO = new ConfiguracionEmailDAO();
-                        ConfiguracionEmail config = configDAO.obtenerConfiguracionActual();
-                        String username = config.getCorreoElectronico();
-                        String appPassword = config.getPasswordApp();
+                for (DetalleVenta detalle : detalles) {
+                    int idProducto = detalle.getIdProducto();
+                    int cantidadVendida = detalle.getCantidad();
 
-                        // Crear instancia de EmailSender
-                        EmailSender emailSender = new EmailSender(host, port, username, appPassword);
-
-                        // Datos del correo
-                        String toAddress = correoCliente; // Usar el correo del cliente
-                        String subject = "Ticket de Compra - " + numeroSecuencial;
-                        String message = "Estimado/a " + cliente.getNombre() + ",\n\nAdjuntamos su ticket de compra. Gracias por preferirnos.";
-                        String attachmentPath = pdfPath;
-
-                        // Enviar el correo
-                        emailSender.sendEmailWithAttachment(toAddress, subject, message, attachmentPath);
-                        mostrarAlerta("Éxito", "Correo enviado exitosamente al cliente.", Alert.AlertType.INFORMATION);
-                    } else {
-                        mostrarAlerta("Advertencia", "El cliente no tiene un correo registrado.", Alert.AlertType.WARNING);
+                    // Verificar si hay suficiente stock
+                    if (!inventarioManager.verificarStock(idProducto, cantidadVendida)) {
+                        mostrarAlerta("Error", "No hay suficiente stock para el producto con ID: " + idProducto, Alert.AlertType.ERROR);
+                        stockActualizado = false;
+                        break; // Detener el proceso si no hay suficiente stock
                     }
-                } else {
-                    mostrarAlerta("Error", "No se pudo generar el ticket en PDF.", Alert.AlertType.ERROR);
+
+                    // Actualizar el stock
+                    if (!inventarioManager.actualizarStock(idProducto, cantidadVendida)) {
+                        mostrarAlerta("Error", "No se pudo actualizar el stock para el producto con ID: " + idProducto, Alert.AlertType.ERROR);
+                        stockActualizado = false;
+                        break;
+                    }
                 }
-                limpiarCampos();
+
+                if (stockActualizado) {
+                    // Generar el PDF
+                    venta.setMetodoPago(obtenerMetodoPagoSeleccionado()); // Implementa este método según tu lógica
+                    String pdfPath = "src/main/resources/tickets/ticket_" + numeroSecuencial + ".pdf";
+                    String generatedPdf = TicketPDFGenerator.generateTicket(emisor, venta, tbl_detalle.getItems(), pdfPath);
+
+                    if (generatedPdf != null) {
+                        mostrarAlerta("Éxito", "Venta registrada correctamente. Ticket generado en: " + pdfPath, Alert.AlertType.INFORMATION);
+
+                        // Enviar el correo con el PDF adjunto
+                        String correoCliente = cliente.getEmail(); // Suponiendo que el cliente tiene un campo "email"
+                        if (correoCliente != null && !correoCliente.isEmpty()) {
+                            // Configuración del servidor SMTP (ejemplo para Gmail)
+                            String host = "smtp.gmail.com";
+                            String port = "587";
+                            ConfiguracionEmailDAO configDAO = new ConfiguracionEmailDAO();
+                            ConfiguracionEmail config = configDAO.obtenerConfiguracionActual();
+                            String username = config.getCorreoElectronico();
+                            String appPassword = config.getPasswordApp();
+
+                            // Crear instancia de EmailSender
+                            EmailSender emailSender = new EmailSender(host, port, username, appPassword);
+
+                            // Datos del correo
+                            String toAddress = correoCliente; // Usar el correo del cliente
+                            String subject = "Ticket de Compra - " + numeroSecuencial;
+                            String message = "Estimado/a " + cliente.getNombre() + ",\n\nAdjuntamos su ticket de compra. Gracias por preferirnos.";
+                            String attachmentPath = pdfPath;
+
+                            // Enviar el correo
+                            emailSender.sendEmailWithAttachment(toAddress, subject, message, attachmentPath);
+                            mostrarAlerta("Éxito", "Correo enviado exitosamente al cliente.", Alert.AlertType.INFORMATION);
+                        } else {
+                            mostrarAlerta("Advertencia", "El cliente no tiene un correo registrado.", Alert.AlertType.WARNING);
+                        }
+                    } else {
+                        mostrarAlerta("Error", "No se pudo generar el ticket en PDF.", Alert.AlertType.ERROR);
+                    }
+
+                    limpiarCampos();
+                } else {
+                    // Revertir la venta si no se pudo actualizar el stock
+                    ventaDAO.eliminarVenta(venta.getIdVenta());
+                    mostrarAlerta("Error", "No se pudo completar la venta debido a problemas de stock.", Alert.AlertType.ERROR);
+                }
             } else {
                 mostrarAlerta("Error", "No se pudo registrar la venta.", Alert.AlertType.ERROR);
             }

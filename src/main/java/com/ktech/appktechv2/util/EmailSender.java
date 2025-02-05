@@ -2,13 +2,19 @@ package com.ktech.appktechv2.util;
 
 import java.io.File;
 import java.util.Properties;
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
-import javax.mail.*;
-import javax.mail.internet.*;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import jakarta.activation.DataHandler;
+import jakarta.activation.DataSource;
+import jakarta.activation.FileDataSource;
+import jakarta.mail.*;
+import jakarta.mail.internet.*;
 
 public class EmailSender {
+
+    private static final Logger logger = LoggerFactory.getLogger(EmailSender.class);
 
     private String host;
     private String port;
@@ -23,6 +29,8 @@ public class EmailSender {
     }
 
     public void sendEmailWithAttachment(String toAddress, String subject, String message, String attachmentPath) throws MessagingException {
+        logger.info("Intentando enviar correo a {}", toAddress);
+
         // Propiedades del servidor SMTP
         Properties properties = new Properties();
         properties.put("mail.smtp.host", host);
@@ -39,6 +47,7 @@ public class EmailSender {
         };
 
         Session session = Session.getInstance(properties, auth);
+        session.setDebug(true); // Habilita el debug de Jakarta Mail si lo necesitas
 
         // Crear el mensaje de correo
         Message msg = new MimeMessage(session);
@@ -63,8 +72,13 @@ public class EmailSender {
 
         msg.setContent(multipart);
 
-        // Enviar el correo
-        Transport.send(msg);
-        System.out.println("Correo enviado exitosamente a " + toAddress);
+        try {
+            // Enviar el correo
+            Transport.send(msg);
+            logger.info("Correo enviado exitosamente a {}", toAddress);
+        } catch (MessagingException e) {
+            logger.error("Error al enviar el correo a {}", toAddress, e);
+            throw e; // Re-lanza la excepción para que se maneje en otro lugar
+        }
     }
 }

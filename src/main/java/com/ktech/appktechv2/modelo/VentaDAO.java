@@ -65,4 +65,35 @@ public class VentaDAO {
             return false;
         }
     }
+
+    public boolean eliminarVenta(int idVenta) {
+        String sqlEliminarDetalles = "DELETE FROM DetalleVenta WHERE IDVenta = ?";
+        String sqlEliminarVenta = "DELETE FROM Ventas WHERE IDVenta = ?";
+        try (Connection con = new SqlConnection().getConexion()) {
+            con.setAutoCommit(false);
+
+            // Eliminar los detalles de la venta
+            try (PreparedStatement psDetalles = con.prepareStatement(sqlEliminarDetalles)) {
+                psDetalles.setInt(1, idVenta);
+                psDetalles.executeUpdate();
+            }
+
+            // Eliminar la venta principal
+            try (PreparedStatement psVenta = con.prepareStatement(sqlEliminarVenta)) {
+                psVenta.setInt(1, idVenta);
+                int rowsAffected = psVenta.executeUpdate();
+
+                if (rowsAffected == 0) {
+                    con.rollback(); // Revertir si no se eliminó ninguna fila
+                    return false;
+                }
+            }
+
+            con.commit(); // Confirmar la transacción
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
