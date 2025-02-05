@@ -511,7 +511,6 @@ public class TicketsVentasController implements Initializable {
             if (ventaDAO.registrarVenta(venta)) {
                 // Generar el PDF
                 venta.setMetodoPago(obtenerMetodoPagoSeleccionado()); // Implementa este método según tu lógica
-
                 String pdfPath = "src/main/resources/tickets/ticket_" + numeroSecuencial + ".pdf";
                 String generatedPdf = TicketPDFGenerator.generateTicket(emisor, venta, tbl_detalle.getItems(), pdfPath);
                 // enviar por correo electronico
@@ -524,8 +523,11 @@ public class TicketsVentasController implements Initializable {
                         // Configuración del servidor SMTP (ejemplo para Gmail)
                         String host = "smtp.gmail.com";
                         String port = "587";
-                        String username = "facturaktech@gmail.com"; // Tu correo de Gmail
-                        String appPassword = "xsdo ylll xeyt khur"; // Contraseña de aplicación
+                        
+                        ConfiguracionEmailDAO configDAO = new ConfiguracionEmailDAO();
+                        ConfiguracionEmail config = configDAO.obtenerConfiguracionActual();
+                        String username = config.getCorreoElectronico();
+                        String appPassword = config.getPasswordApp();
 
                         // Crear instancia de EmailSender
                         EmailSender emailSender = new EmailSender(host, port, username, appPassword);

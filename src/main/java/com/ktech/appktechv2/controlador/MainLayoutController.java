@@ -55,11 +55,11 @@ public class MainLayoutController {
     @FXML
     private Button registerEmisorButton;
     @FXML
-    private Button registerUserButton;
+    private Button configButton;
 
     public void initialize() {
         navBar.setVisible(false);
-        registerUserButton.setVisible(false); // Ocultar botón de registro por defecto
+        configButton.setVisible(false); // Ocultar botón de registro por defecto
         updateLoginStatus();
         handleLogin(); // Cargar login al inicio
 
@@ -106,10 +106,10 @@ public class MainLayoutController {
         updateLoginStatus();
 
         if ("Administrador".equals(role)) {
-            registerUserButton.setVisible(true); // Mostrar botón de registro solo para administradores
+            configButton.setVisible(true); // Mostrar botón de registro solo para administradores
             registerEmisorButton.setVisible(true);
         } else {
-            registerUserButton.setVisible(false);
+            configButton.setVisible(false);
             registerEmisorButton.setVisible(false);
         }
 
@@ -174,12 +174,6 @@ public class MainLayoutController {
     private void navigateToReportes() {
         setActiveButton(reportesButton);
         navigateToView("/com/ktech/appktechv2/vista/Reportes.fxml");
-    }
-
-    @FXML
-    private void navigateToRegister() {
-        setActiveButton(registerUserButton);
-        navigateToView("/com/ktech/appktechv2/vista/Register.fxml");
     }
 
     private void navigateToView(String viewPath) {
@@ -265,7 +259,7 @@ public class MainLayoutController {
             ventasButton,
             reportesButton,
             registerEmisorButton,
-            registerUserButton
+            configButton
         };
 
         // Remover la clase 'active' de todos los botones
@@ -276,6 +270,24 @@ public class MainLayoutController {
         // Agregar la clase 'active' al botón seleccionado
         if (activeButton != null) {
             activeButton.getStyleClass().add("active");
+        }
+    }
+
+    @FXML
+    private void navigateToConfig(ActionEvent event) {
+        setActiveButton(configButton);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ktech/appktechv2/vista/Config.fxml"));
+            Parent view = loader.load();
+
+            // Establecer la referencia del MainLayoutController en Registro_EmisorController
+            ConfigController configController = loader.getController();
+            configController.setMainLayoutController(this);
+
+            setContent(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error cargando vista de registro de usuario: " + e.getMessage());
         }
     }
 }

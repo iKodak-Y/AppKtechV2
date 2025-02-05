@@ -16,6 +16,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javafx.event.ActionEvent;
 
 public class RegisterController {
 
@@ -34,7 +35,6 @@ public class RegisterController {
 
     private MainLayoutController mainLayoutController;
 
-    @FXML
     public void initialize() {
         rolComboBox.getItems().addAll("Administrador", "Trabajador");
     }
@@ -85,12 +85,6 @@ public class RegisterController {
         }
     }
 
-    @FXML
-    private void backToLogin() {
-        loadView("/com/ktech/appktechv2/vista/Login.fxml");
-
-    }
-
     private void loadView(String fxmlPath) {
         if (mainLayoutController == null) {
             System.out.println("MainLayoutController no está configurado");
@@ -104,5 +98,10 @@ public class RegisterController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void backToConfig(ActionEvent event) {
+        loadView("/com/ktech/appktechv2/vista/Config.fxml");
     }
 }

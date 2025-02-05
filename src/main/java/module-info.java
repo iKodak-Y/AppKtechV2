@@ -13,6 +13,7 @@ module com.ktech.appktechv2 {
     requires io;
     requires layout;
     requires forms;
+    requires java.base;
     
     opens com.ktech.appktechv2 to javafx.fxml;
     opens com.ktech.appktechv2.controlador to javafx.fxml;

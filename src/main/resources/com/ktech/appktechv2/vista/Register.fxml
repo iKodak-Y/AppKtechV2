@@ -20,10 +20,10 @@
     <PasswordField fx:id="passwordField" maxWidth="250.0" promptText="Contraseña" />
     <PasswordField fx:id="confirmPasswordField" maxWidth="250.0" promptText="Confirmar Contraseña" />
     
-    <ComboBox fx:id="rolComboBox" promptText="Seleccionar Rol" maxWidth="250.0" />
+    <ComboBox fx:id="rolComboBox" maxWidth="250.0" promptText="Seleccionar Rol" />
     
     <Button onAction="#handleRegister" text="Registrarse" />
-    <Button onAction="#backToLogin" text="Volver al Login" />
+    <Button onAction="#backToConfig" text="Volver" />
     
     <Label fx:id="errorLabel" textFill="RED" />
 </VBox>
