@@ -12,8 +12,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.input.KeyCode;
 
 public class LoginController {
 
@@ -35,6 +37,20 @@ public class LoginController {
     @FXML
     public void initialize() {
         checkAdminExistence();
+
+        // Configurar evento Enter para el campo de usuario
+        usernameField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                passwordField.requestFocus();
+            }
+        });
+
+        // Configurar evento Enter para el campo de contraseña
+        passwordField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                handleLogin();
+            }
+        });
     }
 
     @FXML
@@ -43,24 +59,28 @@ public class LoginController {
         String password = passwordField.getText();
 
         try (Connection conn = new SqlConnection().getConexion()) {
-            String query = "SELECT nombre_completo, rol, password FROM Usuarios WHERE username = ?";
+            String query = """
+                        SELECT u.id_usuario, u.nombre_completo, u.username,
+                               r.id_rol, r.nombre_rol
+                        FROM Usuarios u
+                        JOIN Roles r ON u.id_rol = r.id_rol
+                        WHERE u.username = ? AND u.password = ?
+                    """;
+
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setString(1, username);
+                stmt.setString(2, PasswordUtil.hashPassword(password));
 
                 try (ResultSet rs = stmt.executeQuery()) {
                     if (rs.next()) {
-                        String storedPassword = rs.getString("password");
                         String nombreCompleto = rs.getString("nombre_completo");
-                        String rol = rs.getString("rol");
+                        String rol = rs.getString("nombre_rol");
+                        int idUsuario = rs.getInt("id_usuario");
 
-                        if (PasswordUtil.hashPassword(password).equals(storedPassword)) {
-                            mainLayoutController.setLoggedInUser(nombreCompleto, rol);
-                            errorLabel.setText("");
-                        } else {
-                            errorLabel.setText("Contraseña incorrecta.");
-                        }
+                        mainLayoutController.setLoggedInUser(nombreCompleto, rol, idUsuario);
+                        errorLabel.setText("");
                     } else {
-                        errorLabel.setText("Usuario no encontrado.");
+                        errorLabel.setText("Credenciales incorrectas.");
                     }
                 }
             }
@@ -72,12 +92,19 @@ public class LoginController {
 
     private void checkAdminExistence() {
         try (Connection conn = new SqlConnection().getConexion()) {
-            String query = "SELECT COUNT(*) FROM Usuarios WHERE rol = 'Administrador'";
-            try (PreparedStatement stmt = conn.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
+            String query = """
+                        SELECT COUNT(*)
+                        FROM Usuarios u
+                        JOIN Roles r ON u.id_rol = r.id_rol
+                        WHERE r.nombre_rol = 'Administrador'
+                    """;
+
+            try (PreparedStatement stmt = conn.prepareStatement(query);
+                 ResultSet rs = stmt.executeQuery()) {
                 if (rs.next() && rs.getInt(1) == 0) {
-                    registerButton.setVisible(true); // Mostrar botón si no hay admin
+                    registerButton.setVisible(true);
                 } else {
-                    registerButton.setVisible(false); // Ocultar botón si hay admin
+                    registerButton.setVisible(false);
                 }
             }
         } catch (SQLException e) {

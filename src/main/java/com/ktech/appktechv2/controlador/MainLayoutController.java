@@ -9,12 +9,14 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.image.Image;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import javafx.event.ActionEvent;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -100,7 +102,7 @@ public class MainLayoutController {
         handleLogin();
     }
 
-    public void setLoggedInUser(String username, String role) {
+    public void setLoggedInUser(String username, String role, int idUsuario) {
         this.currentUser = username;
         this.currentUserRole = role;
         updateLoginStatus();
@@ -154,8 +156,21 @@ public class MainLayoutController {
 
     @FXML
     private void navigateToProductos() {
-        setActiveButton(productosButton);
-        navigateToView("/com/ktech/appktechv2/vista/Gestion_Productos.fxml");
+        setActiveButton(productosButton); // Añadir esta línea al inicio
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ktech/appktechv2/vista/Gestion_Productos.fxml"));
+            Parent gestionProductosView = loader.load();
+
+            Gestion_ProductosController gestionProductosController = loader.getController();
+            gestionProductosController.setMainLayoutController(this);
+
+            setContent(gestionProductosView);
+            gestionProductosController.cargarVistaTablaProductos();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error cargando vista de gestión de productos: " + e.getMessage());
+        }
     }
 
     @FXML
@@ -176,7 +191,7 @@ public class MainLayoutController {
         navigateToView("/com/ktech/appktechv2/vista/Reportes.fxml");
     }
 
-    private void navigateToView(String viewPath) {
+    void navigateToView(String viewPath) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(viewPath));
             Parent view = loader.load();
@@ -252,14 +267,14 @@ public class MainLayoutController {
     private void setActiveButton(Button activeButton) {
         // Lista de todos los botones de navegación
         Button[] buttons = {
-            homeButton,
-            clientesButton,
-            productosButton,
-            facturacionButton,
-            ventasButton,
-            reportesButton,
-            registerEmisorButton,
-            configButton
+                homeButton,
+                clientesButton,
+                productosButton,
+                facturacionButton,
+                ventasButton,
+                reportesButton,
+                registerEmisorButton,
+                configButton
         };
 
         // Remover la clase 'active' de todos los botones

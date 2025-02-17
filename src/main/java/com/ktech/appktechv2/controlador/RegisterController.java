@@ -16,6 +16,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import javafx.event.ActionEvent;
 
 public class RegisterController {
@@ -36,7 +37,23 @@ public class RegisterController {
     private MainLayoutController mainLayoutController;
 
     public void initialize() {
-        rolComboBox.getItems().addAll("Administrador", "Trabajador");
+        loadRoles();
+    }
+
+    private void loadRoles() {
+        try (Connection conn = new SqlConnection().getConexion()) {
+            String query = "SELECT nombre_rol FROM Roles ORDER BY id_rol";
+            try (PreparedStatement stmt = conn.prepareStatement(query);
+                 ResultSet rs = stmt.executeQuery()) {
+                rolComboBox.getItems().clear();
+                while (rs.next()) {
+                    rolComboBox.getItems().add(rs.getString("nombre_rol"));
+                }
+            }
+        } catch (SQLException e) {
+            errorLabel.setText("Error al cargar roles.");
+            e.printStackTrace();
+        }
     }
 
     public void setMainLayoutController(MainLayoutController mainLayoutController) {
@@ -45,42 +62,50 @@ public class RegisterController {
 
     @FXML
     private void handleRegister() {
-        if (nombreField.getText().isEmpty() || usernameField.getText().isEmpty()
-                || passwordField.getText().isEmpty() || confirmPasswordField.getText().isEmpty()
-                || rolComboBox.getValue() == null) {
-            errorLabel.setText("Todos los campos son obligatorios.");
-            return;
-        }
-
-        if (!passwordField.getText().equals(confirmPasswordField.getText())) {
-            errorLabel.setText("Las contraseñas no coinciden.");
+        if (!validateFields()) {
             return;
         }
 
         try (Connection conn = new SqlConnection().getConexion()) {
-            String checkQuery = "SELECT COUNT(*) FROM Usuarios WHERE username = ?";
-            try (PreparedStatement checkStmt = conn.prepareStatement(checkQuery)) {
-                checkStmt.setString(1, usernameField.getText());
-                try (ResultSet rs = checkStmt.executeQuery()) {
-                    if (rs.next() && rs.getInt(1) > 0) {
-                        errorLabel.setText("El nombre de usuario ya está en uso.");
-                        return;
-                    }
+            conn.setAutoCommit(false);
+            try {
+                // Primero verificar si el usuario existe
+                if (userExists(conn, usernameField.getText())) {
+                    errorLabel.setText("El nombre de usuario ya está en uso.");
+                    return;
                 }
-            }
 
-            String hashedPassword = PasswordUtil.hashPassword(passwordField.getText());
-            String insertQuery = "INSERT INTO Usuarios (nombre_completo, username, password, rol) VALUES (?, ?, ?, ?)";
-            try (PreparedStatement insertStmt = conn.prepareStatement(insertQuery)) {
-                insertStmt.setString(1, nombreField.getText());
-                insertStmt.setString(2, usernameField.getText());
-                insertStmt.setString(3, hashedPassword);
-                insertStmt.setString(4, rolComboBox.getValue());
-                insertStmt.executeUpdate();
+                // Obtener el ID del rol seleccionado
+                int idRol = getRolId(conn, rolComboBox.getValue());
+                if (idRol == -1) {
+                    errorLabel.setText("Error al obtener el rol.");
+                    return;
+                }
+
+                // Insertar el nuevo usuario
+                String insertQuery = """
+                            INSERT INTO Usuarios (nombre_completo, username, password, id_rol)
+                            VALUES (?, ?, ?, ?)
+                        """;
+
+                try (PreparedStatement insertStmt = conn.prepareStatement(insertQuery)) {
+                    insertStmt.setString(1, nombreField.getText());
+                    insertStmt.setString(2, usernameField.getText());
+                    insertStmt.setString(3, PasswordUtil.hashPassword(passwordField.getText()));
+                    insertStmt.setInt(4, idRol);
+                    insertStmt.executeUpdate();
+                }
+
+                conn.commit();
                 errorLabel.setText("Registro exitoso. Puede iniciar sesión.");
+
+            } catch (SQLException e) {
+                conn.rollback();
+                errorLabel.setText("Error al registrar el usuario.");
+                e.printStackTrace();
             }
         } catch (SQLException e) {
-            errorLabel.setText("Error al registrar el usuario.");
+            errorLabel.setText("Error de conexión.");
             e.printStackTrace();
         }
     }
@@ -98,6 +123,45 @@ public class RegisterController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean validateFields() {
+        if (nombreField.getText().isEmpty() || usernameField.getText().isEmpty()
+                || passwordField.getText().isEmpty() || confirmPasswordField.getText().isEmpty()
+                || rolComboBox.getValue() == null) {
+            errorLabel.setText("Todos los campos son obligatorios.");
+            return false;
+        }
+
+        if (!passwordField.getText().equals(confirmPasswordField.getText())) {
+            errorLabel.setText("Las contraseñas no coinciden.");
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean userExists(Connection conn, String username) throws SQLException {
+        String checkQuery = "SELECT COUNT(*) FROM Usuarios WHERE username = ?";
+        try (PreparedStatement checkStmt = conn.prepareStatement(checkQuery)) {
+            checkStmt.setString(1, username);
+            try (ResultSet rs = checkStmt.executeQuery()) {
+                return rs.next() && rs.getInt(1) > 0;
+            }
+        }
+    }
+
+    private int getRolId(Connection conn, String nombreRol) throws SQLException {
+        String query = "SELECT id_rol FROM Roles WHERE nombre_rol = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, nombreRol);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("id_rol");
+                }
+            }
+        }
+        return -1;
     }
 
     @FXML

@@ -5,7 +5,6 @@ module com.ktech.appktechv2 {
     requires mssql.jdbc;
     requires java.xml.bind;
     requires java.activation;
-    requires java.desktop;
     requires jakarta.mail;
     requires jakarta.activation;
     requires org.slf4j;
@@ -14,12 +13,13 @@ module com.ktech.appktechv2 {
     requires io;
     requires layout;
     requires forms;
-    
+    requires org.apache.poi.ooxml;
+
     opens com.ktech.appktechv2 to javafx.fxml;
     opens com.ktech.appktechv2.controlador to javafx.fxml;
     opens com.ktech.appktechv2.modelo to java.xml.bind;
     opens com.ktech.appktechv2.modelo.xml to java.xml.bind;
-    
+
     exports com.ktech.appktechv2;
     exports com.ktech.appktechv2.controlador;
     exports com.ktech.appktechv2.modelo;

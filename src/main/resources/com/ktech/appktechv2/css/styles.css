@@ -1,16 +1,18 @@
-.table-view{
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1;
+}
+
+.table-view:focused {
     -fx-background-color: transparent;
 }
 
-.table-view:focused{
-    -fx-background-color: transparent;
-}
-
-.table-view .column-header-background{
+.table-view .column-header-background {
     -fx-background-color: linear-gradient(#101010 0%, #424141 100%);
 }
 
-.table-view .column-header-background .label{
+.table-view .column-header-background .label {
     -fx-background-color: transparent;
     -fx-text-fill: white;
 }
@@ -25,25 +27,26 @@
     -fx-background-radius: 1;
 }
 
-.button-enviar{
+.button-enviar {
     -fx-background-color: #7ad13b !important;
     -fx-font-weight: bold !important;
     -fx-font-size: 13px !important;
     -fx-text-fill: white !important;
 }
-.button-enviar:hover{
+
+.button-enviar:hover {
     -fx-background-color: #1976D2 !important;
     -fx-font-weight: bold !important;
 }
 
 .button-guardar {
     -fx-background-color: #46c39d !important;
-    -fx-font-weight: bold!important;
+    -fx-font-weight: bold !important;
     -fx-font-size: 13px !important;
     -fx-text-fill: white !important;
 }
 
-.button-guardar:hover{
+.button-guardar:hover {
     -fx-background-color: #1976D2 !important;
     -fx-font-weight: bold !important;
 }
@@ -108,19 +111,18 @@
     -fx-text-fill: #0c4597; /* Texto azul */
     -fx-background-radius: 5px;
 }
+
 .button-cerrar {
     -fx-background-color: #b21515 !important;
-    -fx-font-weight: bold!important;
+    -fx-font-weight: bold !important;
     -fx-font-size: 13px !important;
     -fx-text-fill: white !important;
 }
 
-.button-cerrar:hover{
+.button-cerrar:hover {
     -fx-background-color: #fe4040 !important;
     -fx-font-weight: bold !important;
 }
-
-
 
 
 /* Estilo combobox y textfield */
@@ -128,6 +130,9 @@
     -fx-background-color: white;
     -fx-border-color: #a9a9a9;
     -fx-border-width: 1;
+    -fx-pref-width: 150px;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
 }
 
 /* Estado enfocado para ambos componentes */
@@ -139,6 +144,7 @@
 .dropdown-content li > a, .dropdown-content li > span {
     color: #fb8c00 !important;
 }
+
 /* Estilos específicos del ComboBox */
 .combo-box .arrow-button {
     -fx-background-color: #0c4597;
@@ -160,22 +166,19 @@
 
 /* combo-box selected text */
 .combo-box .list-view .list-cell:focused {
-    -fx-background-color : #0096C9;
+    -fx-background-color: #0096C9;
     -fx-text-fill: white;
 }
 
 /* combo-box hover text */
 .combo-box .list-view .list-cell:hover {
-    -fx-background-color : #0096C9;
+    -fx-background-color: #0096C9;
     -fx-text-fill: white;
 }
 
 
-
-
-
 /* Estilo datepicker */
-*{
+* {
     -fx-primary-color: #0c4597;
     -fx-secondary-color: #1976D2;
     -fx-light-grey-color: #d1d1d1;
@@ -187,48 +190,84 @@
     -fx-background-color: -fx-primary-color;
     -fx-background-radius: 0;
 }
+
 .date-picker .arrow-button:hover {
     -fx-background-color: -fx-secondary-color;
 }
+
 .date-picker .arrow-button .arrow {
     -fx-background-color: white;
 }
+
 .date-picker .cell {
     -fx-background-color: white;
 }
+
 .date-picker .cell:hover {
     -fx-background-color: -fx-light-grey-color;
 }
+
 .date-picker .cell:focused {
     -fx-background-color: -fx-light-grey-color;
 }
+
 .date-picker .selected {
     -fx-background-color: -fx-primary-color;
     -fx-text-fill: white;
 }
+
 .date-picker .selected:focused {
     -fx-background-color: -fx-primary-color;
     -fx-text-fill: white;
 }
-.date-picker-popup  {
+
+.date-picker-popup {
     -fx-border-color: transparent;
 }
+
 .date-picker-popup .month-year-pane {
     -fx-background-color: -fx-primary-color;
 }
+
 .date-picker-popup .month-year-pane .label {
     -fx-text-fill: white;
 }
+
 .date-picker-popup .week-number-cell {
     -fx-text-fill: -fx-secondary-color;
 }
+
 .date-picker-popup .spinner .button .left-arrow,
 .date-picker-popup .spinner .button .right-arrow {
     -fx-background-color: white;
 }
 
 
+/* Estilo para el título de la vista */
+.titulo-vista {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0c4597;
+    -fx-padding: 0 0 10 0;
+}
 
+/* Estilo para las etiquetas de campo */
+.label-campo {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #666666;
+}
 
+/* Estilo para el botón de agregar */
+.button-enviar {
+    -fx-min-width: 150px;
+    -fx-min-height: 35px;
+    -fx-background-radius: 4px;
+}
 
-/* ---------------------   PAGUINAS     -------------------------  */
+/* Ajustes para los botones de acción */
+.button-guardar, .button-cerrar {
+    -fx-min-width: 100px;
+    -fx-min-height: 35px;
+    -fx-background-radius: 4px;
+}

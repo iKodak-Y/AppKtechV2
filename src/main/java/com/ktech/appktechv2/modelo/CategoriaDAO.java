@@ -1,6 +1,7 @@
 package com.ktech.appktechv2.modelo;
 
 import com.ktech.appktechv2.SqlConnection;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,25 @@ public class CategoriaDAO {
         return categorias;
     }
 
+    public Categoria obtenerPorId(int idCategoria) {
+        String sql = "SELECT * FROM Categorias WHERE IDCategoria = ?";
+        try (Connection con = new SqlConnection().getConexion(); PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setInt(1, idCategoria);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    Categoria categoria = new Categoria();
+                    categoria.setId(rs.getInt("IDCategoria"));
+                    categoria.setNombre(rs.getString("Nombre"));
+                    categoria.setEstado(rs.getString("Estado").charAt(0));
+                    return categoria;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public boolean guardar(Categoria categoria) {
         String sql = "INSERT INTO Categorias (Nombre, Estado) VALUES (?, ?)";
 
@@ -68,5 +88,25 @@ public class CategoriaDAO {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public Categoria obtenerPorNombre(String nombreCategoria) {
+        String sql = "SELECT * FROM Categorias WHERE Nombre = ?";
+        try (Connection con = new SqlConnection().getConexion();
+             PreparedStatement pstmt = con.prepareStatement(sql)) {
+            pstmt.setString(1, nombreCategoria);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    Categoria categoria = new Categoria();
+                    categoria.setId(rs.getInt("IDCategoria"));
+                    categoria.setNombre(rs.getString("Nombre"));
+                    categoria.setEstado(rs.getString("Estado").charAt(0));
+                    return categoria;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

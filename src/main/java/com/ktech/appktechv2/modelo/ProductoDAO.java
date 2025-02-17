@@ -1,6 +1,7 @@
 package com.ktech.appktechv2.modelo;
 
 import com.ktech.appktechv2.SqlConnection;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -236,5 +237,30 @@ public class ProductoDAO {
             e.printStackTrace();
         }
         return null; // Retorna null si no se encuentra el producto
+    }
+
+    public Producto obtenerPorCodigo(String codigo) {
+        String query = "SELECT * FROM Productos WHERE Codigo = ?";
+        try (Connection conn = new SqlConnection().getConexion();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, codigo);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Producto(
+                        rs.getInt("IDProducto"),
+                        rs.getString("Codigo"),
+                        rs.getString("Nombre"),
+                        rs.getDouble("Precio"),
+                        rs.getDouble("PVP"),
+                        rs.getInt("StockActual"),
+                        rs.getDouble("IVA"),
+                        rs.getString("Estado"),
+                        rs.getString("NombreCategoria")
+                );
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al buscar producto por código: " + e.getMessage());
+        }
+        return null;
     }
 }

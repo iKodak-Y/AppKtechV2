@@ -2,6 +2,7 @@ package com.ktech.appktechv2.modelo;
 
 public class Producto {
 
+    private String NombreCategoria;
     private int id;
     private String codigo;
     private String nombre;
@@ -13,9 +14,28 @@ public class Producto {
     private String estado;
     private int idCategoria;
     private int cantidad;
-
+    private Categoria categoria;
     private double subtotal; // nuevo para factura
     private double total; // nuevo para factura
+    private String nombreCategoria;
+
+
+    public Producto() {
+    }
+
+    public Producto(int IDProducto, String Codigo, String Nombre, double Precio,
+                    double PVP, int StockActual, double IVA, String Estado,
+                    String NombreCategoria) {
+        this.id = IDProducto;
+        this.codigo = Codigo;
+        this.nombre = Nombre;
+        this.precio = Precio;
+        this.pvp = PVP;
+        this.stockActual = StockActual;
+        this.iva = IVA;
+        this.estado = Estado;
+        this.NombreCategoria = NombreCategoria;
+    }
 
     // Getters y Setters
     public int getId() {
@@ -99,21 +119,27 @@ public class Producto {
         return cantidad;
     }
 
+    public void setSubtotal(double subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
     /**
      * // Método para calcular el total basado en la cantidad y el pvp public
      * double getTotal() { return Math.round(cantidad * pvp * 100.0) / 100.0; }
-     *
+     * <p>
      * // Método para calcular el subtotal sin IVA public double getSubtotal()
      * { return Math.round(cantidad * pvp * 100.0) / 100.0; // Usar pvp para el
      * subtotal también }
-     *
+     * <p>
      * // Método para calcular el precio total con IVA incluido public void
      * calcularTotal() { this.pvp = Math.round(precio * (1 + iva) * 100.0) /
      * 100.0; }
      *
      * @Override public String toString() { return codigo + " - " + nombre; }
-     *
-     *
      */
     //metos nuevos para factura
     public double getTotal() {
@@ -146,4 +172,23 @@ public class Producto {
         return codigo + " - " + nombre;
     }
 
+    public String getNombreCategoria() {
+        return NombreCategoria;
+    }
+
+    public void setNombreCategoria(String NombreCategoria) {
+        this.NombreCategoria = NombreCategoria;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+        if (categoria != null) {
+            this.idCategoria = categoria.getId();
+            this.NombreCategoria = categoria.getNombre();
+        }
+    }
 }
