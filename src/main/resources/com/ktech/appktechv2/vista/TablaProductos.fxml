@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="10" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ktech.appktechv2.controlador.TablaProductosController">
+    <!-- Campo de búsqueda -->
+    <TextField fx:id="campoBusqueda" onKeyReleased="#buscarProducto" promptText="Buscar por código o descripción" />
+
+    <!-- Tabla de productos -->
+    <TableView fx:id="tablaProductos" styleClass="table-view">
+        <columns>
+            <TableColumn fx:id="columnaId" prefWidth="50" text="ID" />
+            <TableColumn fx:id="columnaCodigo" prefWidth="100" text="Código" />
+            <TableColumn fx:id="columnaNombre" prefWidth="200" text="Descripción" />
+            <TableColumn fx:id="columnaPrecio" prefWidth="100" text="Precio Compra" />
+            <TableColumn fx:id="columnaPvp" prefWidth="100" text="PVP" />
+            <TableColumn fx:id="columnaStock" prefWidth="100" text="Stock Actual" />
+            <TableColumn fx:id="columnaIva" prefWidth="80" text="IVA" />
+            <TableColumn fx:id="columnaEstado" prefWidth="80" text="Estado" />
+            <TableColumn fx:id="columnaCategoria" prefWidth="150" text="Categoría" />
+        </columns>
+    </TableView>
+
+    <!-- Botones de acción -->
+    <HBox alignment="CENTER_RIGHT" spacing="10">
+        <Button fx:id="btnHabilitar" onAction="#habilitarProducto" styleClass="button-guardar" text="Habilitar" visible="false" />
+        <Button fx:id="btnActualizar" onAction="#abrirActualizacionProducto" styleClass="button-enviar" text="Actualizar" />
+      <Button fx:id="btnEliminar" onAction="#eliminarProducto" styleClass="button-cerrar" text="Eliminar" />
+    </HBox>
+</VBox>
